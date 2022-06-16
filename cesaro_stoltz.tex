@@ -1,0 +1,823 @@
+% 반드시 XeLatex으로 컴파일을 해야 합니다.
+% 같이 제공하는 preamblex.tex은 trig.tex보다 상위 디렉토리에 두어야 컴파일이 됩니다. 두 파일을 같은 디렉토리에 두려면 몇 줄 아래에 있는 \input{../preamblex}를 \input{preamblex}로 수정하시기 바랍니다.
+
+\documentclass[11pt, a4paper]{book}
+%\documentclass[11pt,a4paper]{article} 
+\usepackage[T1]{fontenc}
+\usepackage{kotex}
+
+\usepackage{secdot}
+% Set page geometry
+\usepackage[margin=2.5cm,headsep=0.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{versions}
+
+\usepackage{sectsty}
+%\includeversion{aftercal}
+\excludeversion{aftercal}
+\includeversion{nogeo}
+%\excludeversion{nogeo}
+\includeversion{psol}
+%\excludeversion{psol}
+\input{../preamblex} % 작업하는 파일의 상위 디렉토리에 둬야 하는 파일.
+\usetikzlibrary{intersections,decorations.text}
+\definecolor{c1}{RGB}{62, 97, 127}
+\definecolor{c2}{RGB}{104, 182, 182}
+\definecolor{c3}{RGB}{107, 190, 190}
+\definecolor{c4}{RGB}{100, 172, 174}
+\title{Ces\`{a}ro-Stoltz 정리와 급수의 수렴 판정법}
+\author{유익승}
+\date{\today}
+\newcommand{\plogo}{\fbox{\color{c4}$\mathcal{JBSH}$}}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{c4}Ces\`{a}ro-Stoltz and Convergence test of Series}
+\rhead{\plogo}
+\lfoot{\color{c1}\texttt{전북과학고등학교}}
+\rfoot{\color{c1}\pageref{LastPage}페이지 중 \thepage 페이지}
+\pagestyle{empty}
+\begin{document}
+	\begin{tikzpicture}[overlay,remember picture]
+		
+		% Background color
+		\fill[
+		black!2]
+		(current page.south west) rectangle (current page.north east);
+		
+		% Rectangles
+		\shade[
+		left color=Dandelion, 
+		right color=Dandelion!40,
+		transform canvas ={rotate around ={45:($(current page.north west)+(0,-6)$)}}] 
+		($(current page.north west)+(0,-6)$) rectangle ++(9,1.5);
+		
+		\shade[
+		left color=lightgray,
+		right color=lightgray!50,
+		rounded corners=0.75cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(.5,-10)$)}}]
+		($(current page.north west)+(0.5,-10)$) rectangle ++(15,1.5);
+		
+		\shade[
+		left color=lightgray,
+		rounded corners=0.3cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(.5,-10)$)}}] ($(current page.north west)+(1.5,-9.55)$) rectangle ++(7,.6);
+		
+		\shade[
+		left color=orange!80,
+		right color=orange!60,
+		rounded corners=0.4cm,
+		transform canvas ={rotate around ={45:($(current page.north)+(-1.5,-3)$)}}]
+		($(current page.north)+(-1.5,-3)$) rectangle ++(9,0.8);
+		
+		\shade[
+		left color=red!80,
+		right color=red!80,
+		rounded corners=0.9cm,
+		transform canvas ={rotate around ={45:($(current page.north)+(-3,-8)$)}}] ($(current page.north)+(-3,-8)$) rectangle ++(15,1.8);
+		
+		\shade[
+		left color=orange,
+		right color=Dandelion,
+		rounded corners=0.9cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(4,-15.5)$)}}]
+		($(current page.north west)+(4,-15.5)$) rectangle ++(30,1.8);
+		
+		\shade[
+		left color=RoyalBlue,
+		right color=Emerald,
+		rounded corners=0.75cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(13,-10)$)}}]
+		($(current page.north west)+(13,-10)$) rectangle ++(15,1.5);
+		
+		\shade[
+		left color=lightgray,
+		rounded corners=0.3cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(18,-8)$)}}]
+		($(current page.north west)+(18,-8)$) rectangle ++(15,0.6);
+		
+		\shade[
+		left color=lightgray,
+		rounded corners=0.4cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(19,-5.65)$)}}]
+		($(current page.north west)+(19,-5.65)$) rectangle ++(15,0.8);
+		
+		\shade[
+		left color=OrangeRed,
+		right color=red!80,
+		rounded corners=0.6cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(20,-9)$)}}] 
+		($(current page.north west)+(20,-9)$) rectangle ++(14,1.2);
+		
+		% Year
+		\draw[ultra thick,gray]
+		($(current page.center)+(5,2)$) -- ++(0,-3cm) 
+		node[
+		midway,
+		left=0.25cm,
+		text width=5cm,
+		align=right,
+		black!75
+		]
+		{
+			{\fontsize{25}{30} \selectfont \bf 심화수학I \\[10pt] 보충자료}
+		} 
+		node[
+		midway,
+		right=0.25cm,
+		text width=6cm,
+		align=left,
+		orange]
+		{
+			{\fontsize{72}{86.4} \selectfont 2021}
+		};
+		
+		% Title
+		\node[align=center] at ($(current page.center)+(0,-5)$) 
+		{
+			{\fontsize{30}{35} \selectfont {{\bf 함수의 극한문제 해결 전략 몇 가지}}} \\[1cm]
+			{\fontsize{16}{19.2} \selectfont \textcolor{orange}{ \bf 유익승}}\\[1cm]
+			{\fontsize{20}{25} \selectfont \textcolor{blue}{ \bf 전북과학고등학교}}};
+	\end{tikzpicture}
+	
+\setstretch{1.4}
+\tikzset{every shadow/.style={opacity=1}}	
+%	\maketitle
+\newpage
+
+	\chapter{\Huge Ces\`{a}ro-Stolz정리}
+	\pagestyle{fancy}
+	 \pagenumbering{arabic}
+	 \setcounter{page}{1} 
+Ces\`{a}ro-Stolz정리는 함수의 극한에서 로피탈 정리와 같은 의미를 갖는, 수열의 극한에서의 정리이다. 함수의 극한에서 로피탈 정리의 활용이 매우 강력한 문제해결의 도구가 되는 것처럼 수열의 극한과 급수의 계산에서 매우 유용하게 사용할 수 있는 정리이다. 
+\vspace{1em}
+\begin{theorem}[(Ces\`{a}ro-Stolz 1)] 수열 $\left\{x_{n}\right\}$, $\left\{y_{n}\right\}$에 대하여, $\left\{y_{n}\right\}$은 증가수열이며 $\displaystyle \lim_{n\to\infty}y_{n}=\infty$일 때,
+\begin{equation*}
+	\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}=L
+\end{equation*}
+이면 $\displaystyle \lim_{n\to\infty}\frac{x_{n}}{y_{n}}=L$ 이다.
+\end{theorem}
+\begin{proof}
+$n\to\infty$일 때, $\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}\to L$이므로 임의의 양의 실수 $\epsilon$에 대하여 어떤 자연수 $n_{0}$이 존재하여 $n\ge n_{0}$인 모든 자연수 $n$에 대하여
+\begin{equation*}
+L-\frac{\epsilon}{2}<\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}< L +\frac{\epsilon}{2}
+\end{equation*}
+이 성립한다. $y_{n+1}-y_{n}>0$이므로
+\begin{equation*}
+\left(L-\frac{\epsilon}{2}\right)\left(y_{n+1}-y_{n}\right)< x_{n+1}-x_{n}<\left(L+\frac{\epsilon}{2}\right)\left(y_{n+1}-y_{n}\right)
+\end{equation*}
+이고
+\begin{align*}
+	\left(L-\frac{\epsilon}{2}\right)\left(y_{n_{0}+1}-y_{n_{0}}\right) < x_{n_{0}+1}&-x_{n_{0}}<\left(L+\frac{\epsilon}{2}\right)\left(y_{n_{0}+1}-y_{n_{0}}\right)\\
+	\left(L-\frac{\epsilon}{2}\right)\left(y_{n_{0}+2}-y_{n_{0}+1}\right)<x_{n_{0}+2}&-x_{n_{0}+1}<\left(L+\frac{\epsilon}{2}\right)\left(y_{n_{0}+2}-y_{n_{0}+1}\right)\\
+	&\vdots \\
+	\left(L-\frac{\epsilon}{2}\right)\left(y_{m}-y_{m-1}\right)< x_{m}&-x_{m-1}<\left(L+\frac{\epsilon}{2}\right)\left(y_{m}-y_{m-1}\right)
+\end{align*}
+이다. 이제 같은 변끼리 더하면, 망원합(telescoping sum)에 의해,
+\begin{equation*}
+	\left(L-\frac{\epsilon}{2}\right)\left(y_{m}-y_{n_{0}}\right)< x_{m}-x_{n_{0}}<\left(L+\frac{\epsilon}{2}\right)\left(y_{m}-y_{n_{0}}\right)
+\end{equation*}
+을 얻는다. 양변을 $y_{m}$으로 나누고 변형하면
+\begin{equation*}
+L -\frac{\epsilon}{2}+\left(-L\frac{y_{n_{0}}}{y_{m}}+\frac{\epsilon}{2}\cdot\frac{y_{n_{0}}}{y_{m}}+\frac{x_{n_{0}}}{y_{m}}\right)<\frac{x_{m}}{y_{m}}< L +\frac{\epsilon}{2}+\left(-L\frac{y_{n_{0}}}{y_{m}}-\frac{\epsilon}{2}\cdot\frac{y_{n_{0}}}{y_{m}}+\frac{x_{n_{0}}}{y_{m}}\right)
+\end{equation*}
+이다. $y_{n}\to\infty$이므로 $n_{1}> n_{0}$인 자연수 $n_{1}$이 존재하여 $m\ge n_{1}$을 만족하는 모든 자연수 $m$에 대하여 
+\begin{equation*}
+\left | -L\frac{y_{n_{0}}}{y_{m}}+\frac{\epsilon}{2}\cdot\frac{y_{n_{0}}}{y_{m}}+\frac{x_{n_{0}}}{y_{m}}\right | <\frac{\epsilon}{2}
+\end{equation*}을 만족 시키도록  할 수 있다.
+
+즉, $m\ge n_{1}$인 모든 자연수 $m$에 대하여
+\begin{equation*}
+	L-\epsilon <\frac{x_{m}}{y_{m}}< L +\epsilon
+\end{equation*}
+이 성립한다. $\epsilon$은 임의의 양의 실수이므로 $\frac{x_{n}}{y_{n}}$은 $L$에 수렴한다.
+\end{proof}
+
+\vspace{1em}
+  비슷한 방법으로 다음의 정리를 증명할 수 있다.
+\begin{theorem}[(Ces\`{a}ro-Stoltz 2)]
+	수열 $\left\{x_{n}\right\}$, $\left\{y_{n}\right\}$에 대하여, $\left\{y_{n}\right\}$은 감소수열이며
+	\begin{equation*}
+	 \lim_{n\to\infty}x_{n}=\lim_{n\to\infty}y_{n}= 0(y_{n}\ne 0)
+	\end{equation*}
+이고,
+	\begin{equation*}
+			\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}=L
+	\end{equation*}
+	이면 $\displaystyle \lim_{n\to\infty}\frac{x_{n}}{y_{n}}=L$ 이다.
+\end{theorem}
+\vspace{1em}
+\begin{example}
+ 자연수 $n$에 대하여 $\displaystyle \lim_{n\to\infty}\frac{1+3+ 5+\cdots +(2n-1)}{2+4+6+\,\cdots \, + 2n}$의 값은?
+\begin{solution}
+Ces\`{a}ro-Stolz정리를 적용하기 위해 $x_{n}=1+3+5+\, \cdots \, +(2n-1)$
+$y_{n}=2+4+6+\, \cdots \, + 2n$이라 하면 $x_{n+1}-x_{n}=2n+1$, $y_{n+1}-y_{n}=2n+2$이므로 
+\begin{equation*}
+\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}=\lim_{n\to\infty}\frac{2n+1}{2n+2}=1
+\end{equation*}
+이다. 따라서  
+\[
+\lim_{n\to\infty}\frac{1+3+ 5+\,\cdots \, +(2n-1)}{2+4+6+\, \cdots \, + 2n}=1
+\]
+이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{example}
+	자연수 $n$에 대하여 $\displaystyle \lim_{n\to\infty}\frac{n^{3}}{1^{2}+2^{2}+\, \cdots\,  + n^{2}}$의 값은?
+\begin{solution}
+	 $x_{n}=n^{3}$, $y_{n}=1^{2}+2^{2}+\,\cdots \, + n^{2}$라 하면, 
+	\begin{align*}
+	\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}&=\lim_{n\to\infty}\frac{(n+1)^{3}-n^{3}}{(n+1)^{2}}\\
+	&=\lim_{n\to\infty}\frac{3n^{2}+3n+1}{n^{2}+2n+1}=3
+	\end{align*}
+	이므로 $\displaystyle \lim_{n\to\infty}\frac{n^{3}}{1^{2}+2^{2}+\, \cdots \,+ n^{2}}=3$이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{example}[(2006 대수능)]
+수열 $\left\{a_{n}\right\}$이 모든 자연수 $n$에 대하여 $n<a_{n}<n+1$을 만족시킬 때, $\displaystyle \lim_{n\to\infty}\frac{n^{2}}{a_{1}+a_{2}+\, \cdots \, +a_{n}}$의 값은?
+\begin{solution}
+$x_{n}=n^{2}$, $y_{n}=a_{1}+a_{2}+ \,\cdots \, + a_{n}$라 하면,
+\begin{equation*}
+	\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}=\frac{2n+1}{a_{n+1}}
+\end{equation*}	
+	이고
+\begin{equation*}
+	\frac{2n+1}{n+2}<\frac{2n+1}{a_{n}}<\frac{2n+1}{n+1}
+\end{equation*}
+이므로 조임정리(Squeeze Theorem)에 의해 $\displaystyle \lim_{n\to\infty}\frac{2n+1}{a_{n+1}}=2$
+이고 따라서
+\begin{equation*}
+	\lim_{n\to\infty}\frac{n^{2}}{a_{1}+a_{2}+\,\cdots \, +a_{n}}=2
+\end{equation*}
+이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+ 실수열 $\left\{a_{n}\right\}$에 대하여 $s_{n}=\frac{a_{1}+a_{2}+\,\cdots\, + a_{n}}{n}$라 할 때, $\displaystyle\lim_{n\to\infty}a_{n}=L$이면 $\displaystyle\lim_{n\to\infty}s_{n}=L$임을 보여라.
+\processifversion{psol}{%
+	\begin{psolution}
+		 $x_{n}=a_{1}+a_{2}+\cdots + a_{n}$, $y_{n}=n$이라 하면 $\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}= a_{n+1}$이고 
+		
+		$\frac{x_{n}}{y_{n}}=\frac{a_{1}+a_{2}+\, \cdots \,+ a_{n}}{n}$이므로 문제가 증명되었다.
+	\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+ $\displaystyle \lim_{n\to\infty}\frac{1 + 2\sqrt{2}+3\sqrt{3}+\,\cdots \, + n\sqrt{n}}{n^{2}\sqrt{n}}$의 값을 구하시오.
+\processifversion{psol}{%
+	\begin{psolution}
+$x_{n}=1 + 2\sqrt{2}+ 3\sqrt{3}+\,\cdots \, + n\sqrt{n}$, $y_{n}= n^{2}\sqrt{n}$이라 하면
+	\begin{align*}
+		\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}
+		& =\lim_{n\to\infty}\frac{(n+1)\sqrt{n+1}}{(n+1)^{2}\sqrt{n+1}-n^{2}\sqrt{n}}\\
+		& =\lim_{n\to\infty}\frac{\sqrt{(n+1)^{3}}}{\sqrt{(n+1)^{5}}-\sqrt{n^{5}}}\\
+		& =\lim_{n\to\infty}\frac{\sqrt{(n+1)^{3}}\left(\sqrt{(n+1)^{5}}+\sqrt{n^{5}}\right)}{(n+1)^{5}-n^{5}}\\
+		& =\lim_{n\to\infty}\frac{n^{4}+4n^{3}+6n^{2}+4n+1+\sqrt{n^{8}+3n^{7}+3n^{6}+n^{5}}}{5n^{4}+10n^{3}+10n^{2}+5n+1}\\
+		& =\frac{2}{5}
+	\end{align*}
+	이다. 따라서 $\displaystyle \lim_{n\to\infty}\frac{x_{n}}{y_{n}}=\frac{2}{5}$이다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	 $\displaystyle \lim_{n\to\infty}\sum_{k=1}^{n}\frac{\sqrt{_{n+k}C_{2}}}{n^{2}}$의 값을 구하시오.
+	\processifversion{psol}{%
+\begin{psolution}
+	\begin{equation*}
+		\lim_{n\to\infty}\sum_{k=1}^{n}\frac{\sqrt{_{n+k}C_{2}}}{n^{2}}=\displaystyle \lim_{n\to\infty}\frac{\sum_{k=1}^{n}\sqrt{_{n+k}C_{2}}}{n^{2}}
+	\end{equation*}
+이고 $\displaystyle x_{n}=\sum_{k=1}^{n}\sqrt{_{n+k}C_{k}}$, $y_{n}=n^{2}$이라 하면,
+	\begin{align*}
+		\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}=\lim_{n\to\infty}\frac{\sqrt{_{2n+1}C_{2}}}{(n+1)^{2}-n^{2}}
+		& =\lim_{n\to\infty}\frac{\sqrt{\frac{2n(2n+1)}{2}}}{2n+1}\\
+		& =\lim_{n\to\infty}\sqrt{\frac{n}{2n+1}}=\frac{\sqrt{2}}{2}
+	\end{align*}
+	이므로 $\displaystyle \lim_{n\to\infty}\frac{x_{n}}{y_{n}}=\frac{\sqrt{2}}{2}$이다.
+\end{psolution}	
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+수열 $\left\{a_{n}\right\}$의 일반항 $a_{n}$이 $a_{n}=\frac{1+7+13 +\,\cdots \,+(6n-5)}{1+4+7+ \,\cdots \,+(3n-2)}$일 때, $\displaystyle \lim_{n\to\infty}a_{n}$의 값을 구하시오.
+\processifversion{psol}{%
+	\begin{psolution}
+	$x_{n}= 1 + 7 + 13 +\,\cdots \,+(6n-5)$, $y_{n}=1 + 4+ 7 +\,\cdots \, +(3n-2)$라 하면
+$a_{n}=\frac{x_{n}}{y_{n}}$이고 
+\begin{equation*}
+\lim_{n\to\infty}\frac{x_{n+1}-x_{n}}{y_{n+1}-y_{n}}=\frac{6}{3}=2
+\end{equation*}
+이므로 $\displaystyle \lim_{n\to\infty}a_{n}= 2$이다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}[(2012학년도 6월 모의수능)] 자연수 $n$에 대하여 직선 $x=n$이 두 곡선 $y=2^{x}$, $y=3^{x}$과 만나는 점을 각각 $\textrm{P}_{n}$, $\textrm{Q}_{n}$이라 하자. 삼각형 $\textrm{P}_{n}\textrm{Q}_{n}\textrm{P}_{n-1}$의 넓이를 $S_{n}$이라 하고, $\displaystyle T_{n}=\sum_{k=1}^{n}S_{k}$라 할 때, $\displaystyle \lim_{n\to\infty}\frac{T_{n}}{3^{n}}$의 값은?(단, 점 $\textrm{P}_{0}$의 좌표는 $(0,\: 1)$이다.)
+\processifversion{psol}{%
+	\begin{psolution}다음 그림에서
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=1]
+					
+					\draw[-latex, ultra thick] (-2, 0) -- (3.1, 0) node[below] {\Large $x$} ;
+					\draw[-latex, ultra thick] (0, -1) -- (0, 7) node[left] {\Large $y$} ;
+					\node[below left] at (0,0) {\large\textrm{O}};
+					\node[below left] at (1.1,0) {$n-1$};
+					\draw[scale=1, domain=-2:1.7, smooth, variable=\x, blue, ultra thick] plot (\x, {3^(\x)}) node[above, blue]{\large $y=3^{x}$};
+					
+					\draw[scale =1, domain=-1.8:2.6, smooth, variable=\x, red, ultra thick] plot(\x, {2^\x}) node[above, red]{\large $y=2^{x}$};
+					\draw[dotted, ultra thick] (1,-0.5) -- (1,6.7);
+					\draw[dotted, ultra thick] (1.6,-0.5) -- (1.6, 6.5);
+					
+					\node at (1.6,3.0314) [right]{$\textrm{P}_n$}; 
+					\node at (1.6,5.8) [right]{$\textrm{Q}_n$}; 
+					\node[below right] at (1.6, 0) {$n$};
+					
+					\draw[fill=red, draw=black] (1, 2) node[below right]{$\textrm{P}_{n-1}$} circle (0.07cm);
+					\draw[fill=red, draw=black] (1.6,3.0314) circle (0.07cm);
+					\draw[fill=blue, draw=black] (1.6,5.8) circle (0.07cm);
+					\draw[ultra thick, line join=round] (1,2) -- (1.6, 3.0314) -- (1.6, 5.8) --cycle;
+				\end{tikzpicture}
+				\end{center}
+			\end{figure}
+		삼각형 $\textrm{P}_{n}\textrm{Q}_{n}\textrm{P}_{n-1}$의 넓이가 $S_{n}$이므로 $S_{n}=\frac{1}{2}(3^{n}-2^{n})$이고
+	\begin{equation*}
+		 \lim_{n\to\infty}\frac{T_{n}}{3^{n}}=\lim_{n\to\infty}\frac{T_{n}-T_{n-1}}{3^{n}-3^{n-1}}=\lim_{n\to\infty}\frac{S_{n}}{2\cdot 3^{n-1}}
+	\end{equation*}
+이다. 따라서
+\begin{equation*}
+	\lim_{n\to\infty}\frac{T_{n}}{3^{n}}=\lim_{n\to\infty}\frac{\frac{1}{2}\left(3^{n}-2^{n}\right)}{2\cdot 3^{n-1}}=\frac{3}{4}
+\end{equation*}
+이다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{theorem}
+양의 실수열 $\left\{a_{n}\right\}$에 대하여 $\displaystyle \lim_{n\to\infty}\frac{a_{n+1}}{a_{n}}=l$이면 $\displaystyle \lim_{n\to\infty}\sqrt[n]{a_{n}}=l$이다.
+\end{theorem}
+\begin{proof} $\ln\sqrt[n]{a_{n}}=\ln a_{n}^{\frac{1}{n}}=\frac{1}{n}\ln a_{n}=\frac{\ln a_{n}}{n}$이다. 이제 $x_{n}=\ln a_{n}$, $y_{n}=n$이라 하고 $x_{n},\: y_{n}$에 Ces\`{a}ro-Stoltz 정리1을 적용하면
+\begin{align*}
+	\lim_{n\to\infty}\frac{\ln a_{n}}{n}&=\lim_{n\to\infty}\frac{\ln a_{n+1}-\ln a_{n}}{(n+1)-n}\\
+	&=\lim_{n\to\infty}\left(\ln a_{n+1}-\ln a_{n}\right)\\
+	&=\ln\left(\lim_{n\to\infty}\frac{a_{n+1}}{a_{n}}\right)
+\end{align*}
+이 성립하고 $\displaystyle \lim_{n\to\infty}\frac{a_{n+1}}{a_{n}}$이 존재하므로 Ces\`{a}ro-Stoltz 정리1에 의해
+\begin{equation*}
+	\ln\lim_{n\to\infty}\sqrt[n]{a_{n}}=\lim_{n\to\infty}\frac{\ln a_{n}}{n}=\ln\lim_{n\to\infty}\frac{a_{n+1}}{a_{n}}
+\end{equation*}
+이므로 주어진 정리가 증명되었다.
+\end{proof}
+\vspace{1em}
+\begin{example}
+ $\displaystyle \lim_{n\to\infty}\sqrt[n]{\frac{3^{3n}(n!)^{3}}{(3n)!}}$의 값을 구하여라.
+\begin{solution}
+$a_{n}=\frac{3^{3n}(n!)^{3}}{(3n)!}$이라 하면
+\begin{align*}
+	\lim_{n\to\infty}\sqrt[n]{a_{n}}
+	& =\lim_{n\to\infty}\frac{a_{n+1}}{a_{n}}\\
+	& =\lim_{n\to\infty}\frac{3^{3n+3}[(n+1)!]^{3}}{(3n+3)!}\cdot\frac{(3n)!}{3^{3n}(n!)^{3}}\\
+	& =\lim_{n\to\infty}\frac{27(n+1)^{3}}{(3n+1)(3n+2)(3n+3))}\\
+	& = 1
+\end{align*}
+이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+다음 수열의 극한값을 각각 계산하여라.
+
+\phantom{문제 6.  }$a_{n}=\sqrt[n]{\frac{(n+1)!}{(2n+1)!\cdot 3^{n}}}$,  $\quad$ $b_{n}=\sqrt[n]{\frac{((n+1)!)^{2}}{(2n+1)!\cdot 3^{n}}}$
+\end{problem}
+
+\chapter{\Huge 무한급수의 수렴성 판정법}
+  무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$이 주어졌을 때 우리는 이 급수에 대하여 다음의 질문을 할 수가 있을 것이다.
+  \begin{itemize}
+  	\item 주어진 무한급수는 수렴하는가?
+  	\item 주어진 무한급수가 수렴한다면 어떤 값에 수렴하는가?
+  \end{itemize}
+
+그런데 일반적으로 급수의 합을 정확하게 구할 수 있는 경우는 매우 드물다. 예를 들어 무한등비급수나 주어진 급수가 망원합의 형태로 고칠 수 있는 경우 또는 어떤 함수의 정적분 형태로 고칠 수 있는 경우가 거의 전부라고 할 수 있다. 급수의 합을 정확하게 구할 수 없는 경우는 수치적으로 근삿값을 구해야 하는 데 이러한 경우 급수가 수렴하는지의 여부가 중요하다. 따라서 이 장에서는 급수의 수렴 판단법에 대하여 알아 본다.
+
+\section{비교판정법}
+ 비교 판정법의 기본적인 아이디어는 이미 알려진 급수의 수렴, 발산에 관한 정보를 이용하여 주어진 급수의 수렴, 발산을 파악하는 것이다. 예를 들어 
+ \begin{equation*}
+ 	\sum_{n=1}^{\infty} \frac{1}{2^{n}+1}
+ \end{equation*}
+의 수렴은 무한등비급수 $\sum_{n=1}^{\infty} \frac{1}{2^n}$가 수렴한다는 사실과 모든 자연수 $n$에 대하여
+\begin{equation*}
+	\frac{1}{2^{n}+1} < \frac{1}{2^{n}}
+\end{equation*}
+으로부터 주어진 급수가 수렴함을 파악할 수 있다. 이제 이와 관련된 내용을 좀 더 엄밀하게 증명해 보자.
+
+ 임의의 자연수 $n$에 대하여 $a_{n}\geq 0$이면 이 수열의 부분합으로 이루어지는 수열 $S_{n} = \displaystyle \sum_{k=1}^{n}a_{k}$는 증가수열이다. 따라서 모든 자연수 $n$에 대하여 $0 \leq a_{n} \leq b_{n}$이고 $\displaystyle \sum_{n=1}^{\infty}b_{n}$이 $T$로 수렴하면
+ \begin{equation*}
+ 	S_{n} = \sum_{k=1}^{n} a_{k} \le \sum_{k=1}^{n}b_{k} \le T
+ \end{equation*}
+이므로 $\{S_{n}\}$은 위로 유계인 증가수열이고 따라서 단조수렴 정리에 의해 $\displaystyle \sum_{n=1}^{\infty}a_{n}$은 수렴한다. 한편 이것의 대우 또한 참이므로 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$가 발산하면 $\displaystyle \sum_{n=1}^{\infty}b_{n}$도 발산한다. 이것을 {\color{red}비교 판정법}이라고 한다.
+
+ 임의의 무한급수의 첫째 항부터 임의의 유한 항까지의 합은 무한급수의 수렴 발산에 영향을 주지 않으므로 위의 내용을 일반화하여 정리하면 다음과 같다.
+ \vspace{1em}
+ 
+ \begin{theorem}[비교판정법]
+  어떤 자연수 $n_{0}$에 대하여 $n\ge n_{0}$일 때 $0 \le a_{n} \le b_{n}$이라고 하자. 그러면 다음이 성립한다.
+ 	\begin{itemize}
+ 		\item $\displaystyle \sum_{n=1}^{\infty}b_{n}$이 수렴하면 $\displaystyle \sum_{n=1}^{\infty}a_{n}$도 수렴한다.
+ 		\item $\displaystyle \sum_{n=1}^{\infty}a_{n}$이 발산하면 $\displaystyle \sum_{n=1}^{\infty}b_{n}$도 발산한다.
+ 	\end{itemize}
+ 	\end{theorem}
+ \vspace{1em}
+ 이제 간단한 예제들을 살펴보자.
+ 
+ \begin{example}
+ 	다음 급수는 수렴하는지 발산하는지 판단하시오.
+ 	
+ \qquad \quad (1) $\displaystyle \sum_{n=1}^{\infty}\frac{1}{n^{2}}$ \qquad \qquad (2) $\displaystyle \sum_{n=1}^{\infty}\frac{1}{n} \sin\left(\frac{1}{n}\right)$ \qquad \qquad (3) $\displaystyle \sum_{n=1}^{\infty}\sin\left(\frac{1}{n}\right)$
+ 	\begin{solution}
+ 		\begin{enumerate}[label=(\arabic*)]
+ 			\item $0 \le \frac{1}{n^{2}} \le \frac{2}{n(n+1)}$이고
+ 		\begin{equation*}
+ 			\sum_{n=1}^{\infty} \frac{2}{n(n+1)} = 2\sum_{n=1}^{\infty}\frac{1}{n(n+1)} = 2
+ 		\end{equation*}
+ 	이다. 따라서 비교판정법에 의하여 주어진 급수는 수렴한다.
+ 		\item $0 \le x \le 1$이면  $x \ge \sin(x)$이므로 
+ 		\begin{equation*}
+ 			0 \le \frac{1}{n} \sin\left(\frac{1}{n}\right)
+ 		\end{equation*}
+ 	이다. (1)에서  $\displaystyle \sum_{n=1}^{\infty}\frac{1}{n^{2}}$이 수렴하므로 비교판정법에 의하여 주어진 급수는 수렴한다.
+ 		\item 원점과 점 $\left(\frac{\pi}{2}, \, 1\right)$을 연결한 직선 $y=\frac{2}{\pi}x$는 다음 그림과 같이 구간 $\left[0, \, \frac{\pi}{2}\right]$에서 $y=\sin(x)$보다 아래에 있다.
+ 		\begin{figure}[H]
+ 			\begin{center}
+ 				\begin{tikzpicture}[scale=2.5]
+ 					\draw[-latex, ultra thick] (-0.6, 0) -- (2.2, 0) node[below] {\large $x$} ;
+ 					\draw[-latex, ultra thick] (0, -0.7) -- (0, 1.8) node[left] {\large $y$} ;
+ 					\node[below right] at (0,0) {\large \textrm{O}};
+ 					
+ 					\draw[scale=1, domain=-0.4:1.8, smooth, variable=\x, blue, ultra thick] plot (\x, {sin(\x r)}) node[below right, blue]{\large $y=\sin(x)$};
+ 					\draw [very thick, dotted, red, domain=-0.5:1.7] plot (\x, {\x}) node [left]{\large $y=x$};
+ 					\draw [very thick, dotted, black, domain=-0.5:2.1] plot (\x, {2*\x /pi}) node[above]{\large $y=\frac{2x}{\pi}$};
+ 					\draw[dotted, very thick] ({pi/2}, 0) node[below]{\large $\frac{\pi}{2}$}  |- (0,1) node[left]{\large $1$} ;
+ 					
+ 				\end{tikzpicture}
+ 			\end{center}
+ 		\end{figure}
+ 		즉 $0 \le x \le \frac{\pi}{2}$이면 
+ 		\begin{equation*}
+ 			\frac{2}{\pi}x \le \sin(x)
+ 		\end{equation*}
+ 	이다. 그런데 $0 \le \frac{1}{n} \le 1$이므로 
+ 	\begin{equation*}
+ 		\sum_{n=1}^{\infty} \sin \left(\frac{1}{n}\right) \ge \frac{2}{\pi} \sum_{n=1}^{\infty}\frac{1}{n} =\infty
+ 	\end{equation*}
+ 이다. 따라서 비교판정법에 의하여 주어진 급수는 발산한다.
+ 		\end{enumerate}
+ 	\end{solution}
+ \end{example} 
+\vspace{1em}
+\begin{example}
+	무한급수 $\displaystyle \sum_{n=1}^{\infty}\frac{5}{2n^{2}+4n+2}$가 수렴하는지 발산하는지를 판단하시오.
+	\begin{solution}
+		임의의 자연수 $n$에 대하여 다음이 성립한다.
+		\begin{equation*}
+			\frac{5}{2n^{2}+4n+2} < \frac{5}{2n^2}
+		\end{equation*}
+		이다. 그런데 
+		\begin{equation*}
+			\sum_{n=1}^{\infty} \frac{5}{2n^{2}} =\frac{5}{2} \sum_{n=1}^{\infty} \frac{1}{n^{2}}
+		\end{equation*}
+		이다. 그런데 무한급수 $\sum_{n=1}^{\infty}\frac{1}{n^{2}}$이 수렴하므로 비교판정법에 의해 주어진 급수는 수렴한다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 급수가 수렴하는지 발산하는지를 판정하시오.
+	\begin{equation*}
+	 (1) \sum_{n=1}^{\infty} \frac{2n}{1+n^{2}} \qquad \qquad \qquad \qquad \qquad (2) \sum_{n=1}^{\infty} \frac{1}{n !} \qquad \qquad \qquad \qquad \qquad \qquad \qquad 
+	\end{equation*}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	무한급수 $\displaystyle \sum_{k=1}^{\infty}\frac{\ln k}{k}$가 수렴하는지 발산하는지를 판단하시오.
+\end{problem}
+\vspace{1em}
+
+  비교판정법을 적용하다 보면 우리는 어떤 급수가 수렴함을 보일 때는 이 급수의 수열보다 큰 수열로 만들어진 수렴하는 급수를 찾아야 하고, 반대로 어떤 급수가 발산함을 보일 때는 이 급수의 수열보다 작은 수열로 만들어진 발산하는 급수를 찾아야 함을 알 수 있다. 그런데 직관적으로 수렴 또는 발산이 직관적으로 명확한데 반해 비교판정법을 적용하기는 어려운 경우가 있다. 예를 들어 무한급수
+  \begin{equation*}
+  	\sum_{n=1}^{\infty} \frac{1}{2^{n}-1}
+  \end{equation*}
+은 직관적으로 수렴하는 것으로 판단되지만 부등식
+\begin{equation*}
+	\frac{1}{2^{n}-1} > \frac{1}{2^{n}}
+\end{equation*}
+은 비교판정법에의해 주어진 급수가 수렴함을 판단하는데 도움이 되지 않는다. 이러한 경우에 유용한 수단이 존재한다. 다음의 부등식은 이 경우에 유용하다. 
+
+ \begin{theorem}[극한 비교판정법]
+ 	무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$, $\displaystyle \sum_{n=1}^{\infty}b_{n}$은 모든 항이 양수이다. 어떤 양의 실수 $c$에 대하여
+ 	\begin{equation*}
+ 		\lim\limits_{n \to \infty} \frac{a_{n}}{b_{n}} = c
+ 	\end{equation*}
+ 이면 두 급수는 모두 수렴하거나 모두 발산한다.
+ \end{theorem}
+\begin{proof}
+	두 양수 $m$과 $M$가 $m < c<M$을 만족시킨다고 하자. $n$을 크게 하여  $\frac{a_{n}}{b_n}$와 $c$이 원하는 만큼 가깝게 할 수 있으므로 큰 자연수 $N$이 존재하여 $n>N$인 모든 자연수 $n$에 대하여
+	\begin{equation*}
+		m < \frac{a_{n}}{b_{n}} <M
+	\end{equation*} 
+이 성립한다. $b_{n}>0$이므로 $n>N$인 모든 자연수 $n$에 대하여
+	\begin{equation*}
+	mb_{n} < a_{n} < M b_{n}
+\end{equation*} 
+이다.  무한급수 $\displaystyle \sum_{n=N+1}^{\infty}b_{n}$이 수렴하면  $\displaystyle M \sum_{n=N+1}^{\infty}b_{n}$도 수렴하므로 무한급수 $\displaystyle \sum_{n=N+1}^{\infty}a_{n}$도 수렴한다. 한편  무한급수 $\displaystyle \sum_{n=N+1}^{\infty}b_{n}$이 발산하면  $\displaystyle m\sum_{n=N+1}^{\infty}b_{n}$도 발산하고 따라서 비교판정법에 의해 $\displaystyle \sum_{n=N+1}^{\infty}a_{n}$도 발산한다.
+\end{proof}
+\vspace{1em}
+\begin{example}
+	무한급수 $\displaystyle \sum_{n=1}^{\infty}\frac{1}{2^{n}-1}$이 수렴하는지 발산하는지를 판정하시오.
+	\begin{solution}
+		극한 비교판정법을 적용하기 위하여 $a_{n}=\frac{1}{2^{n}-1}$, $b_{n}=\frac{1}{2^{n}}$이라 하자. 그런데
+		\begin{align*}
+			\lim_{n \to \infty}\frac{a_{n}}{b_{n}} &= \lim_{n \to \infty}  \frac{1/(2^n -1)}{1/2^n} \\
+			&= \lim_{n \to \infty} \frac{2^n}{2^n -1} \\
+			& = \lim_{n \to \infty} \frac{1}{1-1/2^n} = 1>0
+		\end{align*}
+	\end{solution}
+이고 무한급수 $\sum_{n=1}^{\infty}1/2^n$이 수렴하는 무한등비급수이므로 주어진 급수는 수렴한다.
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 무한급수가 수렴하는지 발산하는지를 판정하시오.
+	\begin{equation*}
+		\sum_{n=1}^{\infty} \frac{2n^2 +3n}{\sqrt{5+n^{5}}}
+	\end{equation*}
+\end{problem}
+
+\section{교대급수 판정법}
+
+무한급수에서 이웃하는 두 항의 부호가 항상 반대인 급수를 {\color{red}교대급수}라고 한다. 교대급수의 일반항은 양의 수열 $\{a_{n}\}$에 대하여 다음과 같이 쓸 수 있다.
+\begin{equation*}
+	(-1)^{n-1}a_{n} \text{ 또는 } (-1)^{n}a_{n}
+\end{equation*}
+이제 다음과 같이 홀수 항까지의 부분합 $T_{n}$과 짝수항까지의 부분합 $U_{n}$을 정의하자.
+\begin{align*}
+	T_{n} & = a_{1}-a_{2} + a_3 + \, \cdots \, -a_{2n-2} + a_{2n-1} \\
+	&= a_1 -(a_2 -a_3 ) - \, \cdots, \,-(a_{2n-2}-a_{2n-1})\\
+	U_{n} & =a_{1}-a_{2} + a_3 -a_4 + \, \cdots \, +a_{2n-1} - a_{2n}\\
+	&= (a_1 -a_2 ) + (a_3 -a_4 ) + \, \cdots \, + (a_{2n-1}-a_{2n} )
+\end{align*}
+이제 $T_{n}- U_{n} =a_{2n}\ge 0$이므로 $U_{n} \le T_{n}$이고 모든 자연수 $n$에 대하여 $a_{n} \ge a_{n+1}$이면 $\{T_n\}$, $\{U_{n}\}$은 각각 감소수열, 증가수열이다. 따라서 다음의 부등식을 얻는다.
+\begin{equation*}
+	U_1 \le U_2 \le \, \cdots \, \le U_n \le T_n \le \, \cdots \, \le T_2 \le T_1
+\end{equation*}
+이 부등식으로 부터 우리는 $\{T_n\}$은 아래로 유계, $\{U_n\}$은 위로 유계이다. 
+따라서 단조수렴 정리에 의하여 $\{T_n\}$과 $\{U_n\}$은  수렴한다. 한편
+\begin{equation*}
+	\lim\limits_{n \to \infty}(T_n - U_n ) = \lim\limits_{n \to \infty}a_{2n}
+\end{equation*}
+이므로 $\lim\limits_{n \to \infty}a_n =0$이면 $\lim\limits_{n\to\infty}T_n = \lim\limits_{n\to\infty}U_n $이다. 이것을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[교대급수 판정법]
+	모든 자연수 $n$에 대하여 $a_{n} \ge 0$일 때
+	\begin{enumerate}
+		\item 모든 자연수 $n$에 대하여 $a_{n+1} \le a_n$이고
+		\item $\lim\limits_{n\to\infty}a_{n}=0$
+	\end{enumerate}
+이면 주어진 교대급수 $\displaystyle \sum_{n=1}^{\infty}(-1)^{n-1}a_{n}$은 수렴한다.
+\end{theorem}
+
+예를 들어 {\color{red}조화교대급수}
+\begin{equation*}
+	1-\frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \, \cdots \, + (-1)^{n-1}\frac{1}{n} + \, \cdots
+\end{equation*}
+는 수렴함을 알 수 있다. 실제로 이 무한급수는 $\ln 2$에 수렴함이 알려져 있다.
+\vspace{1em}
+\begin{example}
+	다음 교대급수의 수렴, 발산을 판정하시오.
+	\begin{equation*}
+		\sum_{n=1}^{\infty} \frac{(-1)^{n-1}3n}{4n-1}
+	\end{equation*}
+\begin{solution}
+	\begin{equation*}
+		\lim\limits_{n\to \infty}a_{n} =\lim\limits_{n\to \infty}\frac{3n}{4n-1} =\frac{3}{4}
+	\end{equation*}
+이므로 주어진 급수는 수렴하지 않는다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 급수가 수렴하는지 여부를 판정하시오.
+	\begin{enumerate}[label=(\arabic*)]
+		\item $\displaystyle \sum_{n=1}^{\infty}(-1)^{n}\left(\sqrt{n^{2}+n}-n\right)$
+		\item $\displaystyle \sum_{n=1}^{\infty}(-1)^{n}\frac{n^2}{n^2 +n+1}$
+	\end{enumerate}
+\end{problem}
+
+교대급수는 $n$항까지의 합이 교대급수가 수렴하는 값의 좋은 근사값이 된다. 즉 다음이 성림한다.
+\vspace{1em}
+\begin{theorem}[교대급수의 오차의 한계]
+	모든 자연수 $n$에 대하여 $a_{n} \ge 0$이고 $\displaystyle \sum_{n=1}^{\infty}(-1)^{n-1}a_n =s$일 때
+	\begin{enumerate}[label=\arabic*)]
+		\item 모든 자연수 $n$에 대하여 $a_{n+1} \le a_n$이고
+		\item $\lim\limits_{n\to\infty}a_{n}=0$
+	\end{enumerate}
+	이면 
+	\begin{equation*}
+		\vert R_{n} \vert= \vert s - s_n \vert \le a_{n+1}
+	\end{equation*}
+이다.
+\end{theorem}
+\begin{proof}
+	$s_n = \displaystyle \sum_{k=1}^{n}(-1)^{k-1}a_{k}$라 하면 
+	교대급수 수렴정리에서 우리는 항상 $s_n$과 $s_{n+1}$ 사이에 항상 $s$가 존재함을 알 수 있다. 따라서 다음이 성립한다.
+	\begin{equation*}
+			\vert R_{n} \vert = \vert s - s_n \vert \le \vert s_{n+1} -s_{n}\vert = a_{n+1}
+	\end{equation*}
+\end{proof}
+
+\section{비율 판정법(Ratio Test)}
+먼저 임의의 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$에 대하여 우리는 다음의 무한급수를 생각할 수 있다.
+\begin{equation*}
+	\sum_{n=1}^{\infty}\vert a_n \vert = \vert a_1 \vert + \vert a_2 \vert + \vert a_3 \vert + \, \cdots 
+\end{equation*}
+이 급수는 처음 주어진 급수의 모든 항에 절댓값을 취하여 얻어지는 급수이다.
+
+\begin{definition}[절대수렴]
+	무한급수 $\displaystyle \sum_{n=1}^{\infty}\vert a_n \vert$이 수렴하면 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$은 {\color{red}절대수렴}한다고 한다.
+\end{definition}
+\vspace{1em}
+\begin{example}
+	무한급수 $\displaystyle \sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n^{2}}$은 절대수렴하고 $\displaystyle \sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n}$은 절대수렴하지 않음을 보이시오.
+	\begin{solution}
+		무한급수
+		\begin{equation*}
+			\sum_{n=1}^{\infty}\left| \frac{(-1)^{n-1}}{n^{2}}\right|  =\sum_{n=1}^{\infty} \frac{1}{1^2} +\frac{1}{2^2} +\frac{1}{3^{2}} +\frac{1}{4^2} + \, \cdots
+		\end{equation*}
+	이므로 절대수렴한다. 한편 무한급수 $\displaystyle \sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n}$은 조화급수가 발산하므로 절대수렴하지 않는다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{definition}[조건부 수렴]
+	무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$이 수렴하나 절대수렴하지는 않을 때 주어진 급수는 {\color{red}조건부 수렴}한다고 한다.
+\end{definition}
+\vspace{1em}
+\begin{theorem}
+	어떤 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$가 절대수렴하면 이 급수는 수렴한다.
+\end{theorem}
+\begin{proof}
+	부등식
+	\begin{equation*}
+		0 \le a_n + \vert a_n \vert \le 2\vert a_n \vert
+	\end{equation*}
+이 성립한다. 따라서 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$가 절대수렴하면 $\displaystyle \sum_{n=1}^{\infty}\vert a_n \vert$이 수렴하고 따라서 $2 \displaystyle \sum_{n=1}^{\infty}\vert a_n \vert$이 수렴한다. 따라서 비교판정법에 의해 무한급수 $\displaystyle \sum_{n=1}^{\infty}\left(a_n + \vert a_n \vert \right)$는 수렴한다. 그런데
+\begin{equation*}
+	\sum_{n=1}^{\infty}a_{n} =\sum_{n=1}^{\infty}\left(a_n + \vert a_n \vert \right) - \sum_{n=1}^{\infty}\vert a_n \vert
+\end{equation*}
+이므로 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$는 수렴한다.
+\end{proof}
+\vspace{1em}
+
+\begin{problem}
+	무한급수
+	\begin{equation*}
+		\sum_{n=1}^{\infty}\frac{\cos(n)}{n^{2}} = \frac{\cos(1)}{1^2} +\frac{\cos(2)}{2^2} + \frac{\cos(3)}{2^{2}} + \, \cdots
+	\end{equation*}
+가 수렴하는지 발산하는지를 판정하시오.
+\end{problem}
+\vspace{1em}
+
+\begin{theorem}[비율판정법]
+	무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$에 대하여 $\displaystyle \lim\limits_{n\to \infty}\left|\frac{a_{n+1}}{a_{n}}\right| =L$이라고 하자.
+\begin{enumerate}[label=(\arabic*)]
+	\item $L<1$이면 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$는  절대수렴한다. 따라서 수렴한다.
+	\item $L>1$이면 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$는 발산한다.
+	\item $L=1$이면 비율판정법은 주어진 급수의 수렴, 발산을 판정하지못한다. 즉 급수의 수렴, 발산에 대한 어떠한 정보도 주지 않는다.
+\end{enumerate}
+\end{theorem}
+\begin{proof}
+	\begin{enumerate}[label=(\arabic*)]
+		\item 증명의 기본적인 아이디어는 수렴하는 무한등비급수와 이를 이용한 비교판정법을 적용하는 것이다. $L<1$이므로 $L<r<1$을 만족시키는 실수 $r$을 선택할 수 있다. 그런데 
+		\begin{equation*}
+			\displaystyle \lim\limits_{n\to \infty}\left|\frac{a_{n+1}}{a_{n}}\right| =L \qquad \text{이고} \qquad L<r
+		\end{equation*}
+	이므로 충분히 큰 $N$에 대하여 다음이 성립한다.
+	\begin{equation*}
+		n \ge N \text{인 모든 }n \text{에 대하여 } \left|\frac{a_{n+1}}{a_{n}}\right| <r
+	\end{equation*}
+즉,
+\begin{equation}\label{eqn:geo}
+	n \ge N \text{인 모든 }n \text{에 대하여 } \left|a_{n+1}\right| < \left|a_{n}\right| r
+\end{equation}
+이다. 식 (\ref{eqn:geo})에 $N, \,N+1, \, N+2,\, \ldots$를 순차적으로 대입하면
+\begin{align*}
+	\left|a_{N+1}\right| &< \left|a_{N}\right| r\\
+		\left|a_{N+2}\right| &< \left|a_{N+1}\right| r < \left|a_{N}\right| r^{2}\\
+			\left|a_{N+3}\right| &< \left|a_{N+2}\right| r < \left|a_{N}\right| r^{3}
+\end{align*}
+을 얻고 일반적으로 
+\begin{equation}\label{eqn:geoineq}
+	k \ge 1\text{인 모든 } k\text{에 대하여} \left|a_{N+k}\right| < \left|a_{N}\right| r^{k}
+\end{equation}
+이다. 이제 무한등비급수
+\begin{equation*}
+	\sum_{n=1}^{\infty}\vert a_N \vert r^{k} = \vert a_N \vert r + \vert a_N \vert r^2 + \vert a_N \vert r^3 + \, \cdots 
+\end{equation*}
+는 $0<r<1$이므로 수렴한다. 따라서 부등식 (\ref{eqn:geoineq})과 비교판정법에 의해 무한급수
+\begin{equation*}
+	\sum_{n=N+1}^{\infty}\vert a_n \vert =\sum_{k=1}^{\infty}\vert a_{N+k} \vert = \vert a_{N+1} \vert + \vert a_{N+2} \vert + \vert a_{N+3} \vert +\, \cdots 
+\end{equation*}
+은 수렴한다.
+	\item $\vert a_{n+1}/a_{n} \vert \to L>1$ 또는 $\vert a_{n+1}/a_{n} \vert \to \infty$이면 $\vert a_{n+1}/a_{n} \vert$는 적당한 자연수 $N$이 존재하여 $n \ge N$인 모든 자연수 $n$에 대하여 $\vert a_{n+1}/a_{n} \vert >1$이다. 즉 $n \ge N$이면 $\vert a_{n+1}\vert > \vert a_{n} \vert$
+이므로 $\lim\limits_{n \to \infty}a_{n} \neq 0$이므로 주어진 급수는 발산한다.
+	\end{enumerate}
+\end{proof}
+\vspace{1em}
+\begin{example}
+	다음 급수가 수렴하는지 발산하는지 판정하시오.
+	\begin{equation*}
+		\qquad (1) \sum_{n=1}^{\infty} \frac{2^{n}}{n^{2}} \hspace{2.5cm} (2) \sum_{n=1}^{\infty} \frac{2^n}{n!} \hspace{2.5cm} (3) \sum_{n=1}^{\infty}\frac{n!}{n^{n}} \hspace{3.5cm}
+	\end{equation*}
+	\begin{solution}
+		\begin{enumerate}[label=(\arabic*)]
+			\item $\left|\frac{a_{n+1}}{a_{n}}\right|=\frac{2^{n+1}/(n+1)^{2}}{2^{n}/n^{2}}=\frac{2n^2}{(n+1)^2}$이므로 $\lim\limits_{n \to \infty}\left|\frac{a_{n+1}}{a_{n}}\right|=2>1$이다. 따라서 주어진 급수는 비율판정법에 의해 발산한다.
+			\item $\left|\frac{a_{n+1}}{a_{n}}\right|=\frac{2^{n+1}/(n+1)!}{2^{n}/n!}=\frac{2}{(n+1)}$이므로 $\lim\limits_{n \to \infty}\left|\frac{a_{n+1}}{a_{n}}\right|=0<1$이다. 따라서 주어진 급수는 비율판정법에 의해 수렴한다.
+			\item $\left|\frac{a_{n+1}}{a_{n}}\right|=\frac{(n+1)!/(n+1)^{n+1}}{n!/n^{n}}=\frac{n^{n}}{(n+1)^{n+1}} =\frac{1}{\left(1+\frac{1}{n}\right)^n}$이고 $\lim\limits_{n \to \infty}\left(1+\frac{1}{n}\right)^{n}=e$이므로 $\lim\limits_{n \to \infty}\left|\frac{a_{n+1}}{a_{n}}\right|=\frac{1}{e}<1$이다. 따라서 주어진 급수는 비율판정법에 의해 수렴한다.
+		\end{enumerate}
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 점화식으로 정의되는 수열 $\{a_n\}$에 대하여 급수  $\displaystyle \sum_{n=1}^{\infty}a_{n}$은 수렴하는지 발산하는지 판정하시오.
+	\begin{enumerate}[label=(\arabic*)]
+		\item $a_1 =3$, $a_{n+1} =\frac{4n-3}{3n+2} a_{n}$
+		\item $a_1 = 5$, $a_{n+1} =\frac{\ln (n+1)}{\sqrt{n}}a_n$
+	\end{enumerate}
+\end{problem}
+
+\section{근 판정법(Root test)}
+ 근 판정법은 제곱근이 포함된 무한급수의 수렴, 발산의 판정에 편리한 판정법이다. 이제 다음을 증명하자.
+ \begin{theorem}[근 판정법]
+ 	 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$에 대하여 $\displaystyle \lim\limits_{n\to \infty}\sqrt[n]{\left|a_{n}\right|} =L$이라고 하자.
+ 	\begin{enumerate}[label=(\arabic*)]
+ 		\item $L<1$이면 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$는 절대수렴한다. 따라서 수렴한다.
+ 		\item $L>1$이면 무한급수 $\displaystyle \sum_{n=1}^{\infty}a_{n}$는 발산한다.
+ 		\item $L=1$이면 근 판정법은 주어진 급수의 수렴, 발산을 판정하지못한다. 즉 급수의 수렴, 발산에 대한 어떠한 정보도 주지 않는다.
+ 	\end{enumerate}
+ \end{theorem}
+ \begin{proof}
+ 	\begin{enumerate}[label=(\arabic*)]
+ 		\item 증명의 기본적인 아이디어는 수렴하는 무한등비급수와 이를 이용한 비교판정법을 적용하는 것이다. $L<1$이므로 $L<r<1$을 만족시키는 실수 $r$을 선택할 수 있다. 그런데 
+ 		\begin{equation*}
+ 			\displaystyle \lim\limits_{n\to \infty}\sqrt[n]{\vert a_{n}\vert} =L \qquad \text{이고} \qquad L<r
+ 		\end{equation*}
+ 		이므로 충분히 큰 $N$에 대하여 다음이 성립한다.
+ 		\begin{equation*}
+ 			n \ge N \text{인 모든 }n \text{에 대하여 } \sqrt[n]{\vert a_{n}\vert} <r
+ 		\end{equation*}
+ 		즉,
+ 		\begin{equation*}
+ 			n \ge N \text{인 모든 }n \text{에 대하여 } \left|a_{n}\right| < r^{n}
+ 		\end{equation*}
+ 		이다. 따라서 비교판정법에 의하여 주어진 급수는 수렴한다.
+ 		\item (1)의 증명과 비율판정법의 증명을 참고하면 쉽게 증명할 수 있다.
+ 	\end{enumerate}
+ \end{proof}
+\vspace{1em}
+\begin{example}
+	다음 무한급수의 수렴, 발산을 판단하시오.
+	\begin{equation*}
+		\sum_{n=1}^{\infty}\left(\frac{2n+3}{3n+2}\right)^{n}
+	\end{equation*}
+\begin{solution}
+	\begin{align*}
+		a_{n} &=\left(\frac{2n+3}{3n+2}\right)^n \\
+		\sqrt[n]{\vert a_{n}\vert} &= \frac{2n+3}{3n+2} = \frac{2+\frac{3}{n}}{3+\frac{2}{n}}  \to \frac{2}{3} <1
+	\end{align*}
+이므로 근 판정법에 의해 주어진 급수는 수렴한다.
+\end{solution}
+\end{example}
+\vspace{1em}
+
+ 어떤 급수가 절대수렴하는가 조건부 수렴하는가는 이 급수의 항들의 순서를 바꾸어 더해도 되는가의 여부와 관계가 있다. 잘 알다시피 유한한 실수들의 합은 순서를 어떻게 바꾸어 더해도 그 값이 일정하다. 그러나 무한급수는 더하는 순서를 바꾸면 그 값이 변한다. 예를 들어 교대 조화급수
+ \begin{equation*}
+ 	\sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k}=\frac{1}{1}-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\frac{1}{5}-\frac{1}{6}+\cdots+\frac{(-1)^{n+1}}{n}+\cdots 
+ \end{equation*}
+는 $\ln 2$에 수렴함이 알려져 있다. 
+\begin{equation*}
+	\ln 2=\frac{1}{1}-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\frac{1}{5}-\frac{1}{6}+\cdots+\frac{(-1)^{n+1}}{n}+\cdots 
+\end{equation*}
+그런데 
+\begin{align*}
+	&1-\frac{1}{2}-\frac{1}{4}+\frac{1}{3}-\frac{1}{6}-\frac{1}{8}+\frac{1}{5} -\frac{1}{10} -\frac{1}{12} + \cdots \\
+	=& \left(1-\frac{1}{2}\right) -\frac{1}{4} +\left(\frac{1}{3}-\frac{1}{6}\right)-\frac{1}{8} +\left(\frac{1}{5} -\frac{1}{10}\right) -\frac{1}{12} + \cdots \\
+	=& \frac{1}{2} -\frac{1}{4} +\frac{1}{6} -\frac{1}{8} + \frac{1}{10} -\frac{1}{12} +\frac{1}{14} - \frac{1}{16} + \cdots \\
+	=& \frac{1}{2} \left( \frac{1}{1}-\frac{1}{2}+\frac{1}{3}-\frac{1}{4}+\frac{1}{5}-\frac{1}{6}+\cdots \right)  =\frac{1}{2} \ln 2
+\end{align*}
+이다. 즉,
+\begin{equation*}
+	1-\frac{1}{2}-\frac{1}{4}+\frac{1}{3}-\frac{1}{6}-\frac{1}{8}+\frac{1}{5} -\frac{1}{10} -\frac{1}{12} + {분모}\cdots =\ln 2
+\end{equation*}
+이므로 무한급수는 더하는 순서를 바꾸면 다른 값이 된다는 것을 알 수 있다. 일반적으로 조건부 수렴하는 무한급수의 항들의 더하는 순서를 적당히 바꾸면 임의의 실수에 수렴하게 할 수 있다는 것이 Riemann에 의해 증명되었다. 이의 증명은 그렇게 어렵지 않으니 독자들에게 연습문제로 남기겠다.
+\end{document}

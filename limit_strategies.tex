@@ -1,0 +1,1380 @@
+% 반드시 XeLatex으로 컴파일을 해야 합니다.
+% 같이 제공하는 preamblex.tex은 trig.tex보다 상위 디렉토리에 두어야 컴파일이 됩니다. 두 파일을 같은 디렉토리에 두려면 몇 줄 아래에 있는 \input{../preamblex}를 \input{preamblex}로 수정하시기 바랍니다.
+
+\documentclass[11pt, a4paper]{book}
+%\documentclass[11pt,a4paper]{article} 
+\usepackage[T1]{fontenc}
+\usepackage{kotex}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{secdot}
+% Set page geometry
+\usepackage[margin=2.5cm,headsep=0.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{versions}
+\usepackage[most]{tcolorbox}
+\usepackage{anyfontsize}
+\PassOptionsToPackage{inline}{enumitem} %한글 enumerator 쓸때 필요
+\usepackage{dhucs-enumitem} %한글 enumerator 쓸때 필요함.
+\usepackage{sectsty}
+%\includeversion{aftercal}
+\excludeversion{aftercal}
+\includeversion{nogeo}
+%\excludeversion{nogeo}
+\includeversion{psol}
+%\excludeversion{psol}
+\input{../preamblex} % 작업하는 파일의 상위 디렉토리에 둬야 하는 파일.
+\usetikzlibrary{intersections,decorations.text}
+\definecolor{c1}{RGB}{62, 97, 127}
+\definecolor{c2}{RGB}{104, 182, 182}
+\definecolor{c3}{RGB}{107, 190, 190}
+\definecolor{c4}{RGB}{100, 172, 174}
+\title{함수의 극한 문제해결 전략}
+\author{유익승}
+\date{\today}
+\newcommand{\plogo}{\fbox{\color{c4}$\mathcal{JBSH}$}}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{c4}함수의 극한 문제해결 전략}
+\rhead{\plogo}
+\lfoot{\color{c1}\texttt{전북과학고등학교}}
+\rfoot{\color{c1}\pageref{LastPage}페이지 중 \thepage 페이지}
+\pagestyle{empty}
+\begin{document}
+	\pagecolor{for_eyes}
+	\begin{tikzpicture}[overlay,remember picture]
+		
+		% Background color
+		\fill[
+		black!2]
+		(current page.south west) rectangle (current page.north east);
+		
+		% Rectangles
+		\shade[
+		left color=Dandelion, 
+		right color=Dandelion!40,
+		transform canvas ={rotate around ={45:($(current page.north west)+(0,-6)$)}}] 
+		($(current page.north west)+(0,-6)$) rectangle ++(9,1.5);
+		
+		\shade[
+		left color=lightgray,
+		right color=lightgray!50,
+		rounded corners=0.75cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(.5,-10)$)}}]
+		($(current page.north west)+(0.5,-10)$) rectangle ++(15,1.5);
+		
+		\shade[
+		left color=lightgray,
+		rounded corners=0.3cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(.5,-10)$)}}] ($(current page.north west)+(1.5,-9.55)$) rectangle ++(7,.6);
+		
+		\shade[
+		left color=orange!80,
+		right color=orange!60,
+		rounded corners=0.4cm,
+		transform canvas ={rotate around ={45:($(current page.north)+(-1.5,-3)$)}}]
+		($(current page.north)+(-1.5,-3)$) rectangle ++(9,0.8);
+		
+		\shade[
+		left color=red!80,
+		right color=red!80,
+		rounded corners=0.9cm,
+		transform canvas ={rotate around ={45:($(current page.north)+(-3,-8)$)}}] ($(current page.north)+(-3,-8)$) rectangle ++(15,1.8);
+		
+		\shade[
+		left color=orange,
+		right color=Dandelion,
+		rounded corners=0.9cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(4,-15.5)$)}}]
+		($(current page.north west)+(4,-15.5)$) rectangle ++(30,1.8);
+		
+		\shade[
+		left color=RoyalBlue,
+		right color=Emerald,
+		rounded corners=0.75cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(13,-10)$)}}]
+		($(current page.north west)+(13,-10)$) rectangle ++(15,1.5);
+		
+		\shade[
+		left color=lightgray,
+		rounded corners=0.3cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(18,-8)$)}}]
+		($(current page.north west)+(18,-8)$) rectangle ++(15,0.6);
+		
+		\shade[
+		left color=lightgray,
+		rounded corners=0.4cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(19,-5.65)$)}}]
+		($(current page.north west)+(19,-5.65)$) rectangle ++(15,0.8);
+		
+		\shade[
+		left color=OrangeRed,
+		right color=red!80,
+		rounded corners=0.6cm,
+		transform canvas ={rotate around ={45:($(current page.north west)+(20,-9)$)}}] 
+		($(current page.north west)+(20,-9)$) rectangle ++(14,1.2);
+		
+		% Year
+		\draw[ultra thick,gray]
+		($(current page.center)+(5,2)$) -- ++(0,-3cm) 
+		node[
+		midway,
+		left=0.25cm,
+		text width=5cm,
+		align=right,
+		black!75
+		]
+		{
+			{\fontsize{25}{30} \selectfont \bf 심화수학I \\[10pt] 보충자료}
+		} 
+		node[
+		midway,
+		right=0.25cm,
+		text width=6cm,
+		align=left,
+		orange]
+		{
+			{\fontsize{72}{86.4} \selectfont 2021}
+		};
+		
+		% Title
+		\node[align=center] at ($(current page.center)+(0,-5)$) 
+		{
+			{\fontsize{30}{35} \selectfont {{\bf 함수의 극한문제 해결 전략 몇 가지}}} \\[1cm]
+			{\fontsize{16}{19.2} \selectfont \textcolor{orange}{ \bf 유익승}}\\[1cm]
+			{\fontsize{20}{25} \selectfont \textcolor{blue}{ \bf 전북과학고등학교}}};
+	\end{tikzpicture}
+	
+\setstretch{1.4}
+\tikzset{every shadow/.style={opacity=1}}	
+%	\maketitle
+\newpage
+
+	\chapter{\Huge 삼각함수/지수 로그함수의 극한}
+	\pagestyle{fancy}
+	 \pagenumbering{arabic}
+	 \setcounter{page}{1} 
+	 
+삼각함수, 지수-로그함수의 극한을 한없이 가까워져 가는 값의 관점이 아니라 한없이 가까워져 가는 모양의 관점에서 보면 극한 문제를 쉽게 해결할 수 있을 때가 많다.  이러한 관점에서 삼각함수, 지수-로그함수의 극한 문제를 해결하고 이를 일반적인 함수에 적용하여 일반적인 함수의 극한 문제를 해결할 수 있는 전략으로 발전시켜 보자.
+
+삼각함수와 지수, 로그 함수의 극한값의 계산은 극한의 의미를 정확하게 이해하면 간단히 해결할 수 있다. 두 함수 $f(x),\:g(x)$에 대하여 $\displaystyle\lim_{x\to a}\tfrac{f(x)}{g(x)}=k$가 의미하는 것은 $x$가 $a$에 한없이 가까워져 가면 $f(x)$는 $kg(x)$에 한없이 가까워져 간다는 것을 의미한다. 즉 $x\to a$일 때, $f(x)\to kg(x)$이다. 이것을 이용하면 삼각함수와 지수, 로그 함수의 극한의 계산을 매우 쉽게 할 수 있다.
+\vskip 10pt
+\section{삼각함수 극한의 계산}
+극한 $\displaystyle\lim_{\theta\to 0}\tfrac{\sin\theta}{\theta}=1$, $\displaystyle\lim_{\theta\to0}\tfrac{\tan\theta}{\theta}=1$에서 각각
+\[
+\displaystyle\lim_{\theta\to 0}\frac{\sin\theta}{\theta}=\displaystyle\lim_{\theta\to 0}\frac{\sin\theta -\sin 0}{\theta -0}= 1,
+\]
+\[\displaystyle\lim_{\theta\to 0}\frac{\tan\theta}{\theta}=\displaystyle\lim_{\theta\to 0}\frac{\tan\theta -\tan 0}{\theta -0}= 1
+\]
+이므로 $y =\sin x$와 $y =\tan x$는 $x=0$에서 미분계수가 $1$임을 의미하고 따라서 $x\to 0$일 때, $\sin x\to x$, $\tan x\to x$임을 의미한다.
+
+더 일반적으로 $x\to x_{0}$일 때, $f(x)\to 0$이면 $t =f(x)$라 하면 각각
+\[\displaystyle\lim_{x\to x_{0}}\frac{\sin f(x)}{f(x)}=\displaystyle\lim_{t\to 0}\frac{\sin t}{t}=1,
+\]
+\[\displaystyle\lim_{x\to x_{0}}\frac{\tan f(x)}{f(x)}=\displaystyle\lim_{t\to 0}\frac{\tan t}{t}=1
+\]
+이므로 $x\to 0$일 때, $f(x)\to 0$이면 $\sin f(x)\to f(x)$, $\tan f(x)\to f(x)$임을 의미한다.
+
+마찬가지로 
+\[\displaystyle\lim_{\theta\to 0}\frac{1-\cos\theta}{\theta^{2}}=\frac{1}{2}
+\]
+이므로 $x\to 0$일 때, $1-\cos x\to\frac{1}{2}x^{2}$임을 의미하고 일반적으로 $x\to x_{0}$일 때, $f(x)\to 0$이면 $1-\cos f(x)\to \frac{1}{2}(f(x))^{2}$임을 의미한다.
+
+이제 위의 사실을 이용하여 삼각함수의 극한 문제들을 풀어보자.
+\vskip 10pt
+\begin{example}
+다음 극한값을 구하여라.
+\begin{enumerate}
+	\item $\displaystyle\lim_{x\to0}\frac{\sin 2x}{3x}$ 
+	\item $\displaystyle\lim_{x\to0}\frac{\sin 3x}{\tan 2x}$ 
+	\item $\displaystyle\lim_{x\to0}\frac{\sin(\sin 2x)}{\sin 3x}$
+\end{enumerate}
+\begin{solution}
+	\begin{enumerate}
+		\item $\displaystyle\lim_{x\to0}\frac{\sin 2x}{3x}=\displaystyle\lim_{x\to0}\frac{2x}{3x}=\frac{2}{3}$
+		
+		\item $\displaystyle\lim_{x\to0}\frac{\sin 3x}{\tan 2x}=\displaystyle\lim_{x\to0}\frac{3x}{2x}=\frac{3}{2}$
+		
+		\item $\displaystyle\lim_{x\to 0}\frac{\sin(\sin 2x)}{\sin 3x}=\displaystyle\lim_{x\to 0}\frac{\sin 2x}{3x}=\displaystyle\lim_{x\to 0}\frac{2x}{3x}=\frac{2}{3}$
+	\end{enumerate}
+\end{solution}
+\end{example}
+
+\vskip 10pt
+
+\begin{example}
+$\displaystyle\lim_{x\to0}\frac{\cos x -\cos 3x}{x\sin x}$의 극한값을 구하시오.
+\begin{solution}
+	\begin{align*}
+		\displaystyle\lim_{x\to0}\frac{\cos x -\cos 3x}{x\sin x}
+		&=\displaystyle\lim_{x\to0}\frac{(\cos x -1)+(1-\cos 3x)}{x^{2}}\\
+		&=\displaystyle\lim_{x\to0}\frac{-\frac{1}{2}x^{2}+\frac{1}{2}(3x)^{2}}{x^{2}}= 4
+	\end{align*}
+\end{solution}
+\end{example}
+\vskip 10pt
+
+\begin{problem} $\displaystyle\lim_{x\to 0}\frac{x^{3}}{\tan x -\sin  x}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\displaystyle\lim_{x\to 0}\frac{x^{3}}{\tan x-\sin x}& =\displaystyle\lim_{x\to 0}\frac{x^{3}}{\tan x(1-\cos x)}\\
+			& =\displaystyle\lim_{x\to0}\frac{x^{3}}{x\times\frac{1}{2}x^{2}}=2
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+연속함수 $f(x)$에 대하여 $\displaystyle\lim_{x\to0}\tfrac{f(x)}{x-2\sin x}=4$일 때, $\displaystyle\lim_{x\to0}\tfrac{f(x)}{x+2\sin x}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		$\displaystyle\lim_{x\to 0}\tfrac{f(x)}{x-2\sin x}=\displaystyle\lim_{x\to0}\tfrac{f(x)}{x-2x}=\displaystyle\lim_{x\to0}\tfrac{f(x)}{-x}=4$에서 $x\to0$이면 $f(x)\to -4x$임을 알 수 있다. 따라서 $\displaystyle\lim_{x\to0}\tfrac{f(x)}{x+2\sin x}=\displaystyle\lim_{x\to0}\tfrac{-4x}{3x}= -\frac{4}{3}$임을 알 수 있다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+$\displaystyle\lim_{x\to 0}\frac{\cos 3x -\cos 2x}{x^{2}}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\displaystyle\lim_{x\to 0}\frac{\cos 3x -\cos 2x}{x^{2}}
+			& =\displaystyle\lim_{x\to 0}\frac{(1-\cos 2x)-(1-\cos 3x)}{x^{2}}\\
+			& =\displaystyle\lim_{x\to 0}\frac{\frac{1}{2}(2x)^{2}-\frac{1}{2}(3x)^{2}}{x^{2}}= -\frac{5}{2}
+		\end{align*}
+		이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}\textbf{(2009 6월평가원)} $f(x)$가 $\displaystyle\lim_{x\to 0}\tfrac{f(x)}{1-\cos\left(x^{2}\right)}=2$를 만족시킬 때,
+$\displaystyle\lim_{x\to 0}\tfrac{f(x)}{x^{p}}=q$이다. $p+q$의 값은?(단, $p>0$, $q>0$이다.)
+\processifversion{psol}{
+	\begin{psolution}
+		$x\to 0$일 때, $1-\cos(x^{2})\to\frac{1}{2}x^{4}$이고 $\displaystyle\lim_{x\to 0}\tfrac{f(x)}{1-\cos\left(x^{2}\right)}=2$이므로 $x\to 0$일 때, $f(x)\to x^{4}$이다. 따라서 $p=4$일 때만 $\displaystyle\lim_{x\to 0}\tfrac{f(x)}{x^{p}}$는 $0$이 아닌 값 $1$에 수렴한다. 그러므로 $p+q=5$이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}\textbf{(2011 6월평가원)} $\displaystyle\lim_{x\to 0}\tfrac{e^{2x^{2}}-1}{\tan x\sin x}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		$x\to 0$일 때, $e^{2x^{2}-1}\to 2x^{2}$이고 $\tan x\sin x\to x^{2}$이므로 구하는 극한값은 $2$이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+
+\begin{problem}
+다음 극한값을 구하시오.
+\begin{enumerate}
+	\item $\displaystyle\lim_{x\to 0}\frac{\tan(\sin 4x)}{\sin(\tan 2x)}$       
+	\item $\displaystyle\lim_{x\to 0}\frac{\sin 9x}{\sin x +\sin 3x +\sin 5x}$
+\end{enumerate}
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{enumerate}
+			\item $x\to 0$이면 $\sin 4x\to 4x$, $\tan 2x\to 2x$이므로 
+			\[
+			\displaystyle\lim_{x\to 0}\frac{\tan(\sin 4x)}{\sin(\tan 2x)}=\displaystyle\lim_{x\to}\frac{\tan 4x}{\sin 2x}=2
+			\]
+			이다.
+			\item $x\to 0$일 때, $\sin ax\to ax$이므로 
+			\[
+			\displaystyle\lim_{x\to 0}\frac{\sin 9x}{\sin x +\sin 3x +\sin 5x}=\displaystyle\lim_{x\to 0}\frac{9x}{x+3x+5x}=1
+			\]
+			이다.
+		\end{enumerate}
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+앞에서 논의한 것을 활용하면 위의 예제와 문제들에서와 같이 삼각함수의 극한 문제는 간단한 다항식의 극한 문제가 된다.
+
+\vskip 10pt
+\section{지수-로그함수 극한의 계산}
+지수함수와 로그함수의 극한 $\displaystyle\lim_{x\to 0}\frac{e^{x}-1}{x}=1$, $\displaystyle\lim_{x\to 0}\frac{\ln(1+x)}{x}=1$
+에서 각각
+\[
+\displaystyle\lim_{tx\to 0}\frac{e^{x}-1}{x}=\displaystyle\lim_{x\to 0}\frac{e^{x}-e^{0}}{x-0}=1,
+\] 
+\[
+\displaystyle\lim_{x\to 0}\frac{\ln(1+x)}{x}=\displaystyle\lim_{x\to 0}\frac{\ln(1+x)-\ln 1}{x-0}=1
+\]
+이므로 $y = e^{x}$와 $y =\ln(1+x)$는 $x=0$에서 미분계수가 $1$임을 의미하고 따라서 $x\to0$일 때, $e^{x}-1\to x$, $e^{x}\to 1+x$, $\ln(1+x)\to x$임을 의미한다.
+
+
+더 일반적으로 $x\to x_{0}$일 때, $f(x)\to0$이면 $t =f(x)$라 하면 각각
+\[
+\displaystyle\lim_{x\to x_{0}}\frac{e^{f(x)}-1}{f(x)}=\displaystyle\lim_{t\to 0}\frac{e^{t}-1}{t}=1,
+\] 
+\[
+\displaystyle\lim_{x\to x_{0}}\frac{\ln(1+f(x))}{f(x)}=\displaystyle\lim_{t\to 0}\frac{\ln(1+t)}{t}=1
+\]
+이므로 $x\to x_{0}$일 때, $f(x)\to 0$이면 
+$e^{f(x)}-1\to f(x)$, $e^{f(x)}\to 1 +f(x)$, $\ln(1+f(x))\to f(x)$
+임을 의미한다.
+
+이제 위의 사실을 이용하여 지수함수와 로그함수의 극한 문제들을 몇 개 풀어보자.
+\vskip 10pt
+\begin{example}
+다음 극한값을 구하여라.
+\begin{enumerate}
+	\item $\displaystyle\lim_{x\to 0}\frac{e^{2x}-1}{\sin x}$       
+	\item $\displaystyle\lim_{x\to 0}\frac{\ln(1+2x)}{3x}$	
+\end{enumerate}
+\begin{solution}
+	\begin{enumerate}
+		\item $\displaystyle\lim_{x\to 0}\frac{e^{2x}-1}{\sin x}=\displaystyle\lim_{x\to 0}\frac{2x}{x}=2$
+		\item $\displaystyle\lim_{x\to 0}\frac{\ln(1+2x)}{3x}=\displaystyle\lim_{x\to 0}\frac{2x}{3x}=\frac{2}{3}$
+	\end{enumerate}
+\end{solution}
+\end{example}
+\vskip 10pt
+
+\begin{example}
+$\displaystyle\lim_{x\to 0}\frac{1-\cos^{2}x}{x\ln(1+x)}$의 값은?
+\begin{solution}
+	\[\displaystyle\lim_{x\to 0}\frac{1-\cos^{2}x}{x\ln(1+x)}=\displaystyle\lim_{x\to 0}\frac{\sin^{2}x}{x^{2}}=1
+	\]
+\end{solution}
+\end{example}
+\vskip 10pt
+\begin{problem}
+\textbf{(2010학년도 6월 평가원)} $\displaystyle\lim_{x\to 0}\tfrac{e^{1-\sin x}- e^{1-\tan x}}{\tan x -\sin x}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		\[
+		\displaystyle\lim_{x\to 0}\frac{e^{1-\sin x}- e^{1-\tan x}}{\tan x -\sin x}=\displaystyle\lim_{x\to 0}e^{1-\tan x}\times\frac{e^{\tan x -\sin x}-1}{\tan x -\sin x}= e
+		\]
+		이다. 왜냐하면 $x\to 0$일 때, $\tan x -\sin x\to 0$이므로 $e^{\tan x -\sin x}-1\to \tan x -\sin x$이므로
+		$\displaystyle\lim_{x\to 0}\tfrac{e^{\tan x-\sin x}-1}{\tan x-\sin x}=1$이고 따라서 
+		\[
+		\displaystyle\lim_{x\to 0}\frac{e^{1-\sin x}-e^{1-\tan x}}{\tan x-\sin x}=e
+		\]
+		이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+연속함수 $f(x)$가 $\displaystyle\lim_{x\to 0}\frac{e^{2x}-1}{f(x)}=10$을 만족할 때, $\displaystyle\lim_{x\to 0}\frac{f(x)}{x}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		$x\to 0$일 때, $e^{2x}-1\to 2x$이므로 $\displaystyle\lim_{x\to 0}\frac{e^{2x}-1}{f(x)}=10$에서 $x\to 0$일 때, $f(x)\to\frac{1}{5}x$임을 알수 있다. 따라서 $\displaystyle\lim_{x\to 0}\frac{f(x)}{x}=\frac{1}{5}$이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+
+\begin{problem}
+삼차함수 $f(x)$가 $f(-x)=-f(x)$를 만족시킬 때, $\displaystyle\lim_{x\to 0}\frac{f(\sin x)}{\sin f(x)}$의 값은?
+\processifversion{psol}{
+	\begin{psolution} 삼차함수가 $f(-x)= -f(x)$이면 기함수이고 원점을 지난다. 따라서 $x\to 0$일 때, $f(x)\to 0$이므로 $\sin x\to x$, $\sin f(x)\to f(x)$이므로 구하는 극한값은 $1$이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+
+이제 앞에서 언급한 극한에 대한 의미를 일반화 하면 $\displaystyle\lim_{x\to a}\tfrac{f(x)}{g(x)}=\alpha$라는 사실은
+$x\to a$일 때, $f(x)\to\alpha g(x)$임을 의미함을 알 수 있다. 이제 이러한 관점에서 다음의 문제를 풀어보자.
+\vskip 10pt
+\begin{problem}
+$\displaystyle\lim_{x\to\infty}\frac{\ln(2x+3)}{\ln(3x+5)}$의 값을 구하면?
+\processifversion{psol}{
+	\begin{psolution}
+		$\displaystyle\lim_{x\to\infty}\tfrac{2x+3}{2x}=1$이므로 $x\to\infty$일 때, $2x+3\to2x$이고 마찬가지 방법으로 $3x+5\to 3x$이므로  
+		\[
+		\displaystyle\lim_{x\to\infty}\frac{\ln(2x+3)}{\ln(3x+5)}=\displaystyle\lim_{x\to\infty}\frac{\ln 2x}{\ln 3x}=\displaystyle\lim_{x\to\infty}\frac{\ln x+\ln 2}{\ln x+\ln 3}=1
+		\]
+		이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+\textbf{(2010학년도 평가원 6월)} 함수 $f(x)$에 대하여 옳은 것만을 <보기>에서 있는 대로 고르시오.
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!10!white,colframe=blue!75!black,colbacktitle=black!40!white,
+	title=< 보기 >, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=red!50!white} ]
+	\begin{enumerate}[label={\jaso*.}]
+		\item $f(x)=x^{2}$이면 $\displaystyle\lim_{x\to 0}\frac{e^{f(x)}-1}{x}=0$이다.
+		
+		\item $\displaystyle\lim_{x\to 0}\frac{e^{x}-1}{f(x)}=1$이면 $\displaystyle\lim_{x\to 0}\frac{3^{x}-1}{f(x)}=\ln 3$이다.
+		
+		\item $\displaystyle\lim_{x\to 0}f(x)=0$이면 $\displaystyle\lim_{x\to 0}\frac{e^{f(x)}-1}{x}$이 존재한다.
+	\end{enumerate}
+\end{tcolorbox}
+\processifversion{psol}{
+	\begin{psolution}
+		ㄱ에서 $x\to 0$일 때, $e^{f(x)}-1\to x^{2}$이므로 성립한다. ㄴ에서 $x\to 0$일 때, $f(x)\to x$이므로 성립한다. ㄷ에서 $x\to 0$일 때, $f(x)\to 0$이므로 $e^{f(x)}-1\to f(x)$이다. 그런데 $f(x)= | x |$이면 극한값이 존재하지 않으므로 성립하지 않는다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+$\displaystyle\lim_{n\to\infty}4^{n}\left(1 -\cos\frac{\theta}{2^{n}}\right)$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution} $\frac{1}{2^{n}}=t$로 치환하면 $t\to   0^+$이고 
+		\[
+		\displaystyle\lim_{n\to\infty}4^{n}\left(1 -\cos\frac{\theta}{2^{n}}\right)=\displaystyle\lim_{t\to  0^+}\frac{1-\cos t\theta}{t^{2}}=\frac{1}{2}\theta^{2}
+		\]
+		이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+함수 $f(x)$가 $\displaystyle\lim_{x\to 0}\frac{\ln(1+2x)}{f(x)}=2$를 만족시킬 때, 항상 옳은 것만을 <보기>에서 있는 대로 고르시오.
+\begin{tcolorbox}[enhanced,attach boxed title to top center={yshift=-3mm,yshifttext=-1mm},
+	colback=blue!10!white,colframe=blue!75!black,colbacktitle=black!40!white,
+	title=< 보기 >, fonttitle=\bfseries,
+	boxed title style={size=small,colframe=red!50!white}]
+	\begin{enumerate}	
+		\item $\displaystyle\lim_{x\to 0}\frac{xf(x)}{\tan 3x}=0$
+		
+		\item $\displaystyle\lim_{x\to 0}\frac{\ln(1+2x)-x}{f(x)}=1$
+		
+		\item $\displaystyle\lim_{x\to 0}\frac{x\ln(1+2x)}{\{f(x)\}^{2}}=2$
+	\end{enumerate}
+\end{tcolorbox}
+\processifversion{psol}{
+	\begin{psolution} $\displaystyle\lim_{x\to 0}\frac{\ln(1+2x)}{f(x)}=2$이므로 $x\to 0$일 때, $f(x)\to x$이다. 따라서 ㄱ, ㄴ, ㄷ이 모두 성립함을 쉽게 알 수 있다. 
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+\begin{problem}
+두 다항함수 $f(x)$, $g(x)$에 대하여 $\displaystyle\lim_{x\to 0}\frac{f(x)}{x}=\displaystyle\lim_{x\to 0}\frac{g(x)}{x^{2}}=1$일 때, 
+\[
+\displaystyle\lim_{x\to 0}\frac{4xf(x)+g(x)}{xf(x)-2g(x)}
+\]
+의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		$x\to 0$일 때, $f(x)\to x$, $g(x)\to x^{2}$이므로
+		\[
+		\displaystyle\lim_{x\to 0}\frac{4xf(x)+g(x)}{xf(x)-2g(x)}=\displaystyle\lim_{x\to 0}\frac{4x^{2}+x^{2}}{x^{2}-2x^{2}}= -5
+		\]
+		이다.
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+
+지금까지 논의한 지수, 로그함수의 극한의 계산 방법은 극한의 계산에서 $x\to a$일 때, $f(x)$가 어떤 값에 한없이 가까워져가느냐에 관점을 두는 것이 아니라 $f(x)$가 어떤 직선 또는 곡선에 가까워져 가느냐에 관점을 두는 것이다. 즉, 접근해가는 값이 아니라 접근해 가는 {\color{red}‘모양’}에 관심을 두는 것이다. 이러한 관점에서 접근하면 어떤 함수의 극한의 문제들을 매우 쉽게 해결할 수 도 있고 함수의 극한값 계산 문제를 제작하는 데 있어서도 매우 유용하다. 이제 지금까지 논의한 것을 좀 더 일반화하는 방법을 생각하자.
+
+	\chapter{\Huge 일반적인 함수의 극한 계산 전략}
+		이 장에서는 먼저 미분을 사용하지 않는 방법인 극한 변수의 치환에 의한 방법과 미분을 활용하는 방법 3가지를 소개한다. 먼저 극한 변수의 치환에 의한 방법을 알아보자.
+	
+\section{극한 변수 치환법}
+	 $x\to a$일 때 $y=f(x)$의 극한값을 구하는데 $x= 2s$로 치환하는 것은 양변을 시간 $t$에 대하여 미분하면 $\frac{dx}{dt}=2\frac{ds}{dt}$가 된다. 따라서 $x= 2s$로 치환하는 것은 $x$가 $a$에 접근해가는 속도를 바꾸는 행위로 볼 수 있다. 따라서 이러한 치환을 ‘극한변수 속도 조절하기’라고도 할 수 있을 것이다. 이러한 치환은 때때로 로피탈의 정리를 써야만 하는 상황에서 매우 재미있는 문제 풀이를 우리에게 제공한다. 특히 이 전략은 $x\to 0$ 또는 $x\to\infty$일 때 적용되는 사례가 많다. 이 방법의 지도에서 유의해야할 사항은 이미 주어진 극한이 수렴함을 전재하는 것이므로 정당화 수준에서 엄밀한 극한의 계산보다는 극한값을 구할 수 있다는 정당화 수준에서 가르쳐야 할 것이다. 몇 가지 예를 살펴본다.
+	
+	\vspace{1em}
+	\begin{example}
+	다음 극한값을 구하시오.
+\begin{equation*}
+	\displaystyle\lim_{x\to\infty}\frac{\ln x}{x}
+\end{equation*}
+\begin{solution}
+	$x = 2t$로 치환하자. $x\to\infty$이면 $t\to\infty$이다. 구하는 극한값을 $L$이라 하면
+\begin{align*}
+L =\displaystyle\lim_{x\to\infty}\frac{\ln x}{x}
+& =\displaystyle\lim_{t\to\infty}\frac{\ln 2t}{2t}\\
+& =\displaystyle\lim_{t\to\infty}\frac{\ln t +\ln 2}{2t}\\
+& =\displaystyle\lim_{t\to\infty}\left(\frac{1}{2}\frac{\ln t}{t}+\frac{\ln 2}{2t}\right)=\frac{1}{2}L +0
+\end{align*}
+즉 $L =\frac{1}{2}L$이므로 $L=0$임을 알 수 있다.
+\end{solution}
+\end{example}
+
+\vspace{1em}
+\begin{example}
+	다음의 극한값을 구하시오.
+	\begin{equation*}
+		\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x^{3}}
+	\end{equation*}
+
+\begin{solution}
+	 $x = 2t$로 치환하자. $x\to 0$이면 $t\to 0$이다. 구하는 극한값을 $L$이라 하면
+	\begin{align*}
+		L & =\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{2t -\sin 2t}{8t^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{2t - 2\sin t\cos t}{8t^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{t-\sin t\cos t}{4t^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{t-\sin t +\sin t(1-\cos t)}{4t^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\left(\frac{1}{4}\cdot \frac{t-\sin t}{t^{3}}+\frac{1}{4}\left(\frac{\sin t}{t} \cdot \frac{1-\cos t}{t^{2}}\right)\right)\\
+		& =\frac{1}{4}L +\frac{1}{8}
+	\end{align*}
+	이므로 $L =\frac{1}{6}$이다. 한편 $x = 3t$로 치환하고 3배각 공식을 이용할 수도 있다. 이 경우에는 $\displaystyle \displaystyle\lim_{\theta\to 0} \frac{\sin{\theta}}{\theta}=1$이 활용된다.
+		\begin{align*}
+		L & =\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{3t -\sin 3t}{27t^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{3t - 3\sin t +4\sin^{3}t}{27t^{3}}\\
+		& =\displaystyle\lim_{t\to 0}\left(\frac{1}{9}\frac{t-\sin t}{t^{3}}+\frac{4}{27}\left(\frac{\sin t}{t}\right)^{3}\right)\\
+		& =\frac{1}{9}L +\frac{4}{27}
+	\end{align*}
+	이므로 마찬가지로 $L =\frac{1}{6}$임을 알 수 있다.
+\end{solution}
+\end{example}
+
+	이 방법을 적용하면 다음의 두 문제도 쉽게 해결 할 수 있다. 
+	\vspace{1em}
+	
+\begin{problem}
+다음이 성립함을 보여라.
+\begin{equation*}
+\displaystyle\lim_{x\to 0}\frac{\tan x - x}{x^{3}}=\frac{1}{3}
+\end{equation*}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음이 성립함을 보여라.
+	\begin{equation*}
+	\displaystyle\lim_{x\to 0}\frac{\sinh x - x}{x^{3}}=\frac{1}{6}
+	\end{equation*}
+\end{problem}
+\vspace{1em}
+	이러한 문제들을 로피탈 정리를 사용하지 못하게 하고 문제를 해결하라고 학생들에게 제시하면 대부분 포기하게 될 것이다.  예를 하나 더 제시한다.
+
+\begin{example}
+	다음 극한값을 구하시오.
+	\begin{equation*}
+		\displaystyle\lim_{x\to 0}\frac{\cos x - 1 +\frac{1}{2}x^{2}}{x^{4}}
+	\end{equation*}
+	\begin{solution}
+	$x = 2t$로 치환하자. $x\to 0$이면 $t\to 0$이다. 구하는 극한값을 $L$이라 하면
+		\begin{align*}
+		L & =\displaystyle\lim_{x\to 0}\frac{\cos x - 1 +\frac{1}{2}x^{2}}{x^{4}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{\cos 2t - 1 + 2t^{2}}{16 t^{4}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{2\cos^{2}t-2+2t^{2}}{16t^{4}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{\cos^{2}t -1 + t^{2}}{8t^{4}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{(\cos t-1)(\cos t +1) +t^{2}}{8t^{4}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{(\cos t -1 +\frac{1}{2}t^{2})(1+\cos t)+ t^{2}-\frac{1}{2}t^{2}-\frac{1}{2}t^{2}\cos t}{8t^{4}}\\
+		& =\displaystyle\lim_{t\to 0}\left\{\frac{\cos t -1 +\frac{1}{2}t^{2}}{8t^{4}}\cdot (1+\cos t)+\frac{1}{2}\cdot\frac{1-\cos t}{8 t^{2}}\right\}\\
+		& =\frac{1}{4}L +\frac{1}{32}
+	\end{align*}
+	이므로 $L =\frac{1}{24}$이다.
+	\end{solution}
+\end{example}
+
+	지금까지 삼각함수가 포함된 극한을 계산하였다. 지수함수에서도 가능함을 살펴보자. 마지막으로 예 하나를 더 살펴보자.
+	\begin{example}
+		다음 극한값을 구하시오.
+		\begin{equation*}
+				\displaystyle\lim_{x\to 0}\frac{e^{2x}-2x-1}{x^{2}}
+		\end{equation*}
+		\begin{solution}
+		 $x = 2t$로 치환하자. $x\to 0$이면 $t\to 0$이다. 구하는 극한값을 $L$이라 하면
+		\begin{align*}
+			L& =\displaystyle\lim_{x\to 0}\frac{e^{2x}-2x-1}{x^{2}}\\
+			& =\displaystyle\lim_{t\to 0}\frac{e^{4t}-4t-1}{4t^{2}}\\
+			& =\displaystyle\lim_{t\to 0}\frac{(e^{2t}-2t-1)(e^{2t}+1)+ 2t(e^{2t}-1)}{4t^{2}}\\
+			& =\displaystyle\lim_{t\to 0}\left\{\frac{e^{2t}-2t-1}{4t^{2}}\left(e^{2t}+1\right)+\frac{1}{2}\frac{e^{2t}-1}{t}\right\}\\
+			& =\frac{1}{2}L + 1
+		\end{align*}
+		이다. 따라서 $L = 2$이다. 
+		\end{solution}
+	\end{example}
+	비슷한 방법으로 다음을 증명할 수 있다.
+\vspace{1em}
+\begin{problem}
+	 다음이 성립함을 보여라.
+	\begin{equation*}
+	\displaystyle\lim_{x\to 0}\frac{e^{x}-1-x}{\cos x -1}=-1
+	\end{equation*}
+\end{problem}
+\vspace{1em}
+	다음의 예제는 앞의 예제들의 결과로부터 쉽게 얻을 수도 있고 지금까지의 방법으로 계산할 수 도 있다.
+\vspace{1em}
+\begin{example}
+	 다음 극한값을 구하시오.
+	\begin{equation*}
+	\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x-\tan x}= -\frac{1}{2}
+	\end{equation*}
+\begin{solution}
+	 위의 결과들을 안다고 가정하면 다음과 같이 문제를 해결 할 수 있다.
+\begin{equation*}
+	\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x-\tan x}=\displaystyle\lim_{x\to 0}\frac{\frac{x-\sin x}{x^{3}}}{\frac{x-\tan x}{x^{3}}}=\frac{\frac{1}{6}}{-\frac{1}{3}}= -\frac{1}{2}
+\end{equation*}	
+
+\end{solution}
+\begin{solution}
+ $x = 2t$로 치환하자. $x\to 0$이면 $t\to 0$이다. 구하는 극한값을 $L$이라 하면
+	\begin{align*}
+		L=\displaystyle\lim_{x\to 0}\frac{x-\sin x}{x-\tan x}
+		& =\displaystyle\lim_{t\to 0}\frac{2t -\sin 2t}{2t -\tan 2t}\\
+		& =\displaystyle\lim_{t\to 0}\frac{2t - 2\sin t\cos t}{2t -\frac{2\tan t}{1-\tan^{2}t}}\\
+		& =\displaystyle\lim_{t\to 0}\frac{t(1-\tan^{2}t)-\sin t\cos t(1-\tan^{2}t)}{t(1-\tan^{2}t)-\tan t}\\
+		& =\displaystyle\lim_{t\to 0}\frac{t-\sin t +\sin t(1-\cos t)- t\tan^{2}t +\cos t\sin t\tan^{2}t}{t -\tan t - t\tan^{2}t}\\
+		& =\displaystyle\lim_{t\to 0}\frac{\frac{t-\sin t}{t -\tan t}+\frac{\sin t(1-\cos t)}{t-\tan t}-\frac{t\tan^{2}t}{t -\tan t}+\frac{\cos t\sin t\tan^{2}t}{t-\tan t}}{1 -\frac{t\tan^{2}t}{t -\tan t}}\\
+		& =\frac{L +\frac{3}{2}+3 - 3}{1+3}
+	\end{align*} 
+	이다. 따라서 $L =-\frac{1}{2}$이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+	
+	한편 지금까지 언급한 전략을 극한 변수의 치환이라는 측면 보다 좀 더 일반화된 측면에서 보면 이 전략은 극한값의 계산 과정에서 구해야 할 극한값의 상수 배가 나타나게 하여 구해야 할 극한값에 대한 일차 방정식을 얻는 방법이라 할 수 있다. 
+	
+\vspace{1em}
+\begin{example}\label{exam:rev_trans}
+	다음 극한값을 구하시오.
+	\begin{equation*}
+	\displaystyle\lim_{x\to\infty}\left(x - x^{2}\ln\left(\frac{1+x}{x}\right)\right)
+	\end{equation*}
+\begin{solution}
+	$x =\frac{1}{t}$로 치환하면 $t\to 0^{+}$이다. 따라서
+	\begin{align*}
+		\lim_{x\to\infty}\left(x - x^{2}\ln\left(\frac{1+x}{x}\right)\right)
+		& =lim_{t\to 0^{+}}\frac{1-\frac{1}{t}\ln(1+t)}{t}\\
+		& =\lim_{t\to 0^{+}}\frac{\frac{1}{t^{2}}\ln(1+t)-\frac{1}{t(1+t)}}{1}(\text{ by L'Hospital's Theorem})\\
+		& =\lim_{t\to 0^{+}}\frac{\frac{1}{t}\ln(1+t)-\frac{1}{1+t}}{t}\\
+		& =\lim_{t\to 0^{+}}\frac{\frac{1}{t}\ln(1+t)-1 + 1-\frac{1}{1+t}}{t}\\
+		& =\lim_{t\to 0^{+}}\left(\frac{\frac{1}{t}\ln(1+t)-1}{t}+\frac{1}{1+t}\right)
+	\end{align*}
+	에서 구하는 극한값을 $L$이라 하면 $L = -L + 1$을 얻고 따라서 $L =\frac{1}{2}$이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+	\begin{problem}
+ 다음 극한값을 구하시오.
+\begin{equation*}
+	\displaystyle\lim_{x\rightarrow 0}\frac{\pi\sin x -\sin\pi x}{x(\cos x -\cos\pi x)}
+\end{equation*}	
+\processifversion{psol}{
+\begin{psolution}
+	$\displaystyle L=\displaystyle\lim_{x\rightarrow 0}\frac{\pi\sin x -\sin\pi x}{x(\cos x -\cos\pi x)}$라 하고 $x = 2t$로 치환하면 $x \to 0$일 때 $t \to 0$이다. 이제
+	\begin{align*}
+\displaystyle\lim_{x\rightarrow 0}\frac{\pi\sin x -\sin\pi x}{x(\cos x -\cos\pi x)}
+		& =\displaystyle\lim_{t\rightarrow 0}\frac{\pi\sin 2t -\sin 2\pi t}{2t(\cos 2t -\cos 2\pi t)}\\
+		& =\frac{1}{2}\displaystyle\lim_{t\rightarrow 0}\frac{2\pi\sin t\cos t - 2\sin\pi t\cos\pi t}{t\left(2\cos^{2}t - 1 -\left(2\cos^{2}\pi t-1\right)\right)}\\
+		& =\frac{1}{2}\displaystyle\lim_{t\rightarrow 0}\frac{2\pi\sin t\cos t - 2\sin\pi t\cos\pi t}{t\left(2\cos^{2}t - 2\cos^{2}\pi t\right)}\\
+		& =\frac{1}{2}\displaystyle\lim_{t\rightarrow 0}\frac{\pi\sin t\cos t -\sin\pi t\cos\pi t}{t(\cos t -\cos\pi t)}\cdot\frac{1}{(\cos t +\cos\pi t)}\\
+		& =\frac{1}{4}\displaystyle\lim_{t\rightarrow 0}\frac{\pi\sin t\cos t -\pi\sin t\cos\pi t +\pi\sin t\cos\pi t-\sin\pi t\cos\pi t}{t(\cos t -\cos\pi t)}\\
+		& =\frac{1}{4}\displaystyle\lim_{t\rightarrow 0}\frac{\pi\sin t(\cos t -\cos\pi t)+\cos\pi t(\pi\sin t -\sin\pi t)}{t(\cos t -\cos\pi t)}\\
+		& =\frac{1}{4}\left(\pi\displaystyle\lim_{t\rightarrow 0}\frac{\sin t}{t}+\displaystyle\lim_{t\rightarrow 0}\frac{\pi\sin t -\sin\pi t}{t(\cos t -\cos\pi t)}\right)\\
+		& =\frac{\pi}{4}+\frac{1}{4}L
+	\end{align*}
+	이므로 $L =\frac{\pi}{3}$이다.
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+	다음에 제시하는 문제는 급수전개로 해결하는 것은 가능하다. 급수 전개는 아주 나중에 학습하는 내용이므로 극한의 성질에 위배되지 않으면서 정교하게 문제를 풀어보자.
+	\vspace{1em}
+	
+	\begin{example}
+		 다음 극한값을 구하시오.
+		 \begin{equation*}
+		 	\displaystyle\lim_{n\to\infty}e^{2n}\left(1-\frac{2}{n}\right)^{n^{2}}
+		 \end{equation*}
+	 \begin{solution}
+	먼저
+	
+	\begin{align*}
+		\displaystyle\lim_{n\to\infty}e^{2n}\left(1-\frac{2}{n}\right)^{n^{2}}
+		& =\displaystyle\lim_{n\to\infty}\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)\right)^{n^{2}}\\
+		& =\displaystyle\lim_{n\to\infty}\left(1+\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)-1\right)\right)^{\frac{1}{\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)-1\right)}\cdot n^{2}\left(e^{\frac{2}{n}\left(1-\frac{2}{n}\right)-1}\right)}
+	\end{align*}
+	이다. 그런데
+	\begin{equation*}
+		\displaystyle\lim_{n\to\infty}\left(1+\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)-1\right)\right)^{\frac{1}{\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)-1\right)}}= e
+	\end{equation*}
+	이므로 $\displaystyle\lim_{n\to\infty}n^{2}\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)-1\right)$의 극한값만 구하면 된다. $t =\frac{1}{n}$으로 치환하면 $n\to\infty$이면 $t\to 0^{+}$이므로 
+	\begin{align*}
+		\displaystyle\lim_{n\to\infty}n^{2}\left(e^{\frac{2}{n}}\left(1-\frac{2}{n}\right)-1\right)
+		& =\displaystyle\lim_{t\to 0^{+}}\frac{e^{2t}(1-2t)-1}{t^{2}}\\
+		& =\displaystyle\lim_{t\to 0^{+}}\frac{e^{2t}-2te^{2t}-1}{t^{2}}\\
+		& =\displaystyle\lim_{t\to 0^{+}}\frac{(e^{2t}-2t-1)- 2t(e^{2t}-1)}{t^{2}}\\
+		& =\displaystyle\lim_{t\to 0^{+}}\left\{\frac{e^{2t}-2t-1}{t^{2}}-\frac{2\left(e^{2t}-1\right)}{t}\right\}\\
+		& =\displaystyle\lim_{t\to 0^{+}}\frac{e^{2t}-2t-1}{t^{2}}- 2\displaystyle\lim_{t\to 0^{+}}\frac{e^{2t}-1}{t}\\
+		& = 2 -4 =-2
+	\end{align*}
+	이다. 따라서 구하는 극한값은 $e^{-2}$이다.  	
+	 \end{solution}
+ \begin{solution}\textbf{(오류에 의한 풀이 1)}
+ 		\begin{align*}
+ 		\displaystyle\lim_{n\to\infty}e^{2n}\left(1-\frac{2}{n}\right)^{n^{2}}
+ 		& =\displaystyle\lim_{n\to\infty}\left(\left(1+\frac{2}{n}\right)^{\frac{n}{2}}\right)^{2n}\left(1-\frac{2}{n}\right)^{n^{2}}\\
+ 		& =\displaystyle\lim_{n\to\infty}\left(1+\frac{2}{n}\right)^{n^{2}}\left(1-\frac{2}{n}\right)^{n^{2}}\\
+ 		& =\displaystyle\lim_{n\to\infty}\left(1-\frac{4}{n^{2}}\right)^{n^{2}}\\
+ 		& =\displaystyle\lim_{n\to\infty}\left(1-\frac{4}{n^{2}}\right)^{\left(-\frac{n^{2}}{4}\right)(-4)}=e^{-4}
+ 	\end{align*}
+ \end{solution}
+\begin{solution}\textbf{(오류에 의한 풀이 2)}
+	\begin{align*}
+		\displaystyle\lim_{n\to\infty}e^{2n}\left(1-\frac{2}{n}\right)^{n^{2}}
+		& =\displaystyle\lim_{n\to\infty}e^{2n}\left(1-\frac{2}{n}\right)^{n}\cdot\left(1-\frac{2}{n}\right)^{n}\cdots\left(1-\frac{2}{n}\right)^{n}\\
+		& =\displaystyle\lim_{n\to\infty}e^{2n}\left\{\left(1-\frac{2}{n}\right)^{\left(-\frac{n}{2}\right)(-2)}\left(1-\frac{2}{n}\right)^{\left(-\frac{n}{2}\right)(-2)}\cdots\left(1-\frac{2}{n}\right)^{\left(-\frac{n}{2}\right)(-2)}\right\}\\
+		& =\displaystyle\lim_{n\to\infty}e^{2n}\left(e^{-2}e^{-2}\cdots e^{-2}\right)\\
+		& =\displaystyle\lim_{n\to\infty}e^{2n}\cdot e^{-2n}=1
+	\end{align*}
+\end{solution}
+\end{example} 
+	\begin{problem}
+위의 두 오류에 의한 풀이의 오류를 설명하시오.		
+	\end{problem}
+\vspace{1em}
+다음의 예제는 예제 \ref{exam:rev_trans}과 마찬가지로 $x =\frac{1}{t}$로 치환하는 것이다.  
+\begin{example}
+	 다음 극한값을 구하시오.
+	\begin{equation*}
+		\displaystyle\lim_{x\to \infty}x\left(\arctan x -\frac{\pi}{2}e^{\frac{1}{x}}\right)
+	\end{equation*}
+\begin{solution}
+	$\displaystyle\lim_{x \to \infty}x\left(\arctan x -\frac{\pi}{2}e^{\frac{1}{x}}\right)$에서 $x =\frac{1}{t}$로 치환하자. 그러면 $x \to \infty$일 때, $t \to 0^{+}$이다. 따라서 $\arctan(t)+\arctan\left(\frac{1}{t}\right)=\frac{\pi}{2}$이므로 다음이 성립한다.
+	\begin{align*}
+		\displaystyle\lim_{x\rightarrow\infty}x\left(\arctan x -\frac{\pi}{2}e^{\frac{1}{x}}\right)
+		& =\displaystyle\lim_{t\rightarrow 0^{+}}\frac{\arctan\left(\frac{1}{t}\right)-\frac{\pi}{2}e^{t}}{t}\\
+		& =\displaystyle\lim_{t\rightarrow 0^{+}}\frac{\frac{\pi}{2}-\arctan(t)-\frac{\pi}{2}e^{t}}{t}\\
+		& = -\displaystyle\lim_{t\rightarrow 0^{+}}\left(\frac{\arctan(t)}{t}+\frac{\pi}{2}\cdot\frac{e^{t}-1}{t}\right)\\
+		& =-\left(1+\frac{\pi}{2}\right)
+	\end{align*}
+\end{solution}
+\end{example}
+\begin{problem}
+다음 극한값을 구하시오.
+	\begin{equation*}
+		\displaystyle\lim_{x\rightarrow 0}\frac{1-\frac{1}{2}x^{2}-\cos\left(\frac{x}{1-x^{2}}\right)}{x^{4}}
+	\end{equation*}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음 극한값을 구하시오.
+	\begin{equation*}
+	\displaystyle\lim_{x\rightarrow 0}\left(\frac{1}{\sin^{2}x}+\frac{1}{\tan^{2}x}-\frac{2}{x^{2}}\right)
+	\end{equation*}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음 극한값을 구하시오.
+	\begin{equation*}
+		\lim\limits_{x \to 0}\frac{\frac{\sin x}{x}- \cos 2x}{x^2}
+	\end{equation*}
+\end{problem}
+\vspace{1em}
+\section{선형근사에 의한 극한의 계산}
+선형근사에 의한 극한 문제의 해결은 계산해야 할 함수의 극한값이 매우 복잡한 형태일 때, $x=a$에서 접선의 방정식을 복잡한 함수를 대신하여 극한값의 계산에 이용하는 것이다. 몇 개의 예제를 통해서 살펴보자.
+
+\vskip 10pt
+\begin{example} $\displaystyle\lim_{x\to\infty}\left(\sqrt{x^{2}+2x}-x\right)+\displaystyle\lim_{x\to -\infty}\frac{1}{\sqrt{x^{2}-2x}+x}$의 값은?
+\begin{solution}
+	먼저 $\displaystyle\lim_{x\to\infty}\left(\sqrt{x^{2}+2x}-x\right)$를 계산하면
+	\begin{align*}
+		\displaystyle\lim_{x\to\infty}\left(\sqrt{x^{2}+2x}-x\right)
+		& =\displaystyle\lim_{x\to\infty}\frac{x^{2}+2x -x^{2}}{\sqrt{x^{2}+2x}+x}\\
+		& =\displaystyle\lim_{x\to\infty}\frac{2x}{\sqrt{x^{2}+2x}+x}=1
+	\end{align*}
+	이다. 즉 $\displaystyle\lim_{x\to\infty}\left(\sqrt{x^{2}+2x}-x\right)=1$이다. 이 극한값의 계산 결과를 분석해 보자. 이 극한값의 계산 결과는
+	\[
+	x\to\infty \Rightarrow \sqrt{x^{2}+2x}\to x+1
+	\] 즉, 
+	$y =\sqrt{x^{2}+2x}$의 점근선이 $y = x+1$임을 의미한다. 따라서 $x$가 한없이 커질 때, $\sqrt{x^{2}+2x}$는 $x+1$에 한없이 가까워져 간다. 이것은 $x\to\infty$일 때, $\sqrt{x^{2}+2x}$ 대신 $x+1$을 대신 써서 계산해도 됨을 의미한다. 이제 $\displaystyle\lim_{x\to -\infty}\frac{1}{\sqrt{x^{2}-2x}+x}$을 계산하기 위해 $t= -x$로 치환하면 
+	\[
+	\displaystyle\lim_{x\to -\infty}\frac{1}{\sqrt{x^{2}-2x}+x}=\displaystyle\lim_{t\to\infty}\frac{1}{\sqrt{t^{2}+2t}-t}
+	\]
+	이다. 그런데 $t\to\infty$일 때, $\sqrt{t^{2}+2t}\to t+1$이므로 
+	\[
+	\displaystyle\lim_{t\to\infty}\frac{1}{\sqrt{t^{2}+2t}-t}=\displaystyle\lim_{t\to\infty}\frac{1}{(t+1)-t}= 1
+	\]
+	임을 쉽게 알 수 있다. 
+\end{solution}
+\end{example}
+
+\vskip 10pt
+이것을 다음과 같이 일반화 할 수 있다. 즉 $a>0$일 때,
+\begin{align*}
+\displaystyle\lim_{x\to\infty}\left(\sqrt{ax^{2}+bx+c}-\sqrt{a}x\right)
+& =\displaystyle\lim_{x\to\infty}\frac{bx+c}{\left(\sqrt{ax^{2}+bx+c}+\sqrt{a}x\right)}\\
+& =\displaystyle\lim_{x\to\infty}\frac{b+\frac{c}{x}}{\sqrt{a +\frac{b}{x}+\frac{c}{x^{2}}}+\sqrt{a}}\\
+&=\frac{b}{2\sqrt{a}}
+\end{align*}
+이므로 $x\to\infty$일 때, $\sqrt{ax^{2}+bx+c}\to\sqrt{a}x +\frac{b}{2\sqrt{a}}$임을 알 수 있고 이 사실을 극한값 계산에 활용할 수 있다. 이제 이 사실을 이용하여 극한값을 간단히 계산할 수 있음을 살펴보자.
+
+\begin{example}
+$\displaystyle\lim_{x\to\infty}\left(2x -\sqrt{4x^{2}-x}\right)$의 값은?
+\begin{solution}
+	$x\to\infty$일 때 $\sqrt{4x^{2}-x}\to 2x -\frac{1}{4}$이므로 구하는 극한값은 $\frac{1}{4}$이다.
+\end{solution}
+\end{example}
+\vskip 10pt
+
+\begin{problem}
+다음 극한값을 구하여라.
+\begin{enumerate}
+	\item $\displaystyle\lim_{x\to\infty}\left(\sqrt{4x^{2}-3x}- 2x\right)$
+	\item $\displaystyle\lim_{x\to\infty}\left(\sqrt{x^{2}+4x}-\sqrt{x^{2}}\right)$
+\end{enumerate}
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{enumerate}
+			\item 공식을 적용하면 $\displaystyle\lim_{x\to\infty}\left(\sqrt{4x^{2}-3x}- 2x\right)= -\frac{3}{2}$임을 알 수 있다.
+			\item 마찬가지로 $\displaystyle\lim_{x\to\infty}\left(\sqrt{x^{2}+4x}-\sqrt{x^{2}}\right)=2$임을 알 수 있다.
+		\end{enumerate}	
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+
+\begin{problem}
+\textbf{(평가원 기출)} 곡선 $y =\sqrt{x}$위의 점 $(t,\:\sqrt{t})$에서 점 $(1,\: 0)$까지의 거리를 $d_{1}$, 점 $(2,\: 0)$가지의 거리를 $d_{2}$라 할 때, $\displaystyle\lim_{t\to\infty}\left(d_{1}-d_{2}\right)$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\[
+		d_1 =\sqrt{(t-1)^2 + \sqrt{t}^2} =\sqrt{t^2 - t +1} \rightarrow t-\frac{1}{2}
+		\]이고
+		\[	
+		d_2 = \sqrt{(t-2)^2 + \sqrt{t}^2} =\sqrt{t^2 - 3t +4} \rightarrow t-\frac{3}{2}
+		\]이므로 
+		$\displaystyle\lim_{t\to\infty}\left(d_{1}-d_{2}\right)=1$이다.	
+		
+		한편 그림
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[domain=0:3.5, samples=200, >=latex]
+					% \draw[very thin,color=gray] (-2.6,-1.6) grid (2.4,1.6);
+					\filldraw[blue] (1,0) circle (1.5pt) node [below] {$\textrm{A}$};
+					\filldraw[blue] (2,0) circle (1.5pt) node [below] {$\textrm{B}$};
+					\filldraw[blue] (3,1.7321) circle (1.5pt) node [above] {$\textrm{P}$};
+					\draw[->] [line width=0.3mm] (-0.5,0) -- (3.5,0) node[right] {$x$};
+					\draw[->] [line width=0.3mm] (0,-0.5) -- (0,1.9) node[above] {$y$};
+					\draw[domain=0:3.5, color=blue,line width=0.3mm] plot (\x, {sqrt(\x)}) node [above] {$\sqrt{x}$};
+					\node[below left] at (0, 0) {\small \text{O}} ;
+					\draw [line width=0.3mm, color=blue] (1,0) -- (3, 1.7321);
+					\draw [line width=0.3mm, color=blue] (2,0) -- (3, 1.732);
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+		로부터 점 $\text{P}$가 원점으로부터 한없이 멀어지면 $d_1 -d_2 = \overline{\textrm{AB}}$임을 알 수 있다.	
+\end{psolution}}
+\end{problem}
+\vskip 10pt
+
+
+한편 $x\to\infty$인 경우가 아니더라도 함수의 극한의 의미를 해석하여 문제를 해결할 수 있다. 다음의 예제는 분자를 유리화하여 상당히 긴 대수적 연산을 통해 $a,\: b$를 구할 수 있다. 그러나 $x=0$에서 $\sqrt{x^{2}+x+1}$의 선형 근사를 통해 문제를 간단히 해결할 수 있다.
+\vskip 10pt
+
+\begin{example}
+$\displaystyle\lim_{x\to 0}\frac{\sqrt{x^{2}+x+1}-(ax+b)}{x}=\frac{5}{2}$를 만족시키는 두 실수 $a,\: b$의 합 $a+b$의 값을 구하시오.
+\begin{solution}
+	먼저 $f(x)=\sqrt{x^{2}+x+1}$의 $x =0$에서의 미분계수를 구하자. 
+	\[
+	f^{\prime}(0)=\displaystyle\lim_{x\to 0}\frac{f(x)-f(0)}{x-0}=\displaystyle\lim_{x\to 0}\frac{\sqrt{x^{2}+x+1}-1}{x}=\frac{1}{2}
+	\]
+	이다. 이 미분계수의 결과를 해석하면 $x\to 0$일 때, 
+	\[
+	\sqrt{x^{2}+x+1}\to\frac{1}{2}x +1
+	\]
+	임을 의미한다. 
+	\begin{align*}
+		\displaystyle\lim_{x\to 0}\frac{\sqrt{x^{2}+x+1}-(ax+b)}{x}
+		& =\displaystyle\lim_{x\to 0}\frac{\frac{1}{2}x+1-(ax+b)}{x}\\
+		& =\displaystyle\lim_{x\to 0}\frac{\left(\frac{1}{2}-a\right)x+(1-b)}{x}\\
+		&=\frac{5}{2}
+	\end{align*}
+	이다. 따라서 $\frac{1}{2}-a =\frac{5}{2}$, $1-b =0$이므로 $a = -2$, $b =1$을 쉽게 얻을 수 있다.
+\end{solution}
+\end{example}
+\vskip 10pt
+
+이 예제를 일반화 하자. $x\to a$일 때 어떤 함수의 극한을 계산하는데 대수적으로 다루기 어려운 함수 $f(x)$가 포함되어 있는 경우에
+\[
+f'(a)=\displaystyle\lim_{x\to a}\frac{f(x)-f(a)}{x-a}
+\]
+이므로 $x\to a$일 때 $f(x)\to(x-a)f'(a)+f(a)$라 할 수 있다. 예제 3의 경우는 $f(x)=\sqrt{x^{2}+x+1}$인 경우이다. 이제 이러한 방법을 이용하여 다음 문제를 풀어보자.
+\vskip 10pt
+\begin{example}
+\textbf{(평가원 기출)} $\displaystyle\lim_{x\to 0}\frac{20x}{\sqrt{4+x}-\sqrt{4-x}}$의 값을 구하시오.
+\begin{solution}
+	$f(x)=\sqrt{4+x}$라 하면 $f'(0)=\frac{1}{4}$이므로 $\displaystyle\lim_{x\to 0}\frac{\sqrt{4+x}-2}{x}=\frac{1}{4}$이다. 즉 $x\to 0$일 때, $\sqrt{4+x}\to\frac{1}{4}x +2$이고 $\sqrt{4-x}\to -\frac{1}{4}x+2$이다. 따라서
+	\begin{align*}
+		\displaystyle\lim_{x\to 0}\frac{20x}{\sqrt{4+x}-\sqrt{4-x}}&=\displaystyle\lim_{x\to 0}\frac{20x}{\left(\frac{1}{4}x+2\right)-\left(-\frac{1}{4}x+2\right)}\\
+		&=40
+	\end{align*}
+	이다.
+\end{solution}
+\end{example}
+\vskip 10pt
+\begin{problem} $\displaystyle\lim_{x\to 0}\frac{\sqrt{1+2x}-\sqrt{1-2x}}{x}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		함수 $y =\frac{1}{\sqrt{1+2x}}$의 $x=0$에서의 접선의 방정식은 $y=x+1$이고  $y =\frac{1}{\sqrt{1-2x}}$의 $x=0$에서의 접선의 방정식은 $y=-x+1$이이므로 구하는 극한값은 $2$임을 알 수 있다.
+\end{psolution}}
+\end{problem} 
+
+\vspace{1em}
+\section{평균변화율을 이용한 극한의 계산}
+ $\frac{0}{0}$꼴의 극한값의 계산을 미분 특히 평균값 정리를 배운 3학년 학생의 경우도 여전히 미분의 지식을 사용하지 않고 대수적 연수만으로 계산하는 경우가 있다. 그러나 고 3 수험생의 경우 실전에서는 최대한 문제를 빨리 풀 수 있도록 이미 배운 모든 지식을 총 동원하여 문제를 해결 하는 것이 좋다. $\frac{0}{0}$꼴의 극한값을 계산하는 편리한 방법으로 로피탈의 정리가 있으나 로피탈의 정리를 쓰면 문제가 더 복잡해 지는 경우가 있다. 평균변화율의 개념을 활용한 함수의 극한의 계산은 처음 문제보다 더 복잡해지는 경우가 없으면서도 계산을 매우 빠르게 수행할 수 있다는 장점이 있다. 
+
+평균변화율의 개념을 활용한 함수의 극한값의 계산에서 중요한 것은 주어진 극한의 계산에서 주어진 식이 어떤 함수의 특정한 구간에서의 평균변화율이라는 것을 분석해 내는 것이 중요하다. 
+\vspace{1em}
+\begin{example}
+	다항함수 $f(x)$에 대하여 $\displaystyle\lim_{x\to 1}\frac{f(x)-f(1)}{x-1}=10$일 때,
+	\begin{equation*}
+		\displaystyle\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{h}
+	\end{equation*}
+의 값은?
+\begin{solution}\textbf{(일반적인 풀이)}
+ $\displaystyle\lim_{x\to 1}\frac{f(x)-f(1)}{x-1}=f'(1)$이므로 $f'(1)=10$이고,
+	\begin{align*}
+		\displaystyle\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{h}
+		& =\displaystyle\lim_{h\to 0}\frac{f(1+h)-f(1)+ f(1)-f(1-2h)}{h}\\
+		& =\displaystyle\lim_{h\to 0}\frac{f(1+h)-f(1)}{h}+\displaystyle\lim_{h\to 0}\frac{f(1-2h)-f(1)}{-2h}\times 2 \\
+		& = f^{\prime}(1)+ 2 f^{\prime}(1)		\\
+		& =3f^{\prime}(1)=30
+	\end{align*}
+\end{solution}
+\begin{solution}\textbf{(평균변화율의 개념을 활용한 풀이)}
+	
+$\displaystyle\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{h}$을
+\begin{equation*}
+	 3\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{3h}=3\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{(1+h)-(1-2h)}
+\end{equation*}
+로 변형하면 $\frac{f(1+h)-f(1-2h)}{(1+h)-(1-2h)}$은 함수 $y=f(x)$의 구간 $[1-2h,\:1+h]$에서의 평균변화율이고 이 구간은 $h\to 0$일 때, 한 점 $x=1$에 수렴해 간다. 따라서 
+	\begin{equation*}
+	3\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{3h}=3\lim_{h\to 0}\frac{f(1+h)-f(1-2h)}{(1+h)-(1-2h)}=3f^{\prime}(1)
+	\end{equation*}
+	이다. 
+\end{solution}
+\end{example}
+
+평균변화율의 개념을 활용한 풀이는 주어진 $\frac{0}{0}$꼴의 극한값의 계산식이 $\frac{f(A)-f(B)}{X}$일 때, $X = k(A-B)$의 꼴로 고쳐주기만 하면 간단히 계산된다는 장점이 있다.
+\vspace{1em}
+\begin{example}
+	$f^{\prime}(3)=2$일 때, $\displaystyle\lim_{h\to 0}\frac{f(3 +2h)-f(3-3h)}{2h}$의 값을 구하시오.
+	\begin{solution}
+		\begin{align*}
+		 \lim_{h\to 0}\frac{f(3 +2h)-f(3-3h)}{2h} &=\displaystyle\lim_{h\to 0}\frac{f(3+2h)-f(3-3h)}{5h}\cdot\frac{5}{2}\\
+		 &=f^{\prime}(3)\times\frac{5}{2}=5
+		\end{align*}
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	$\displaystyle\lim_{x\to 0}\frac{e^{1-\sin x}-e^{1-\tan x}}{\tan x -\sin x}$의 값을 구하시오.
+	
+\processifversion{psol}{
+\begin{psolution}
+	$\frac{e^{1-\sin x}-e^{1-\tan x}}{\tan x -\sin x}=\frac{e^{1-\sin x}-e^{1-\tan x}}{(1-\sin x)-(1-\tan x)}$이므로 $\frac{e^{1-\sin x}-e^{1-\tan x}}{\tan x -\sin x}$는 구간 $[1- \tan x,\:1-\sin x]$에서 함수 $y=e^{x}$의 평균변화율이다. 그런데 $x\to 1$이면 구간 $[1- \tan x,\:1-\sin x]$은 한 점 $x=1$에 수렴해 가고 따라서 평균변화율은 $x=1$에서의 순간변화율 $e$에 수렴함을 알 수 있다.
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	$f(x)=\begin{cases}
+		\frac{x^{2}+x-12}{x-3}&(x\ne 3)\\
+		a &	(x=3)
+	\end{cases}$
+가 모든 실수 $x$에서 연속일 때, $a$의 값은?
+\processifversion{psol}{
+\begin{psolution}
+	$x=3$에서 연속이면 모든 실수 $x$에서 연속이고 $x=3$에서 연속이려면	
+	\begin{equation*}
+	a =\displaystyle\lim_{x\to 3}\frac{x^{2}+x-12}{x-3}
+	\end{equation*}
+	이어야 한다. $\frac{x^{2}+x-12}{x-3}$은 구간 $[3,\:x]$에서 함수 $f(x)=x^{2}+x$의 평균변화율이고 $x\to 3$이면 이 평균변화율은 $x=3$에서의 순간변화율에 수렴해가므로 구하는 $a$의 값은 $7$이다.
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	 다음 극한값을 구하시오.
+	\begin{enumerate}
+		\item $\displaystyle\lim_{x\to +0}\frac{e^{x}-e^{\sin x}}{x-\sin x}$
+		\item $\displaystyle\lim_{x\to 0}\frac{\sin x -\sin(\sin x)}{x -\sin x}$
+	\end{enumerate}
+\processifversion{psol}{
+\begin{psolution}
+	\begin{enumerate}
+		\item $\frac{e^{x}-e^{\sin x}}{x-\sin x}$는 구간 $(\sin x,\:x)$에서 함수 $y=e^{x}$의 평균변화율이다. $x\to 0+$이면 구간 
+		$(\sin x,\:x)$은 한 점 $x=0$에 수렴해 가므로 $\displaystyle\lim_{x\to 0+}\tfrac{e^{x}-e^{\sin x}}{x-\sin x}$은 $y=e^{x}$의 $x=0$에서의 순간변화율 즉, 미분계수이다. 따라서 구하는 값은 $1$이다.
+		\item $\frac{\sin x -\sin(\sin x)}{x -\sin x}$은 구간 $(\sin x,\:x)$에서 함수 $y=\sin x$의 평균변화율이다. $x\to 0$이면 구간 $(\sin x,\:x)$은 한 점 $x=0$에 수렴해 가므로 $\displaystyle\lim_{x\to 0}\tfrac{\sin x -\sin(\sin x)}{x -\sin x}$은 $y=\sin x$의 $x=0$에서의 순간변화율 즉, 미분계수이다. 따라서 구하는 값은 $1$이다.
+	\end{enumerate}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+\section{함수의 극한 문제 해결}
+\begin{problem}
+	$\lim\limits_{n\to\infty}\left(\sqrt{2n^{2}+n}-a\sqrt{2n^{2}-n}\right)$의 극한값이 존재할 때의 $a$값과 그 때의 극한값을 $b$라 할 때, $a^{2}+b^{2}$의 값은?
+\processifversion{psol}{
+\begin{psolution}
+	\begin{align*}
+		\lim_{n\to\infty}\left(\sqrt{2n^{2}+n}-a\sqrt{2n^{2}-n}\right)
+		& =\lim_{n\to\infty}\frac{2n^{2}+n-a^{2}(2n^{2}-n)}{\sqrt{2n^{2}+n}+a\sqrt{2n^{2}-n}}\\
+		& =\lim_{n\to\infty}\frac{2n^{2}(1-a^{2})+n(1+a^{2})}{n\left(\sqrt{2+\frac{1}{n}}+a\sqrt{2-\frac{1}{n}}\right)}\\
+		& =\lim_{n\to\infty}\frac{2n(1-a^{2})+(1+a^{2})}{\sqrt{2+\frac{1}{n}}+a\sqrt{2-\frac{1}{n}}}
+	\end{align*}
+	이므로 $a=1$일 때, 구하는 극한값은 $\frac{\sqrt{2}}{2}$이다. 따라서 $a^{2}+b^{2}=\frac{3}{2}$이다.
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	$\lim\limits_{x\to 1}\frac{\sqrt[3]{x^{2}+7}-\sqrt{x+3}}{x^{2}-3x+2}$의 값을 구하면?
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{x\to 1}\frac{\sqrt[3]{x^{2}+7}-\sqrt{x+3}}{x^{2}-3x+2}
+			& =\lim_{x\to 1}\frac{\sqrt[3]{x^{2}+7}-2}{x^{2}-3x+2}+\lim_{x\to 1}\frac{2-\sqrt{x+3}}{x^{2}-3x+2}\\
+			& =\lim_{x\to 1}\frac{x+1}{(x-2)\left(\sqrt[3]{(x^{2}+7)^{2}}+2\sqrt[3]{x^{2}+7}+4\right)}\\ &\phantom{+}+\lim_{x\to 1}\frac{1}{(2-x)(2+\sqrt{x+3)}}\\
+			& = -\frac{2}{12}+\frac{1}{4}=\frac{1}{12}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	$\lim\limits_{x\to 0}\frac{\sqrt{1+\sin^{2}x}-\cos x}{1-\sqrt{1+\tan^{2}x}}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+	\begin{align*}
+		\lim_{x\to 0}\frac{\sqrt{1+\sin^{2}x}-\cos x}{1-\sqrt{1+\tan^{2}x}}
+		& =\lim_{x\to 0}\frac{(1+\sin^{2}x-\cos^{2}x)(1+\sqrt{1+\tan^{2}x})}{(1-1-\tan^{2}x)(\sqrt{1+\sin^{2}x}+\cos x)}\\
+		& =\lim_{x\to 0}\frac{2\sin^{2}x(1+\sqrt{1+\tan^{2}x})}{-\tan^{2}x\left(\sqrt{1+\sin^{2}x}+\cos x\right)}\\
+		& =\lim_{x\to 0}\frac{-2\left(1+\sqrt{1+\tan^{2}x}\right)}{\sqrt{1+\sin^{2}x}+\cos x}\\
+		& = -2
+	\end{align*}	
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	$\lim\limits_{n\to\infty}\left(\frac{2n^{2}-3}{2n^{2}-n+1}\right)^{\frac{n^{2}-1}{n}}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{n\to\infty}\left(\frac{2n^{2}-3}{2n^{2}-n+1}\right)^{\frac{n^{2}-1}{n}}
+			& =\lim_{n\to\infty}\left(1+\frac{n-4}{2n^{2}-n+1}\right)^{\frac{n^{2}-1}{n}}\\
+			& =\lim_{n\to\infty}\left[\left(1+\frac{n-4}{2n^{2}-n+1}\right)^{\frac{2n^{2}-n+1}{n-4}}\right]^{\frac{(n-4)(n^{2}-1)}{2n^{3}-n^{2}+n}}\\
+			& = e^{\lim_{n\to\infty}\frac{n^{3}-4n^{2}-n+4}{2n^{3}-2n^{2}+n}}= e^{\frac{1}{2}}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	$\lim\limits_{x\to 0}\left(e^{x}+\sin x\right)^{\frac{1}{x}}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{x\to 0}\left(e^{x}+\sin x\right)^{\frac{1}{x}}
+			& =\lim_{x\to 0}\left[e^{x}\left(1+\frac{\sin x}{e^{x}}\right)\right]^{\frac{1}{x}}\\
+			& =\lim_{x\to 0}\left(e^{x}\right)^{\frac{1}{x}}\cdot\lim_{x\to 0}\left[\left(1+\frac{\sin x}{e^{x}}\right)^{\frac{e^{x}}{\sin x}}\right]^{\frac{\sin x}{xe^{x}}}\\
+			& = e\cdot e^{\lim_{x\to 0}\frac{\sin x}{x}\cdot\frac{1}{e^{x}}}=e^{2}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$a,\: b$가 양의 실수일 때, $\lim\limits_{n\to\infty}\left(\frac{a-1+\sqrt[n]{b}}{a}\right)^{n}$의 값은?
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{n\to\infty}\left(\frac{a-1+\sqrt[n]{b}}{a}\right)^{n}
+			& =\lim_{n\to\infty}\left[\left(1+\frac{\sqrt[n]{b}-1}{a}\right)^{\frac{a}{\sqrt[n]{b}-1}}\right]^{\frac{n(\sqrt[n]{b}-1)}{a}}\\
+			& = e^{\frac{1}{a}\lim_{n\to\infty}\frac{b^{\frac{1}{n}}-1}{\frac{1}{n}}}\\
+			& =e^{\frac{\ln b}{a}}=b^{\frac{1}{a}}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	\[
+	a_{n}=\begin{cases}
+		1&(n\le k,\: k\text{는 자연수})\\
+		\frac{(n+1)^{k}-n^{k}}{_{n}C_{k-1}}&(n>k)
+	\end{cases}
+	\]
+	일 때, 다음 물음에 답하시오.
+	\begin{enumerate}
+		\item $\lim\limits_{n\to\infty}a_{n}$을 구하시오.
+		
+		\item $b_{n}=1+\sum\limits_{k=1}^{n}k \cdot \lim\limits_{n\to\infty}a_{n}$이라 할 때, \[\lim_{n\to\infty}\left(\frac{b_{n}^{2}}{b_{n-1} b_{n+1}}\right)^{n}\]의 값을 구하시오.
+	\end{enumerate}
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{enumerate}
+			\item \begin{align*}
+		\lim_{n\to\infty}a_{n}
+		& =\lim_{n\to\infty}\frac{(n+1)^{k}-n^{k}}{_{n}C_{k}}\\
+		& =\lim_{n\to\infty}\frac{(k-1)!kn^{k-1}+\cdots +(k-1)!}{(n-k+2)(n-k+3)\cdots n}\\
+		& =\frac{k!\cdot n^{k-1}+\cdots}{n^{k-1}+\cdots}=k!
+	\end{align*}
+			 \item $b_{n}=1 +\sum_{k=1}^{n}k\cdot k! =1+\sum_{k=1}^{n}((k+1)!-k!)=(n+1)!$이므로
+			 \begin{equation*}
+			 	\displaystyle \lim_{n\to\infty}\left(\frac{b_{n}^{2}}{b_{n-1}b_{n+1}}\right)^{n}=\lim_{n\to\infty}\left(1-\frac{1}{n}\right)^{n}=e^{-1}
+			 \end{equation*}
+			이다.	
+\end{enumerate}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$a>0$일 때, $\lim\limits_{x\to 0}\frac{(a+x)^{x}-1}{x}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{x\to 0}\frac{(a+x)^{x}-1}{x}
+			& =\lim_{x\to 0}\frac{e^{x\ln(a+x)}-1}{x}\\
+			& =\lim_{x\to 0}\frac{e^{x\ln(a+x)}-1}{x\ln(a+x)}\cdot\ln(a+x)\\
+			& =\ln a
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$a_{1}=\frac{3}{2}$이고 $a_{n+1}=\frac{a_{n}^{2}-a_{n}+1}{a_{n}}$일 때 다음 물음에 답하시오.
+	\begin{itemize}
+		\item수열 $\left\{a_{n}\right\}$이 수렴함을 보이시오.
+		\item $\lim\limits_{n\to\infty}a_{n}$의 값을 구하시오.
+	\end{itemize}
+\processifversion{psol}{
+	\begin{psolution}
+\begin{itemize}
+	\item 산술-기하 부등식에 의해
+	\begin{equation*}
+	a_{n+1}=\frac{a_{n}^{2}-a_{n}+1}{a_{n}}=a_{n}+\frac{1}{a_{n}}-1\ge 1
+	\end{equation*}
+	이므로 주어진 수열은 아래로 유계이고 	
+	$a_{n+1}-a_{n}=\frac{1}{a_{n}}-1\le 0$이므로 감소수열이다. 따라서 주어진 수열은 수렴한다.
+	\item 주어진 수열이 수렴하므로 $\lim_{n\to\infty}a_{n}=l$이라 하면
+		$l =\frac{l^{2}-l+1}{l}$에서 $l=1$이다.
+\end{itemize}		
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$a>0$, $b \in \left(a,\: 2a\right)$이다. $x_{0}=b$이고 $x_{n+1}=a+\sqrt{x_{n}(2a-x_{n})}$을 만족시키는 수열 $x_{n}$의 극한값이 존재할 때, $\frac{b}{a}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+       $x_{1}= a+\sqrt{2ab-b^{2}}$이고 
+		\begin{align*}
+			x_{2}
+			& = a+\sqrt{(a+\sqrt{2ab-b^{2}})(a-\sqrt{2ab-b^{2}})}\\
+			& = a+\sqrt{a^{2}-2ab+b^{2}}\\
+			& = a+ | a-b | =b
+		\end{align*}
+		이므로 주어진 수열은 주기수열이고 따라서 $\lim_{k\to\infty}x_{2k}=b$, $\lim_{k\to\infty}x_{2k+1}= a+\sqrt{2ab-b^{2}}$이다. 이 수열이 수렴하기 위한 필요충분조건은 $b=a+\sqrt{2ab-b^{2}}$이고 따라서 
+		\begin{equation*}
+			\frac{b}{a}=1+\frac{\sqrt{2}}{2}
+		\end{equation*}
+	이다. 
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{n\to\infty}\sum\limits_{k=1}^{n}\frac{k}{4k^{4}+1}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{n\to\infty}\sum_{k=1}^{n}\frac{k}{4k^{4}+1}
+			& =\lim_{n\to\infty}\left(\frac{1}{4}\sum_{k=1}^{n}\frac{1}{2k^{2}-2k+1}-\frac{1}{4}\sum_{k=1}^{n}\frac{1}{2k^{2}+2k+1}\right)\\
+			& =\frac{1}{4}\lim_{n\to\infty}\left(1-\frac{1}{2n^{2}+2n+1}\right)=\frac{1}{4}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{x\to 0}\frac{\ln(\cos 4x)}{\ln(\cos 2x)}$의 값은? 더 일반적으로 $\lim\limits_{x\to 0}\frac{\ln(\cos ax)}{\ln(\cos bx)}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		 $\lim_{x\to 0}\frac{\ln(\cos ax)}{\ln(\cos bx)}$의 극한값을 구하면 원래의 문제는 해결되므로 이 극한값만 계산하자.
+		\begin{align*}
+			\lim_{x\to 0}\frac{\ln(\cos ax)}{\ln(\cos bx)}
+			& =\lim_{x\to 0}\frac{(\cos ax-1)\ln(1+\cos ax-1)^{\frac{1}{\cos ax-1}}}{(\cos bx-1)\ln(1+\cos bx-1)^{\frac{1}{\cos bx-1}}}\\
+			& =\lim_{x\to 0}\frac{-2\sin^{2}\frac{ax}{2}}{-2\sin^{2}\frac{bx}{2}}=\frac{a^{2}}{b^{2}}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$a,\: b$가 양의 실수일 때, $\lim\limits_{n\to\infty}\left(\frac{\sqrt[n]{a}+\sqrt[n]{b}}{2}\right)^{n}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		$\lim_{n\to\infty}n(\sqrt[n]{a}-1)=\lim_{n\to\infty}\frac{a^{\frac{1}{n}}-1}{\frac{1}{n}}=\ln a$이므로
+		\begin{align*}
+			\lim_{n\to\infty}\left(\frac{\sqrt[n]{a}+\sqrt[n]{b}}{2}\right)^{n}
+			& =\lim_{n\to\infty}\left(1+\frac{\sqrt[n]{a}-1+\sqrt[n]{b}-1}{2}\right)^{n}\\
+			& =\lim_{n\to\infty}\left[\left(1+\frac{\sqrt[n]{a}-1+\sqrt[n]{b}-1}{2}\right)^{\frac{2}{\sqrt[n]{a}-1+\sqrt[n]{b}-1}}\right]^{\frac{n(\sqrt[n]{a}-1)+n(\sqrt[n]{b}-1)}{2}}\\
+			& =e^{\lim_{n\to\infty}\frac{n(\sqrt[n]{a}-1)+n(\sqrt[n]{b}-1)}{2}}\\
+			& = e^{\frac{\ln a +\ln b}{2}}=e^{\ln\sqrt{ab}}=\sqrt{ab}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{x\to 1^{-0}}\frac{1-\cos\left(4\cos^{-1}x\right)}{1-x^{2}}$의 값은?$\left(\text{단, } x \in \left(0,\:\frac{\pi}{2}\right)\text{이다.}\right)$
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{x\to 1-0}\frac{1-\cos\left(4\cos^{-1}x\right)}{1-x^{2}}
+			& =\lim_{x\to 1-0}\frac{2\sin^{2}\left(2\cos^{-1}x\right)}{1-x^{2}}\\
+			& =\lim_{x\to 1-0}\frac{2\sin^{2}\left(2\cos^{-1}x\right)}{(2\cos^{-1}x)^{2}}\cdot\lim_{x\to 1-0}\frac{4(\cos^{-1}x)^{2}}{1-x^{2}}\\
+			& = 2\cdot\lim_{x\to 1-0}\frac{4(\cos^{-1}x)^{2}}{1-x^{2}}\\
+			& =8\lim_{y\to 0+}\frac{y^{2}}{\sin^{2}y}=8
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{x\to 0}\frac{\tan{x} -\tan^{-1}x}{x^{2}}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		먼저 $x \in \left(0,\:\frac{\pi}{2}\right)$일 때,
+\begin{equation*}
+0 <\frac{\tan x-x}{x^{2}}<\frac{\tan x-\sin x}{x^{2}}=\frac{\tan x(1-\cos x)}{x^{2}}=\frac{2\tan x\sin^{2}\frac{x}{2}}{x^{2}}
+\end{equation*}		
+		이고 
+\begin{equation*}
+	\lim_{x\to 0}\frac{2\tan x\sin^{2}\frac{x}{2}}{x^{2}}=\lim_{x\to 0}\frac{\tan x}{2}\cdot\lim_{x\to 0}\left(\frac{\sin\frac{x}{2}}{\frac{x}{2}}\right)^{2}=0
+\end{equation*}
+	이므로 $\lim_{x\to 0}\frac{\tan x -x}{x^{2}}=0$이다. 이제,
+	\begin{align*}
+			\lim_{x\to 0}\frac{\tan x -\tan^{-1}x}{x^{2}}
+			& =\lim_{x\to 0}\frac{tanx-x}{x^{2}}+\lim_{x\to 0}\frac{x-\tan^{-1}x}{x^{2}}\\
+			& =\lim_{x\to 0}\frac{x-\tan^{-1}x}{x^{2}}\\
+			& =\lim_{y\to 0}\frac{\tan y-y}{\tan^{2}y}\\
+			& =\lim_{y\to 0}\frac{\tan y-y}{y^{2}}\cdot\frac{y^{2}}{\tan^{2}y}=0
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{n\to\infty}\cos(n\pi\sqrt[2n]{e})$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\left|\lim_{n\to\infty}\cos(n\pi\sqrt[2n]{e})\right|
+			& =\lim_{n\to\infty}\left|(-1)^{n}\cos(n\pi\sqrt[2n]{e}-n\pi)\right| \\
+			& =\lim_{n\to\infty}\left|\cos\left(\frac{\pi}{2}\cdot\frac{e^{\frac{1}{2n}}-1}{\frac{1}{2n}}\right)\right| \\
+			& =\left|\cos\frac{\pi}{2}\cdot\lim_{n\to\infty}\frac{e^{\frac{1}{2n}}-1}{\frac{1}{2n}}\right|\\
+			& =\left|\cos\frac{\pi}{2}\right| =0
+		\end{align*}
+		이므로 $\displaystyle \lim_{n\to\infty}\cos(n\pi\sqrt[2n]{e})=0$이다.	
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{n\to\infty}\left(\frac{n+1}{n}\right)^{\tan\frac{(n-1)\pi}{2n}}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{n\to\infty}\left(\frac{n+1}{n}\right)^{\tan\frac{(n-1)\pi}{2n}}
+			& =\displaystyle\lim_{n\to\infty}\left[\left(1+\frac{1}{n}\right)^{n}\right]^{\frac{1}{n}\tan\frac{(n-1)\pi}{2n}}\\
+			& = e^{\displaystyle\lim_{n\to\infty}\frac{\tan\frac{(n-1)\pi}{2n}}{n}}\\
+			& = e^{\displaystyle\lim_{n\to\infty}\frac{\tan\left(\frac{\pi}{2}-\frac{\pi}{2n}\right)}{n}}\\
+			& = e^{\displaystyle\lim_{n\to\infty}\frac{\cot\frac{\pi}{2n}}{n}}\\
+			& = e^{\frac{2}{\pi}\displaystyle\lim_{n\to\infty}\frac{\frac{\pi}{2n}}{\tan\frac{\pi}{2n}}}=e^{\frac{2}{\pi}}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{n\to\infty}n\ln\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{n\to\infty}n\ln\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)
+			& =\lim_{n\to\infty}\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)^{n}\\
+			& =\ln\left[\left(1+\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)-1\right)^{\frac{1}{\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)-1}}\right]^{n\left(\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)-1\right)}\\
+			& =\ln e^{\displaystyle \lim_{n\to\infty}n\left(\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)-1\right)}\\
+			& =\lim_{n\to\infty}n\left(\tan\left(\frac{\pi}{4}+\frac{\pi}{n}\right)-1\right)\\
+			& =\lim_{n\to\infty}n\left(\frac{1+\tan\frac{\pi}{n}}{1-\tan\frac{\pi}{n}}-1\right)\\
+			& =\lim_{n\to\infty}\frac{2n\tan\frac{\pi}{n}}{1-\tan\frac{\pi}{n}}\\
+			& = 2\lim_{n\to\infty}n\tan\frac{\pi}{n}\\
+			& =2\pi\lim_{n\to\infty}\frac{\tan\frac{\pi}{n}}{\frac{\pi}{n}}=2\pi 
+	\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\tan\alpha +\cot\alpha =n(n\ge 2)$의 근을 $\alpha_{n}$이라 할 때,
+	\begin{equation*}
+		\lim\limits_{n\to\infty}(\sin\alpha_{n}+\cos\alpha_{n})^{n}
+	\end{equation*}
+	의 값을 구하시오.$\left(\text{단, }0<\alpha_{n}<\frac{\pi}{4}\text{이다.}\right)$
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+			\lim_{n\to\infty}(\sin\alpha_{n}+\cos\alpha_{n})^{n}
+			& =\lim_{n\to\infty}\left[\left(\sin\alpha_{n}+\cos\alpha_{n}\right)^{2}\right]^{\frac{n}{2}}\\
+			& =\lim_{n\to\infty}\left(1+ 2\cos\alpha_{n}\sin\alpha_{n}\right)^{\frac{n}{2}}\\
+			& =\lim_{n\to\infty}\left(1+\frac{2}{\frac{\sin^{2}\alpha_{n}+\cos^{2}\alpha_{n}}{\cos\alpha_{n}\sin\alpha_{n}}}\right)^{\frac{n}{2}}\\
+			& =\lim_{n\to\infty}\left(1+\frac{2}{\tan\alpha_{n}+\cot\alpha_{n}}\right)^{\frac{n}{2}}\\
+			& =\lim_{n\to\infty}\left(1+\frac{2}{n}\right)^{\frac{n}{2}}=e
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{x\to 0}\frac{2^{\tan^{-1}x}-2^{\sin^{-1}x}}{2^{\tan x}- 2^{\sin x}}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+	\lim_{x\to 0}\frac{2^{\tan^{-1}x}-2^{\sin^{-1}x}}{2^{\tan x}- 2^{\sin x}}&=\lim_{x\to 0}\frac{2^{\sin^{-1}x}(2^{\tan^{-1}x-\sin^{-1}x}-1)}{2^{\sin x}(2^{\tan x-\sin x}-1)}\\
+	 &=\lim_{x\to 0}\frac{2^{\tan^{-1}x -\sin^{-1}x}-1}{2^{\tan x-\sin x}-1}\\
+	 &=\lim_{x\to 0}\frac{2^{\tan^{-1}x-\sin^{-1}x}-1}{\tan^{-1}x-\sin^{-1}x}\cdot\lim_{x\to 0}\frac{\tan x-\sin x}{2^{\tan x-\sin x}-1}\\
+	 &\phantom{lim}\cdot\lim_{x\to 0}\frac{\tan^{-1}x-\sin^{-1}x}{\tan x-\sin x}\\
+	 &=\ln 2\cdot\frac{1}{\ln 2}\cdot\lim_{x\to 0}\frac{\tan^{-1}x-\sin^{-1}x}{\tan x-\sin x}\\
+	 &=\lim_{x\to 0}\frac{\tan^{-1}x-\sin^{-1}x}{x^{3}}\cdot\lim_{x\to 0}\frac{x^{3}}{\tan x-\sin x}\\
+     &=\lim_{x\to 0}\frac{\tan^{-1}x-\sin^{-1}x}{\tan\left(\tan^{-1}x-\sin^{-1}x\right)}\times\lim_{x\to 0}\frac{\tan\left(\tan^{-1}x-\sin^{-1}x\right)}{x^{3}}\\
+			&\times\lim_{x\to 0}\frac{x^{3}}{\tan x(1-\cos x)}\\
+     &=\lim_{x\to 0}\frac{\frac{x-\frac{x}{\sqrt{1-x^{2}}}}{1+\frac{x^{2}}{\sqrt{1-x^{2}}}}}{x^{3}}\cdot\lim_{x\to 0}\frac{x^{3}}{2 \tan x\sin^{2}\frac{x}{2}}\\
+	 &= 2\lim_{x\to 0}\frac{\sqrt{1-x^{2}}-1}{x^{2}\left(\sqrt{1-x^{2}}+x^{2}\right)}\\
+	 &= 2\lim_{x\to 0}\frac{-x^{2}}{x^{2}\left(\sqrt{1-x^{2}}+x^{2}\right)\left(\sqrt{1-x^{2}}+1\right)}=-1
+	\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{x\to 0}\frac{\tan^{-1}x-\sin^{-1}x}{x^{3}}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		\begin{align*}
+	\lim_{x\rightarrow 0}\frac{\tan^{-1}x-\sin^{-1}x}{x^{3}}
+			& =\lim_{x\rightarrow 0}\frac{\tan^{-1}x-\sin^{-1}x}{\tan\left(\tan^{-1}x-\sin^{-1}x\right)}\cdot\frac{\tan(\tan^{-1}x-\sin^{-1}x)}{x^{3}}\\
+			& =\lim_{x\rightarrow 0}\frac{\tan(\tan^{-1}x-\sin^{-1}x)}{x^{3}}\\
+			& =\lim_{x\rightarrow 0}\frac{1}{x^{3}}\cdot\frac{x-\frac{x}{\sqrt{1-x^{2}}}}{1+\frac{x^{2}}{\sqrt{1-x^{2}}}}\\
+			& =\lim_{x\rightarrow 0}\frac{1}{x^{2}}\cdot\frac{\sqrt{1-x^{2}}-1}{\sqrt{1-x^{2}}+x^{2}}\\
+			& =\lim_{x\rightarrow 0}\frac{-1}{\left(\sqrt{1-x^{2}}+x^{2}\right)\left(\sqrt{1-x^{2}}+1\right)}= -\frac{1}{2}
+		\end{align*}
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\begin{problem}
+	$\lim\limits_{n\to\infty}\sqrt[n]{\frac{3^{3n}(n!)^{3}}{(3n)!}}$의 값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+	$a_{n}=\frac{3^{3n}(n!)^{3}}{(3n)!}$라 하면
+	\begin{align*}
+		\lim_{n\to\infty}\sqrt[n]{a_{n}}
+		& =\lim_{n\to\infty}\frac{a_{n+1}}{a_{n}}\\
+		& =\lim_{n\to\infty}\frac{3^{3n+3}[(n+1)!]^{3}}{(3n+3)!}\cdot\frac{(3n)!}{3^{3n}(n!)^{3}}\\
+		& =\lim_{n\to\infty}\frac{27(n+1)^{3}}{(3n+1)(3n+2)(3n+3)}=1
+	\end{align*}	
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+
+
+\end{document}

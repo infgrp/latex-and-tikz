@@ -1,0 +1,3492 @@
+% 반드시 XeLatex으로 컴파일을 해야 합니다.
+% 같이 제공하는 preamblex.tex은 trig.tex보다 상위 디렉토리에 두어야 컴파일이 됩니다. 두 파일을 같은 디렉토리에 두려면 몇 줄 아래에 있는 \input{../preamblex}를 \input{preamblex}로 수정하시기 바랍니다.
+
+\documentclass[11pt, a4paper]{book}
+%\documentclass[11pt,a4paper]{article} 
+\usepackage[T1]{fontenc}
+\usepackage{kotex}
+\usepackage{secdot}
+% Set page geometry
+\usepackage[margin=2.5cm,headsep=0.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{versions}
+%\includeversion{aftercal}
+\excludeversion{aftercal}
+\includeversion{nogeo}
+%\excludeversion{nogeo}
+\includeversion{psol}
+%\excludeversion{psol}
+\input{../preamblex} % 작업하는 파일의 상위 디렉토리에 둬야 하는 파일.
+\usetikzlibrary{intersections,decorations.text}
+
+\pgfdeclarelayer{background}
+\pgfsetlayers{background,main}
+
+
+\definecolor{c1}{RGB}{62, 97, 127}
+\definecolor{c2}{RGB}{104, 182, 182}
+\definecolor{c3}{RGB}{107, 190, 190}
+\definecolor{c4}{RGB}{100, 172, 174}
+\title{삼각함수}
+\author{유익승}
+\date{\today}
+\newcommand{\plogo}{\fbox{\color{c4}$\mathcal{YHHS}$}}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{c4}Trigonometry}
+\rhead{\plogo}
+\lfoot{\color{c1}\texttt{양현고등학교}}
+\rfoot{\color{c1}\pageref{LastPage}페이지 중 \thepage 페이지}
+
+\begin{document}
+	
+	\newcommand{\Bond}[6]%
+	% start, end, thickness, incolor, outcolor, iterations
+	{ \begin{pgfonlayer}{background}
+			\colorlet{InColor}{#4}
+			\colorlet{OutColor}{#5}
+			\foreach \I in {#6,...,1}
+			{   \pgfmathsetlengthmacro{\r}{#3/#6*\I}
+				\pgfmathsetmacro{\C}{sqrt(1-\r*\r/#3/#3)*100}
+				\draw[InColor!\C!OutColor, line width=\r] (#1.center) -- (#2.center);
+			}
+		\end{pgfonlayer}
+	}
+	
+	\newcommand{\SingleBond}[2]%
+	% start, end
+	{   \Bond{#1}{#2}{1mm}{white}{gray!50}{10}
+	}
+	
+	\newcommand{\RedBond}[2]%
+	% start, end
+	{   \Bond{#1}{#2}{2mm}{orange!70}{red!75!black}{10}
+	}
+	
+	\newcommand{\BlueBond}[2]%
+	% start, end
+	{   \Bond{#1}{#2}{2mm}{cyan}{blue!50!black}{10}
+	}
+	
+	\newcommand{\GreenBond}[2]%
+	% start, end
+	{   \Bond{#1}{#2}{0.7071mm}{green!25}{green!25!black}{10}
+	}
+	
+\thispagestyle{empty}
+\begin{tikzpicture}[overlay,remember picture,font=\sffamily\bfseries]
+\draw[very thick,red,name path=big arc] ([xshift=-2mm]current page.north) arc(150:285:11)
+coordinate[pos=0.225] (x0);
+\begin{scope}
+\clip ([xshift=-2mm]current page.north) arc(150:285:11) --(current page.north
+east);
+\fill[c4!50,opacity=0.25] ([xshift=4.55cm]x0) circle (4.55);
+\fill[c4!50,opacity=0.25] ([xshift=3.4cm]x0) circle (3.4);
+\fill[c4!50,opacity=0.25] ([xshift=2.25cm]x0) circle (2.25);
+\draw[very thick,c4!50] (x0) arc(-90:30:6.5);
+\draw[very thick,c4] (x0) arc(90:-30:8.75);
+\draw[very thick,c4!50,name path=arc1] (x0) arc(90:-90:4.675);
+\draw[very thick,c4!50] (x0) arc(90:-90:2.875);
+\path[name intersections={of=big arc and arc1,by=x1}];
+\draw[very thick,c4,name path=arc2] (x1) arc(135:-20:4.75);
+\draw[very thick,c4!50] (x1) arc(135:-20:8.75);
+\path[name intersections={of=big arc and arc2,by={aux,x2}}];
+\draw[very thick,c4!50] (x2) arc(180:50:2.25);
+\end{scope} 
+\path[decoration={text along path,text color=c4,
+raise = -2.8ex,
+text  along path,
+text = {|\sffamily\bfseries|\today},
+text align = center,
+},
+decorate
+] ([xshift=-2mm]current page.north) arc(150:245:11);
+%
+\begin{scope}
+\path[clip,postaction={fill=c3}]
+([xshift=2cm,yshift=-8cm]current page.center) rectangle ++ (4.2,7.7);
+\fill[c2] ([xshift=0.5cm,yshift=-8cm]current page.center)
+([xshift=0.5cm,yshift=-8cm]current page.center)  arc(180:60:2)
+|- ++ (-3,6) --cycle;
+\draw[very thick,c4] ([xshift=-1.5cm,yshift=-8cm]current page.center) 
+arc(180:0:2);
+\draw[very thick,c4] ([xshift=0.5cm,yshift=-8cm]current page.center) 
+arc(180:0:2);
+\draw[very thick,c4] ([xshift=2.5cm,yshift=-8cm]current page.center) 
+arc(180:0:2);
+\draw[very thick,c4] ([xshift=4.5cm,yshift=-8cm]current page.center) 
+arc(180:0:2);
+\fill[red] ([xshift=2.5cm,yshift=-8cm]current page.center) +(60:2) circle(1mm)
+node[above=1mm]{$\displaystyle \phantom{xx}\sin^{2}\theta + \cos^{2}\theta= 1$};
+\end{scope}
+%
+\fill[c1] ([xshift=2cm,yshift=-8cm]current page.center) rectangle ++ (-12.7,7.7);
+\node[text=white,anchor=west,scale=5,inner sep=0pt] at
+([xshift=-8cm,yshift=-3.25cm]current page.center) {삼각함수};
+\node[text=white,anchor=west,scale=2.5,inner sep=0pt] at
+([xshift=-3.5cm,yshift=-6cm]current page.center) {유익승};
+%
+\draw[gray,line width=5mm] 
+([xshift=2mm,yshift=-1mm]current page.south west) rectangle ([xshift=-2mm,yshift=1mm]current
+page.north east);
+\end{tikzpicture}
+\setstretch{1.4}
+\tikzset{every shadow/.style={opacity=1}}	
+%	\maketitle
+\chapter{\Huge 삼각함수와 그 그래프}
+\section{일반각과 호도법}
+
+다음 그림과 같이 $\angle \textrm{XOP}$는 평면 위에서 반직선 $\textrm{OX}$의 위치에서 점 $\textrm{O}$를 중심으로 반직선 $\textrm{OP}$가 회전하여 만들어진 도형이다.
+
+\begin{figure}[H]
+\begin{center}
+
+\begin{tikzpicture}[scale=0.8, line join=round]
+\draw[-stealth,  very thick] (0,0) -- (5, 0) node[right]{$\textrm{X}$};
+\draw[-stealth, very thick] (0, 0) -- ( 56:5) node[right]{$\textrm{P}$} ;
+\node [below] at (4, 0) {시초선};
+\node[left, rotate=60] at (60:4.5) {동경};
+\node[below] at (0,0){O};
+\draw[-latex, blue, very thick] (1.2,0) arc (0:56:1.2);
+\draw[-latex, red, very thick] (1,0) arc (360:56:1);
+\node[rotate=28, blue] at (28:2.4){양의 각(+)};
+\node[red] at (0, -1.3) {음의 각(-)};
+\end{tikzpicture}
+\end{center}
+\end{figure}
+그 회전한 양을 $\angle \textrm{XOP}$의 크기로 정한다. 이때, 반직선 $\textrm{OX}$를 {\color{red}시초선}, 반직선 $\textrm{OP}$를 {\color{red}동경}이라고 한다 동경 \textrm{OP}가 시계 반대 방향으로 회전하여 생기는 각을 양의 각, 시계 방향으로 회전하여 새기느 각을 음의 각으로 정하고, 음의 각일 경우 그 크기는 음의 부호(-)를 붙여서 나타낸다.
+
+\begin{sample}
+	$30^{\circ}$와 $-60^{\circ}$를 그림으로 나타내면  다음과 같다.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.4\linewidth}
+			\centering
+			\begin{tikzpicture}[scale=0.8, line join=round]
+				\pgfmathsetmacro{\ang}{30}
+				\draw[-stealth,  very thick] (0,0) -- (5, 0) node[right]{$\textrm{X}$};
+				\draw[-stealth, very thick] (0, 0) -- ( \ang:5) node[right]{$\textrm{P}$} ;
+				\node[below] at (0,0){O};
+				\draw[-stealth, blue] (1,0) arc (0:\ang:1);
+				\node[rotate=\ang/2, blue] at (\ang/2:1.6){$\ang^{\circ}$};
+			\end{tikzpicture}
+		\end{minipage}
+			\begin{minipage}{0.4\linewidth}
+			\centering
+			\begin{tikzpicture}[scale=0.8, line join=round]
+				\pgfmathsetmacro{\ang}{-60}
+				\draw[-stealth,  very thick] (0,0) -- (5, 0) node[right]{$\textrm{X}$};
+				\draw[-stealth, very thick] (0, 0) -- ( \ang:5) node[right]{$\textrm{P}$} ;
+				\node[below, xshift=-3pt] at (0,0){O};
+				\draw[-stealth, red, thick] (1,0) arc (0:\ang:1);
+				\node[rotate=\ang/2, red] at (\ang/2:1.7){$\ang^{\circ}$};
+			\end{tikzpicture}
+		\end{minipage}
+	\end{center}
+\end{figure}
+\end{sample}
+
+\vspace{1em}
+
+\begin{problem}
+	다음 각이 나타내는 시초선과 동경을 그림으로 나타내시오
+\quesfour{75^{\circ}}{-150^{\circ}}{510^{\circ}}{-1110^{\circ}}
+\end{problem}
+
+시초선 \textrm{OX}는 고정되어 있으므로 $\angle \textrm{XOP}$의 크기가 주어지면 동경 \textrm{OP}의 위치는 하나로 정해진다. 그러나 동경 \textrm{OP}의 위치가 정해져도 $\angle \textrm{XOP}$의 크기는 하나로 정해지지 않는다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			\begin{tikzpicture}
+					\pgfmathsetmacro{\ang}{30}
+				\draw[-stealth,  very thick] (0,0) -- (4, 0) node[right]{$\textrm{X}$};
+				\draw[-stealth, very thick] (0, 0) -- ( \ang:4) node[right]{$\textrm{P}$} ;
+				\node[below] at (0,0){O};
+				\draw[-stealth, blue] (1,0) arc (0:\ang:1);
+				\node[rotate=\ang/2, blue] at (\ang/2:1.6){$\ang^{\circ}$};
+				\draw [-stealth, domain=0:6.8,variable=\t,smooth,samples=75, red, thick]
+				plot ({\t r}: {0.03 *\t+0.5});
+			\end{tikzpicture}\vspace{-3em}
+		\begin{align*}
+			&360^{\circ} \times 1 + 30^{\circ} \\
+			&= 390^{\circ}
+		\end{align*}
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+		\centering
+		\begin{tikzpicture}
+			\pgfmathsetmacro{\ang}{30}
+			\draw[-stealth,  very thick] (0,0) -- (4, 0) node[right]{$\textrm{X}$};
+			\draw[-stealth, very thick] (0, 0) -- ( \ang:4) node[right]{$\textrm{P}$} ;
+			\node[below] at (0,0){O};
+			\draw[-stealth, blue] (1,0) arc (0:\ang:1);
+			\node[rotate=\ang/2, blue] at (\ang/2:1.6){$\ang^{\circ}$};
+			\draw [-stealth, domain=0:13.08,variable=\t,smooth,samples=75, red, thick]
+			plot ({\t r}: {0.015 *\t+0.3});
+		\end{tikzpicture}\vspace{-3em}
+		\begin{align*}
+			&360^{\circ} \times 2 + 30^{\circ} \\
+			&= 750^{\circ}
+		\end{align*}
+	\end{minipage}
+	\begin{minipage}{0.3\linewidth}
+	\centering
+	\begin{tikzpicture}
+		\pgfmathsetmacro{\ang}{30}
+		\draw[-stealth,  very thick] (0,0) -- (4, 0) node[right]{$\textrm{X}$};
+		\draw[-stealth, very thick] (0, 0) -- ( \ang:4) node[right]{$\textrm{P}$} ;
+		\node[below] at (0,0){O};
+		\draw[-stealth, blue] (1,0) arc (0:\ang:1);
+		\node[rotate=\ang/2, blue] at (\ang/2:1.6){$\ang^{\circ}$};
+		\draw [-stealth, domain=0:-12.04,variable=\t,smooth,samples=75, red, thick]
+		plot ({\t r}: {0.02 *\t+0.4});
+	\end{tikzpicture}\vspace{-3em}
+	\begin{align*}
+		&360^{\circ} \times (-2) + 30^{\circ} \\
+		&= -690^{\circ}
+	\end{align*}
+\end{minipage}
+	\end{center}
+\end{figure}
+
+이와 같이 동경 \textrm{OP}가 나타내는 한 각의 크기를 $\alpha^{\circ}$라고 할 때, $\angle \textrm{XOP}$의 크기는 다음과 같은 식으로 나타낼 수 있다.
+\[
+360^{\circ} \times {\color{blue}n} + \alpha^{\circ} ({\color{blue}n}\text{은 정수})
+\]
+이것을 동경 \text{OP}가 나타내는 {\color{red}일반각}이라고 한다.
+
+\begin{sample}
+	$60^{\circ}$의 동경이 나타내는 일반각은 $360^{\circ}\times {\color{blue}n} + 60^{\circ}$(${\color{blue}n}$은 정수)이다.
+\end{sample}
+
+\begin{problem}
+	다음 각의 동경이 나타내는 일반각을 구하여라.
+	\quesfour{45^{\circ}}{420^{\circ}}{-330^{\circ}}{-1400^{\circ}}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	다음 그림에서 반직선 \textrm{OX}가 시초선일 때, 동경 \textrm{OP}가 나타내는 일반각을 구하여라.
+	\begin{figure}[H]
+		\begin{center}
+			\begin{minipage}{0.4\linewidth}
+				\centering
+				\begin{tikzpicture}[scale=0.6, line join=round]
+					\pgfmathsetmacro{\ang}{60}
+					\draw[-stealth,  very thick] (0,0) -- (5, 0) node[right]{$\textrm{X}$};
+					\draw[-stealth, very thick] (0, 0) -- ( \ang:5) node[right]{$\textrm{P}$} ;
+					\node[below] at (0,0){O};
+					\draw[-stealth, blue] (1,0) arc (0:\ang:1);
+					\node[rotate=\ang/2, blue] at (\ang/2:1.6){$\ang^{\circ}$};
+					\node at (0, 5) {(1)};
+				\end{tikzpicture}
+			\end{minipage}
+			\begin{minipage}{0.4\linewidth}
+				\centering
+				\begin{tikzpicture}[scale=0.6, line join=round]
+					\pgfmathsetmacro{\ang}{-225}
+					\draw[-stealth,  very thick] (0,0) -- (5, 0) node[right]{$\textrm{X}$};
+					\draw[-stealth, very thick] (0, 0) -- ( \ang:5) node[right]{$\textrm{P}$} ;
+					\node[below, xshift=-3pt] at (0,0){O};
+					\draw[-stealth, red, thick] (1,0) arc (0:\ang:1);
+					\node[rotate=\ang/2, red] at (\ang/2:2.2){$\ang^{\circ}$};
+					\node at (-4.2, 3.0) {(2)};
+				\end{tikzpicture}
+			\end{minipage}
+		\end{center}
+	\end{figure}
+\processifversion{psol}{%
+\begin{psolution}
+	\begin{enumerate}[label=(\arabic*)]
+		\item $360^{\circ} \times {\color{blue}n} + 60^{\circ}$(${\color{blue}n}$은 정수)
+		\item $360^{\circ} \times {\color{blue}n} + 135^{\circ}$(${\color{blue}n}$은 정수)
+	\end{enumerate}
+\end{psolution}
+}%
+\end{problem}
+\vspace{1em}
+일반각의 꼭짓점을 좌표평면의 원점 \textrm{O}에 놓고, 시초선 \textrm{OX}를 $x$축의 양의 방향을로 잡을 때, 동경 \textrm{OP}가 제1, 제2, 제3, 제4사분면에 있으면 동경 \textrm{OP}가 나타내는 각을 각각 제1, 제2, 제3, 제4사분면의 각이라고 한다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			
+			\newcommand*{\XAxisMin}{-4.5}
+			\newcommand*{\XAxisMax}{4.5}
+			\newcommand*{\YAxisMin}{-4.5}
+			\newcommand*{\YAxisMax}{4.5}
+			
+			\begin{axis}[axis equal=true,
+				axis y line=center, axis x line=middle, axis on top=true,
+				xmin=\XAxisMin, xmax=\XAxisMax, ymin=\YAxisMin, ymax=\YAxisMax, 
+				] 
+	
+				\fill[orange!30!white] (axis cs:0,0) rectangle (rel axis cs:1,1) node [pos=0.5,text=black] {제1사분면};
+				
+				\fill[cyan!30!white] (axis cs:0,0) rectangle (rel axis cs:-1,-1) node [pos=0.17,text=red] {제3사분면};
+				
+				\fill[green!30!white] (current axis.right of origin) rectangle (current axis.below origin) node [pos=0.5,text=black] {제4사분면};
+				
+				\fill[blue!30]
+				(axis cs:\pgfkeysvalueof{/pgfplots/xmin},\pgfkeysvalueof{/pgfplots/ymax})
+				rectangle (axis cs:0,0) node [pos=0.5,text=white] {제2사분면};
+				
+				\draw[-latex, very thick, cyan] (0,0) -- (72:4.3) node[right]{\textrm{P}};
+				\node[below left] at (0,0) {\textrm{O}};
+				
+			\end{axis} 
+		\end{tikzpicture} 
+	\end{center}
+\end{figure}
+
+\begin{problem}
+	다음 각은 제 몇 사분면의 각인지 말하여라.
+	\quesfour{210^{\circ}}{1000^{\circ}}{-500^{\circ}}{-1000^{\circ}}
+\end{problem}
+
+
+ 두꺼운 종이 위에 반지름의 길이가 서로 다른 두 개의 원을 그린 후 실을 이용하여 반지름의 길이와 호의 길이가 같은 부채꼴을 만들어 잘라내고 우 두 부채꼴의 중심각의 크기를 비교해 보면 같음을 알 수 있다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=0.6]
+			\def\myrad{3cm}% radius of the circle
+			\def\myang{60}% angle for the arc
+			
+			% the origin
+			\coordinate (O) at (0,0);
+			% the circle and the dot at the origin
+			\draw (O) node[circle,inner sep=1.5pt,fill] {} circle [radius=\myrad];
+			% the ``\theta'' arc
+			\draw 
+			(\myrad,0) coordinate (xcoord) -- 
+			node[midway,below] {${\color{blue}r}$} (O) -- 
+			(\myang:\myrad) coordinate (slcoord)
+			pic [draw,->,angle radius=1cm,"$\alpha^{\circ}$"] {angle = xcoord--O--slcoord};
+			% the outer ``s'' arc
+			\draw[|-|]
+			(\myrad+10pt,0)
+			arc[start angle=0,end angle=\myang,radius=\myrad+10pt]
+			node[midway,fill=white] {${\color{blue}r}$};
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+ 반지름의 길이가 일정한 원에서 호의 길이와 중심각의 크기는 서로 비례하므로 각의 크기를 나타내는 새로운 단위를 정의할 수 있다. 반지름의 길이가 $r$인 원 \textrm{O}에서 길이가 $r$인 호의 중심각의 크기를 $\alpha^{\circ}$라고 하면 호의 길이는 중심각의 크기에 비례하므로 
+ \[
+ 360^{\circ} : \alpha^{\circ} = 2\pi r : r  \qquad \therefore \; \alpha^{\circ} =\frac{180^{\circ}}{\pi} \fallingdotseq 57^{\circ}17^{\prime}45^{\prime\prime}
+ \]
+ 이 일정한 각의 크기 $\frac{180^{\circ}}{\pi}$를 1{\color{red}라디안(radian)}이라 하고, 이것을 단위로 각의 크기를 나타내는 방법을 {\color{red}호도법}이라고 한다.
+ 
+ 따라서 육십분법과 호도법 사이에는 다음과 같은 관계가 있다.
+\vspace{1em} 
+ \begin{theorem}[육십분법과 호도법의 관계]
+ 	\questwo{1\text{라디안} = \dfrac{180^{\circ}}{\pi}}{1^{\circ}= \dfrac{\pi}{180} \text{라디안}}
+ \end{theorem}
+ \vspace{1em}
+ \begin{example}
+ 	$60^{\circ}$를 호도법으로, $\frac{2}{3}\pi$를 육십분법으로 나타내어라.
+ 	\begin{solution}
+ 		$1^{\circ} =\frac{\pi}{180}$(라디안)이므로
+ 		\[
+ 		60^{\circ} = 60 \times 1^{\circ} = 60 \times \frac{\pi}{180} = \frac{\pi}{3} \text{(라디안)}
+ 		\]
+ 		한편 $1$(라디안) =$\frac{180^{\circ}}{\pi}$이므로
+ 		\[
+ 		\frac{2}{3}\pi  =\frac{2}{3} \Ccancel[red]{\pi} \times \frac{180^{\circ}}{\Ccancel[red]{\pi}} = 120^{\circ}
+ 		\]
+ 	\end{solution}
+ \end{example}
+\vspace{1em}
+\begin{problem}
+	다음 표를 완성하여라.
+	\vspace{1em}
+		 \begin{tcolorbox}[tab2,tabularx={X||Y|Y|Y|Y|Y|Y|Y|},boxrule=0.5pt, box align=center]
+		도($^{\circ}$)   &   & $45^{\circ}$     & $60^{\circ}$  & $90^{\circ}$ &  & $300^{\circ}$ &      \\\hline\hline
+		라디안 &   $\frac{\pi}{6}$   &             &     $\frac{\pi}{3}$        &        &    $\frac{3}{4} \pi$      &             &  $2\pi$      \\ \hline
+		
+	\end{tcolorbox}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+다음 각의 동경이 나타내는 일반각을 $2n \pi +\theta$꼴로 나타내어라(단, $n$은 정수, $0 \le \theta < 2 \pi$)
+
+\quesfour{5\pi}{\frac{20}{3}\pi}{-17 \pi}{-\frac{27}{4}\pi}
+
+\end{problem}
+
+이제 부채꼴의 호의 길이와 넓이를 구하는 문제에 대하여 알아보자. 반지름의 길이가 $r$, 중심각의 크기가 $\theta$(라디안)인 부채꼴 \textrm{OAB}의 호의 길이 $l$은 중심각의 크기에 비례하므로
+\[
+l : 2 \pi r = \theta : 2 \pi \qquad \therefore l = r \theta
+\]
+또한, 부채꼴의 넓이도 중심각의 크기에 비례하므로 부채꼴의 넓이를 $S$라고 하면
+\[
+S : \pi r^{2} = \theta : 2\pi \qquad  \therefore  S=\frac{1}{2}r^{2}\theta = \frac{1}{2} r l
+\]
+이다. 이상을 정리하면 다음과 같다.
+
+\begin{theorem}[부채꼴의 호의 길이와 넓이]
+	반지름의 길이가 $r$, 중심각의 크기가 $\theta$(라디안)인 부채꼴에서 호의 길이를 $l$, 넓이를 $S$라고 하면
+	\questwo{l=r \theta}{S=\frac{1}{2}r^{2}\theta = \frac{1}{2}r l}
+\end{theorem}
+
+\begin{example}
+	호의 길이가 $\pi$이고 중심각의 크기가 $\frac{2}{3}\pi$인 부채꼴의 넓이를 구하여라.
+	\begin{solution}
+		부채꼴의 반지름의 길이를 $r$, 호의 길이를 $l$, 넙이를 $S$라고 하면 $l=r\theta$에서 $\pi = r \times \frac{2}{3}\pi$이다. 따라서 부채꼴의 반지름의 길이는 $r=\frac{3}{2}$이다. 또한 $S =\frac{1}{2}rl$이므로 $S=\frac{1}{2} \times \frac{3}{2}\times \pi$이다. 따라서 부채꼴의 넓이는 $S =\frac{3}{4}\pi$이다.
+	\end{solution}
+\end{example}
+
+\begin{problem}
+	다음 그림과 같은 부채꼴의 넓이를 구하여라.
+	\vspace{1em}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[>={[inset=0,angle'=27]Stealth}, scale=0.7]
+				
+				\draw [thick,fill=cyan!20](108:3)--(0,0)--(0:3) arc (0:108:3)--cycle;
+				
+				\draw [|<->|](0:3.3) arc (0:108:3.3) node[right, pos=.5]{$l=3\pi$};
+				\draw [<->, red]  (0:1)   arc (0:108:1)   node[right, pos=.5]{$\frac{3}{5}\pi$};
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+	
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	다음 그림과 같은 부채꼴의 반지름의 길이를 구하여라.
+	
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			[>={[inset=0,angle'=27]Stealth}, scale=0.7]
+			
+			\draw [thick,fill=teal!20](300:3)--(0,0)--(0:3) arc (0:300:3)--cycle;
+			
+%			\draw [|<->|](0:3.3) arc (0:108:3.3) node[right, pos=.5]{$l=3\pi$};
+			\draw [<->, red]  (0:1)   arc (0:300:1)   node[left, pos=.5]{$\frac{5}{3}\pi$};
+			\draw[->, thick]  (190:3.5)  node[below, left] {$S=\frac{4}{3}\pi$}-- (175:2);
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	둘레의 길이가 일정한 삼각형 중 그 넓이가 가장 큰 것은 정삼각형이다. 또, 둘레의 길이가 일정한 사각형 중 그 넓이가 가장 큰 것은 정사각형이다. 그렇다면 부채꼴에서는 어떤 모양일 때 그 넓이가 최대가 되는지 서로 이야기해 보자.
+\end{problem}
+
+\section{삼각함수}
+
+다음 그림과 같이 반지름의 길이가 $r$인 원 $\textrm{O}$위의 임의의 점 $\textrm{P}(x, \;y)$에 대하여 동경 \textrm{OP}가 나타내는 일반각의 크기를 $\theta$라고 하면 $\frac{y}{r}$, $\frac{x}{r}$, $\frac{y}{x}(x \neq 0)$의 값은 반지름의 길이 $r$에 관계없이 $\theta$의 값에 따라 각각 하나로 결정된다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=0.7]
+			\pgfmathsetmacro{\angle}{135} % math mode에서 작동함.
+			\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+			\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+ 			\node[below left] at (0, 0){\textrm{O}};
+ 			\draw[very thick, red] (0,0) circle [radius=3];
+ 			\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+ 			\draw[dotted, thick] ({-sin(\angle)*3}, 0) node[below]{$x$}|-(0, {sin(\angle)*3}) node[right]{$y$};
+ 			\node[below left] at (-3, 0) {$-r$};
+ 			\node[below right] at (3, 0) {$r$};
+ 			\draw [->, cyan]  (0:1)   arc (0:\angle:1)   node[left, pos=.3, yshift=10pt]{$\theta$};
+ 			\node[below left, yshift=9pt] at ({-3*sin(\angle)}, {3*sin(\angle)}) {$\text{P}(x,\;y)$};
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+즉, 다음의 대응관계
+\[
+\theta \Rightarrow \frac{y}{r}, \quad \theta \Rightarrow \frac{x}{r}, \quad \theta \Rightarrow \frac{y}{x} \;(x \ne 0)
+\]
+는 각각 $\theta$에 대한 함수가 된다.
+
+이 함수를 차례로 {\color{red}사인함수}, {\color{red}코사인함수}, {\color{red}탄젠트함수}라 하고, 이것을 각각
+	\[
+	\sin \theta = \frac{y}{r}, \quad \cos \theta = \frac{x}{r}, \quad \tan \theta =\frac{y}{x}
+	\]
+와 같이 나타낸다. 또 이들 함수의 역수인 함수를 다음과 같이 정의한다.
+\[
+\sec \theta = \frac{1}{\cos\theta},\quad \csc \theta = \frac{1}{\sin\theta}, \quad \cot \theta = \frac{1}{\tan \theta}
+\]
+이상에서 정의한 함수들을 각 $\theta$에 대한 {\color{red}삼각함수}라고 한다.
+
+\vspace{1em}
+\begin{example}
+	$\theta = \frac{2}{3}\pi$일 때, $\sin \theta$, $\cos \theta$, $\tan \theta$의 값을 구하여라.
+	\begin{solution}
+		$\theta =\frac{2}{3}\pi$의 동경이 단위원과 만나는 점의 좌표를 구해야 한다. 다음 그림과 같이 반지름의 길이가 $1$인 단위원에서 $\angle \textrm{AOP} =\frac{2}{3}\pi$가 되도록 점 \textrm{P}를 잡고 점 \textrm{P}에서 $x$축에 내린 수선의 발을 \textrm{H}라고 하면
+		\[
+		\overline{\textrm{PH}} =\frac{\sqrt{3}}{2}, \quad \overline{\textrm{OH}} =\frac{1}{2}
+		\]
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=0.7]
+					\pgfmathsetmacro{\angle}{120} % math mode에서 작동함.
+					\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+					\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+					\node[below left] at (0, 0){\textrm{O}};
+					\draw[very thick, red] (0,0) circle [radius=3];
+					\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+					\draw[dotted, thick] ({cos(\angle)*3}, 0) node[below]{$\textrm{H}$}|-(0, {sin(\angle)*3}) node[right]{$y$};
+					\node[below left] at (-3, 0) {$-1$};
+					\node[below right] at (3, 0) {$1$};
+					\node[below left] at (0, -3) {$-1$};
+					\node[above left] at (0, 3) {$1$};
+					\node[above right] at (3, 0) {\textrm{A}};
+					\draw [->, cyan]  (0:1)   arc (0:\angle:1)   node[left, pos=.3, yshift=14pt, xshift=8pt]{$\frac{2}{3}\pi$};
+					\node[below left, yshift=9pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}$};
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}\vspace{-2em}
+		따라서 점 \textrm{P}의 좌표는 $\left(-\frac{1}{2}, \; \frac{\sqrt{3}}{2}\right)$이다. 따라서 정의에 의해 $\theta=\frac{2}{3}\pi$에 대한 삼각함수의 값을 모두 구하면
+		\[
+		\sin \frac{2}{3}\pi = \frac{\sqrt{3}}{2}, \quad \cos \frac{2}{3}\pi = -\frac{1}{2}, \quad \tan \frac{2}{3}\pi = -\sqrt{3}
+		\]
+		이다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	다음 각 $\theta$에 대하여 $\sin \theta$, $\cos \theta$, $\tan \theta$의 값을 구하여라.
+	\quesfour{\frac{5}{6}\pi}{-\frac{4}{3}\pi}{225^{\circ}}{-300^{\circ}}
+\end{problem}
+삼각함수 값의 부호는 동경과 원이 만나는 점의 $x$좌표와 $y$좌표에 의해 결정되므로 각 $\theta$의 동경이 위치한 사분면에 따라 다음과 같이 정해진다.
+\begin{center}
+\begin{tcolorbox}[tab2,tabularx={X||Y|Y|Y|Y|},boxrule=0.5pt]
+	$\theta$의 사분면 & 제1사분면    & 제2사분면    & 제3사분면  & 제4사분면      \\\hline\hline
+	$\sin\theta=\frac{y}{r}$ &   $+$       &      $+$        &    $-$         &   $-$      \\ \hline
+	$\cos\theta=\frac{x}{r}$ & $+$   & $-$ & $-$ & $+$ \\ \hline
+	$\tan\theta=\frac{y}{x}$ & $+$ & $-$ & $+$  & $-$ \\ \hline
+\end{tcolorbox}
+\end{center}  
+\begin{figure}[H]
+		\begin{center}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			\begin{tikzpicture}[scale=0.5]
+				\draw [thick,fill=cyan!20](180:3)--(0,0)--(90:3) arc (90:180:3)--cycle;
+				\draw [thick,fill=cyan!20](0:3)--(0,0)--(90:3) arc (90:0:3)--cycle;
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below left, xshift=3pt, yshift=2pt] at (0,0) {\textrm{O}};
+				\draw[thick, blue] (0,0) circle [radius=3];
+				\foreach \i/\j in {45/+,135/+,225/-,315/-}
+				{
+					\node[red] at (\i:1.7){$\j$};
+				}
+			\end{tikzpicture}\vspace{-2em}
+		\[
+		\sin \theta \text{의 부호}
+		\]
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			\begin{tikzpicture}[scale=0.5]
+				\draw [thick,fill=cyan!20](0:3)--(0,0)--(270:3) arc (270:360:3)--cycle;
+				\draw [thick,fill=cyan!20](0:3)--(0,0)--(90:3) arc (90:0:3)--cycle;
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below left, xshift=3pt, yshift=2pt] at (0,0) {\textrm{O}};
+				\draw[thick, blue] (0,0) circle [radius=3];
+					\foreach \i/\j in {45/+,135/-,225/-,315/+}
+				{
+					\node[red] at (\i:1.7){$\j$};
+				}
+			\end{tikzpicture}\vspace{-2em}
+			\[
+			\cos \theta \text{의 부호}
+			\]
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			\begin{tikzpicture}[scale=0.5]
+			\draw [thick,fill=cyan!20](90:3)--(0,0)--(0:3) arc (0:90:3)--cycle;
+			\draw [thick,fill=cyan!20](180:3)--(0,0)--(270:3) arc (270:180:3)--cycle;			
+			\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+			\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+			\node[below left, xshift=3pt, yshift=2pt] at (0,0) {\textrm{O}};
+			\draw[thick, blue] (0,0) circle [radius=3];
+				\foreach \i/\j in {45/+,135/-,225/+,315/-}
+			{
+				\node[red] at (\i:1.7){$\j$};
+			}
+			\end{tikzpicture}\vspace{-2em}
+			\[
+			\tan \theta \text{의 부호}
+			\]
+		\end{minipage}
+	\end{center}
+\end{figure}
+
+  사인, 코사인, 탄젠트 함수를 단위원에서 정의해도 마찬가지 이다. 단위원 위의 임의의 점 $\textrm{P}(x, \;y)$에 대하여 원점을 시점으로 하고 점 \textrm{P}를 지나는 반직선을 동경으로 하는 각의 크기가 $\theta$일 때 $r=1$이므로 $\cos \theta$는 단위원 위를 움직이는 점 \textrm{P}의 $x$좌표, $\sin \theta$는 단위원 위를 움직이는 점 \textrm{P}의 $y$좌표, 그리고 탄젠트 함수는 이 경우에도 마찬가지로 $\tan \theta =\frac{y}{x}$로 정의된다.  단위원에서의 삼각함수의 정의는 각 사분면에서의 주어진 점의 $x$, $y$좌표의 부호만 생각하면 되므로 위의 그림을 특별히 기억하지 않아도 $\theta$의 사분면에 따른 삼각함수의 부호를 쉽게 알 수 있다.
+  
+  \begin{example}
+  	$\theta =\frac{100}{3}\pi$일 때, $\sin\theta$, $\cos\theta$, $\tan\theta$의 부호를 말하여라.
+  	\begin{solution}
+  		각 $\theta$의 동경은서
+  		\[
+  		\frac{100}{3}\pi = 33 \pi +\frac{\pi}{3} = 2\pi \times 16 + \left(\pi+\frac{\pi}{3}\right)
+  		\]
+  		이므로 $\theta$는 제$3$사분면의 각이고 따라서
+  		\[
+  		\sin\theta<0, \quad \cos\theta<0, \quad \tan\theta>0
+  		\]
+  		이다.
+  	\end{solution}
+  \end{example}
+
+\begin{problem}
+	다음 각 $\theta$에 대하여 $\sin\theta$, $\cos\theta$, $\tan\theta$의 값의 부호를 말하여라.
+	\quesfour{\dfrac{44}{5}\pi}{-\dfrac{19}{3}\pi}{1234^{\circ}}{-2022^{\circ}}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음 부등식을 만족시키는 각 $\theta$는 몇 사분면의 각인지 말하여라.
+	\quesfour{\sin\theta>0, \; \tan\theta<0}{\cos\theta<0,\;\tan\theta>0}{\sin\theta \cos \theta>0}{\frac{\cos\theta}{\tan\theta}<0}
+\end{problem}
+
+이제 삼각함수 사이의 관계에 대하여 알아보자. 일반적으로 각 $\theta$의 동경이 단위원과 만나는 점을 $\textrm{P}(x,\;y)$라고 하면 삼각함수의 정의에 따라
+
+
+\begin{minipage}{0.6\textwidth}
+\[
+\sin\theta = y, \; \cos\theta=x, \;\tan\theta =\frac{y}{x}(x\neq0)
+\]
+가 성립한다. 따라서
+\[
+\tan \theta = \frac{\sin\theta}{\cos\theta}
+\]
+임을 알 수 있다.  또, 점 $\textrm{P}(x, \;y)$는 원 $x^2 +y^2=1$ 위의 점이므로 $x=\cos\theta$, $y=\sin\theta$를 대입하면
+\[
+\cos^2\theta + \sin^2\theta =1
+\]
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+		\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{119} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below left, xshift=2pt, yshift=2pt] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[dotted, thick] ({cos(\angle)*3}, 0) node[below]{$\textrm{H}$}|-(0, {sin(\angle)*3}) node[right]{$y$};
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\node[above right] at (3, 0) {\textrm{A}};
+				\draw [->, cyan]  (0:1)   arc (0:\angle:1)   node[left, pos=.3, yshift=7pt, xshift=6pt]{$\theta$};
+				\node[below left, yshift=9pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}$};
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+임을 알 수 있다. 또한 $\cos^2\theta + \sin^2\theta =1$의 양변을 $\cos^{2}\theta$로 나누면
+\begin{align*}
+	\phantom{\Leftrightarrow}&\cos^2\theta + \sin^2\theta =1  \\
+	\Leftrightarrow & 1 + \frac{\sin^2\theta}{\cos^2\theta} =\frac{1}{\cos^2\theta}\\
+	\Leftrightarrow & 1 + \tan^2\theta = \sec^2\theta
+\end{align*}
+이고 양변을 $\sin^2\theta$로 나누면 $1+\cot^2\theta=\csc^2\theta$를 얻는다.
+이상을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[삼각함수 사이의 관계]
+\quesfour{\tan\theta =\frac{\sin\theta}{\cos\theta}}{\sin^2 \theta + \cos^2\theta=1}{1+\tan^2\theta=\sec^2\theta}{1+\cot^2\theta=\csc^2\theta}
+\end{theorem}
+\vspace{1em}
+\begin{example}
+	$\theta$가 제3사분면의 각이고 $\cos\theta =-\frac{3}{4}$일 때, $\sin\theta$, $\tan\theta$의 값을 구하여라.
+	\begin{solution}
+		$\theta$가 제3사분면의 각이므로 $\sin\theta<0$이고 $\sin^2 \theta + \cos^2\theta=1$에서
+		\[
+		\sin\theta = -\sqrt{1-\cos^2\theta} = -\sqrt{1-\frac{9}{16}} = -\frac{\sqrt{7}}{4}
+		\]
+		이고 $\tan\theta = \frac{\sin\theta}{\cos\theta}$이므로
+		\[
+		\tan\theta = \frac{-\frac{\sqrt{7}}{\Ccancel[red]{4}}}{-\frac{3}{\Ccancel[red]{4}}} =\frac{\sqrt{7}}{3}
+		\]
+		이다.
+	\end{solution}
+\end{example}
+
+\begin{problem}
+	$\frac{\pi}{2}<\theta < \pi$이고, $\sin\theta =\frac{5}{13}$일 때, $\cos\theta$, $\tan\theta$의 값을 구하여라.
+\end{problem}
+\vspace{1em}
+\begin{example}
+	다음 식을 간단히 하여라.
+	\[
+	\left(\sin\theta + \cos\theta\right)^2 + \left(\sin\theta -\cos\theta\right)^2
+	\]
+	\begin{solution}
+		주어진 식을 전개하면
+		\begin{align*}
+			&\left(\sin\theta + \cos\theta\right)^2 + \left(\sin\theta -\cos\theta\right)^2\\
+			&= \sin^2\theta + \Ccancel[red]{2\sin\theta} \cos\theta + \cos^2\theta + \sin^2\theta - \Ccancel[red]{2\sin\theta }\cos\theta + \cos^2\theta \\
+			&=2\left(\sin^2\theta+\cos^2\theta\right) \\
+			&=2
+		\end{align*}
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	다음 식을 간단히 하여라.
+	\questwo{\frac{1+\sin\theta}{\cos\theta}+\frac{\cos\theta}{1+\sin\theta}}{\frac{\cos\theta}{\sin\theta}-\frac{\sin\theta}{1-\cos\theta}}
+\end{problem}
+
+\vspace{1em}
+\begin{problem}
+	$0<\theta \le \frac{\pi}{4}$인 $\theta$에 대하여 $\tan\theta +\frac{1}{\tan\theta}=2$일 때, 다음 식의 값을 구하여라.
+	\begin{enumerate}[label=(\arabic*)]
+		\item $\sin\theta$
+		\item $\sin\theta +\cos\theta$
+		\item $\sin^3\theta +\cos^3\theta$
+	\end{enumerate}
+\end{problem}
+
+\newpage
+\section{삼각함수의 그래프}
+
+각 $\theta$에 대한 동경이 단위원과 만나는 점을 $\textrm{P}(x,\;y)$라고 하자. 각 $\theta$의 크기가 $0$부터 $\frac{\pi}{6}$만큼씩 증가 또는 감소할 때, $\theta$의 값을 가로축에, 그에 대응하는 $\sin\theta$의 값을 세로 축에 나타내고 $\sin\theta = \frac{y}{1}$이므로 함수 $y=\sin\theta$의 그래프를  좌표평면에 그려보면 다음과 같다. 
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=1.3]
+			%			\draw[gray] (-6, -2) grid (10, 2);
+			\draw [very thick] (-3, 0) circle [radius=1];
+			\draw[-latex, very thick](-4.3, 0) --(-1.5, 0) node[below]{$x$};
+			\draw[-latex, very thick](-3, -1.3) --(-3, 1.5) node[left]{$y$};
+			
+			\draw[-latex, very thick](-1, 0) -- (7.5, 0) node [below]{$\theta$};
+			\draw[-latex, very thick](0, -1.3) -- (0, 1.5) node [left]{$y$};
+			\draw[dotted, thick, domain=-pi/6:2*pi, smooth, variable=\x] plot (\x, {sin(\x r)});
+			
+			\foreach \i in {-pi/6, pi/6, pi/3, pi/2, 2*pi/3, 5*pi/6, pi, 7*pi/6, 4*pi/3, 3*pi/2, 5*pi/3, 11*pi/6, 2*pi, 13*pi/6}
+			{
+				\draw[thick, cyan]  (\i , 1.4)--(\i , -1.3);
+				
+			}
+			\foreach \i in {30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}
+			{
+				\draw (-3,0) -- ++ (\i:1);
+			}
+			\fill[red] (0,0) circle [radius=2pt];
+			\fill[red] (pi,0) circle [radius=2pt];
+			\fill[red] (2*pi,0) circle [radius=2pt];
+			\node[below right, xshift=-2pt] at (pi/6, 0){$\frac{\pi}{6}$};
+			\node[below left, xshift=-2pt] at (-pi/6, 0){$-\frac{\pi}{6}$};
+			\node[below right, xshift=-2pt] at (pi/3, 0){$\frac{\pi}{3}$};
+			\node[below right, xshift=-2pt] at (pi/2, 0){$\frac{\pi}{2}$};
+			\node[below right, xshift=-2pt] at (2*pi/3, 0){$\frac{2\pi}{3}$};
+			\node[below right, xshift=-2pt] at (5*pi/6, 0){$\frac{5\pi}{6}$};
+			\node[below right, xshift=-2pt] at (pi, 0){$\pi$};	
+			\node[below right, xshift=-2pt] at (7*pi/6, 0){$\frac{7\pi}{6}$};
+			\node[below right, xshift=-2pt] at (4*pi/3, 0){$\frac{4\pi}{3}$};
+			\node[below right, xshift=-2pt] at (3*pi/2, 0){$\frac{3\pi}{2}$};
+			\node[below right, xshift=-2pt] at (5*pi/3, 0){$\frac{5\pi}{3}$};
+			\node[below right, xshift=-2pt] at (11*pi/6, 0){$\frac{11\pi}{6}$};
+			\node[below right, xshift=-2pt] at (2*pi, 0){$2\pi$};
+			\node[below right, xshift=-2pt] at (13*pi/6, 0){$\frac{13\pi}{6}$};
+			
+			\foreach \i/\j in  {30/yellow, 60/blue, 90/teal}
+			{
+				\draw[dotted, \j, very thick]  ({cos(\i )-3} , {sin(\i )})--({pi*\i/180} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180} , {sin(\i )}) circle [radius=2pt];
+			};
+			
+			\foreach \i/\j in  {120/black, 150/orange, 180/purple}
+			{
+				\draw[dotted, \j, very thick]  ({pi-pi*\i/180} , {sin(\i )})--({pi*\i/180} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180} , {sin(\i )}) circle [radius=2pt];
+			};
+			
+			\foreach \i/\j in  {210/violet, 240/magenta, 270/pink}
+			{
+				\draw[dotted, \j, very thick]  ({cos(\i )-3} , {sin(\i )})--({pi*\i/180} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180} , {sin(\i )}) circle [radius=2pt];
+			};
+			
+			\foreach \i/\j in  {300/green, 330/brown}
+			{
+				\draw[dotted, \j, very thick]  ({3*pi- pi*\i/180} , {sin(\i )})--({pi*\i/180} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180} , {sin(\i )}) circle [radius=2pt];
+			};
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+
+함수 $y=\sin \theta$의 정의역은 실수 전체의 집합이고, 치역은 $\{ y \vert -1 \le y \le 1\}$임을 알 수 있다. 또 $y=\sin\theta$의 그래프는 원점에 대하여 대칭이며 $2\pi$간격으로 곡선의 모양이 반복됨을 알 수 있다. 
+
+함수 $y=\sin\theta$에서 각 $\theta$의 동경이 단위원과 만나는 점을 \textrm{P}라고 하면 동경 \textrm{OP}가 나타내는 일반각은 $2n \pi +\theta$($n$은 정수)이므로 다음이 성립한다.
+\[
+\sin\left(2n\pi +\theta\right) =\sin\theta
+\]
+
+일반적으로 상수함수가 아닌 함수 $f(x)$의 정의역의 모든 원소 $x$에 대하여 
+\[
+f(x+p) = f(x)
+\]
+를 만족시키는 상수 $p$가 존재할 때, $fx$를 {\color{red}주기함수}라고 하고, 이 상수 $p$중에서 가장 작은 양수를 주기함수 $f(x)$의 {\color{red}주기}라고 한다.
+\begin{sample}
+	$f(x) = x-[x]$는 주기가 $1$인 주기함수이다. 이때 $[x]$는 가우스 함수, 즉 $x$를 넘지 않는 최대 정수이다. 실제로
+	\begin{align*}
+		f(x+1) & = (x+1) - [x+1] \\
+		&= (x+1) - ([x]+[1]) \\
+		&= (x+\Ccancel[red]{1}) - ([x]+\Ccancel[red]{1})\\
+		& = x - [x] =f(x)
+	\end{align*}
+이므로 주기가 $1$임을 알 수 있다. 참고로 일반적으로 $[x+y] \ge [x]+[y]$이지만 $x$와 $y$중 적어도 하나가 정수이면 $[x+y]=[x]+[y]$임을 어렵지 않게 증명할 수 있다.
+\end{sample}
+
+특히, 함수 $y = \sin\theta$는 주기함수이고 그 주기는 $2\pi$이다.  이상에서 사인함수 $y=\sin\theta$의 그래프는 다음과 같은 성질이 있다.
+\vspace{1em}
+\begin{theorem}[사인함수 $y=\sin\theta$의 그래프의 성질]
+	\begin{enumerate}[label=(\arabic*)]
+		\item 정의역은 실수 전체의 집합이고, 치역은 $\{y \vert -1 \le y \le 1\}$이다.
+		\item $y=\sin\theta$의 그래프는 원점에 대하여 대칭이다.
+		\item 주기가 $2\pi$인 주기함수이다.
+	\end{enumerate}
+\end{theorem}
+
+\begin{example}
+	함수 $y=\sin2x$의 주기를 구하고, 그 그래프를 그려라.
+	\begin{solution}
+		$f(x)=\sin 2x$라 하면
+		\begin{align*}
+			f(x) & = \sin 2x\\
+			&= \sin (2x + 2\pi)\\
+			&= \sin 2(x+\pi) \\
+			&=f(x+\pi)
+		\end{align*}
+	이다. 따라서 주어진 함수의 주기는 $\pi$이다. 이고 그래프를 그리면 다음과 같다.
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}
+				\begin{axis}[
+					clip=false,
+					scale only axis = true,
+					width=1\textwidth,
+					height=0.16\textwidth,
+					xmin=-2.2*pi,xmax=2.2*pi,
+					xlabel= $x$,
+					ylabel=$y$,
+					ymin=-1.5,ymax=1.5,
+					axis lines=middle,
+					xtick={-6.28,-4.71,-3.14,-1.57,0,1.57,3.14,4.71,6.28},
+					xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$\,\,\,-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,\frac{3}{2}\pi$,$\,\,\,2\pi$},
+					%xticklabel style={anchor=north west}
+					]
+					\addplot[domain=-2*pi:2*pi,samples=200,red]{sin(deg(x))}
+					node[right,pos=0.8,font=\footnotesize, xshift=-2mm, yshift=-7mm]{$f(x)=\sin x$};
+					\addplot[domain=-2*pi:2*pi,samples=200,blue]{sin(2*deg(x))}
+					node[right,pos=0.8,font=\footnotesize, xshift=-4mm, yshift=3mm]{$f(x)=\sin 2x$};
+					\draw[dotted, thick] (-6.26, 1) -- (6.28, 1);
+					\draw[dotted, thick] (-6.26, -1) -- (6.28, -1);
+				\end{axis}
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 함수의 주기를 구하고, 그 그래프를 그려라.
+	\questwo{y=\sin\frac{x}{2}}{y = \sin(-2x)}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	상수 $a$에 대하여 함수 $y = \sin ax$의 주기는 $\dfrac{2\pi}{\vert a\vert}$임을 설명하여라.(단, $a\ne 0$)
+\end{problem}
+
+\vspace{1em}
+\begin{example}
+	다음 함수의 주기와 치역을 구하고, 그 그래프를 그려라.
+	\questwo{y=2\sin x}{y = \sin\left(x - \frac{\pi}{2}\right)}
+		
+\begin{solution}
+	\begin{enumerate}[label=(\arabic*)]
+		\item $f(x)=2\sin x$라고 하면
+	\begin{align*}
+		f(x) & = 2 \sin x \\
+		&=2 \sin(x+\pi) = f(x+2 \pi)
+	\end{align*}
+이므로 이 함수의 주기는 $2\pi$이고 $-2 \le 2 \sin x \le 2$이므로 치역은
+$\{y \vert -2 \le y \le 2\}$이다. 따라서 그래프는 다음과 같다.
+
+	\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.16\textwidth,
+				xmin=-2.2*pi,xmax=2.2*pi,
+				xlabel= $x$,
+				ylabel=$y$,
+				ymin=-2.6,ymax=2.6,
+				axis lines=middle,
+				xtick={-6.28,-4.71, -3.14,-1.57,0,1.57,3.14, 4.71, 6.28},
+				xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,\frac{3}{2}\pi$,$\,\,\,2\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\addplot[domain=-2*pi:2*pi,samples=200,red]{sin(deg(x))}
+				node[right,pos=0.6,font=\footnotesize, xshift=-2mm, yshift=1mm]{$y=\sin x$};
+				\addplot[domain=-2*pi:2*pi,samples=200,blue]{2*sin(deg(x))}
+				node[right,pos=0.2,font=\footnotesize, xshift=-4mm, yshift=3mm]{$y=2 \sin x$};
+				\draw[dotted, thick] (-6.26, 1) -- (6.28, 1);
+				\draw[dotted, thick] (-6.26, -1) -- (6.28, -1);
+				\draw[dotted, thick] (-6.26, 2) -- (6.28, 2);
+				\draw[dotted, thick] (-6.26, -2) -- (6.28, -2);
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+	\item $f(x)=\sin \left(x-\frac{\pi}{2}\right)$라고 하면
+	\begin{align*}
+		f(x) & = \sin\left(x-\frac{\pi}{2}\right) = \sin \left(x-\frac{\pi}{2}+2\pi\right)\\
+		&= \sin\left[(x+2\pi)-\frac{\pi}{2}\right] = f(x+2\pi)
+	\end{align*}
+이므로 이 함수의 주기는 $2\pi$이고 
+\[
+-1 \le \sin\left(x -\frac{\pi}{2}\right) \le 1
+\]
+이므로 구하는 치역은 $\{y \vert -2 \le y \le 2\}$이다. 한편, $f(x)=\sin \left(x-\frac{\pi}{2}\right)$의 그래프는 $y=\sin x$의 그래프를 $x$축의 방향으로 $\frac{\pi}{2}$만큼 평행이동한 그래프이다. 따라서 그 그래프는 다음과 같다.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.16\textwidth,
+				xmin=-2.2*pi,xmax=2.2*pi,
+				xlabel= $x$,
+				ylabel=$y$,
+				ymin=-1.5,ymax=1.5,
+				axis lines=middle,
+				xtick={-6.28,-4.71,-3.14,-1.57,0,1.57,3.14,4.71,6.28},
+				xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$\,\,\,-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,\frac{3}{2}\pi$,$\,\,\,2\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\addplot[domain=-2*pi:2*pi,samples=200,red]{sin(deg(x))}
+				node[right,pos=0.8,font=\footnotesize, xshift=-2mm, yshift=-7mm]{$f(x)=\sin x$};
+				\addplot[domain=-2*pi:2*pi,samples=200,blue]{sin(deg(x-90))}
+				node[right,pos=0.8,font=\footnotesize, xshift=-4mm, yshift=3mm]{$f(x)=\sin\left(x-\frac{\pi}{2}\right)$};
+				\draw[dotted, thick] (-6.26, 1) -- (6.28, 1);
+				\draw[dotted, thick] (-6.26, -1) -- (6.28, -1);
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+
+	\end{enumerate}
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 함수의 주기와 치역을 구하고, 그 그래프를 그려라.
+	\questwo{y = 2\sin\frac{x}{3}}{y = -\sin \left(x+\frac{\pi}{2}\right)}
+\end{problem}
+
+이제 $y = \cos \theta$의 그래프에 대하여 알아보자.  다음 그림과 같이 세로축이 $x$축이고 가로축이 $y$축인 좌표평면에서 각 $\theta$에 대한 동경이 단위원과 만나는 점을 $\textrm{P}(x, \;y)$라고 하자. 각 $\theta$의 크기가 $0$에서부터 $\frac{\pi}{6}$만큼씩 증가 또는 감소시킬 때 $\theta$의 값을 가로축에, 그에 대응하는 $\cos\theta$의 값을 세로축에 나타내고, $\cos\theta =\frac{x}{1}=x$이므로 함수 $y=\cos\theta$의 그래프를 좌표평면에 그리면 다음과 같은 곡선의 그래프를 얻을 수 있다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=1.3]
+			%			\draw[gray] (-6, -2) grid (10, 2);
+			\draw [very thick] (-3, 0) circle [radius=1];
+			\draw[-latex, very thick](-4.3, 0) --(-1.5, 0) node[below]{$x$};
+			\draw[-latex, very thick](-3, -1.3) --(-3, 1.5) node[left]{$y$};
+			
+			\draw[-latex, very thick](-1, 0) -- (7.5, 0) node [below]{$\theta$};
+			\draw[-latex, very thick](0, -1.3) -- (0, 1.5) node [left]{$y$};
+			\draw[dotted, thick, domain=-pi/6:2*pi, smooth, variable=\x] plot (\x, {cos(\x r)});
+			
+			\foreach \i in {-pi/6, pi/6, pi/3, pi/2, 2*pi/3, 5*pi/6, pi, 7*pi/6, 4*pi/3, 3*pi/2, 5*pi/3, 11*pi/6, 2*pi, 13*pi/6}
+			{
+				\draw[thick, cyan]  (\i , 1.4)--(\i , -1.3);
+				
+			}
+			\foreach \i in {30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}
+			{
+				\draw (-3,0) -- ++ (\i:1);
+			}
+			\fill[red] (0,1) circle [radius=2pt];
+			\fill[red] (pi/2,0) circle [radius=2pt];
+			\fill[red] (3*pi/2,0) circle [radius=2pt];
+			\fill[red] (2*pi,1) circle [radius=2pt];
+			\node[below right, xshift=-2pt] at (pi/6, 0){$\frac{\pi}{6}$};
+			\node[below left, xshift=-2pt] at (-pi/6, 0){$-\frac{\pi}{6}$};
+			\node[below right, xshift=-2pt] at (pi/3, 0){$\frac{\pi}{3}$};
+			\node[below right, xshift=-2pt] at (pi/2, 0){$\frac{\pi}{2}$};
+			\node[below right, xshift=-2pt] at (2*pi/3, 0){$\frac{2\pi}{3}$};
+			\node[below right, xshift=-2pt] at (5*pi/6, 0){$\frac{5\pi}{6}$};
+			\node[below right, xshift=-2pt] at (pi, 0){$\pi$};	
+			\node[below right, xshift=-2pt] at (7*pi/6, 0){$\frac{7\pi}{6}$};
+			\node[below right, xshift=-2pt] at (4*pi/3, 0){$\frac{4\pi}{3}$};
+			\node[below right, xshift=-2pt] at (3*pi/2, 0){$\frac{3\pi}{2}$};
+			\node[below right, xshift=-2pt] at (5*pi/3, 0){$\frac{5\pi}{3}$};
+			\node[below right, xshift=-2pt] at (11*pi/6, 0){$\frac{11\pi}{6}$};
+			\node[below right, xshift=-2pt] at (2*pi, 0){$2\pi$};
+			\node[below right, xshift=-2pt] at (13*pi/6, 0){$\frac{13\pi}{6}$};
+			
+			\foreach \i/\j in  {90/cyan, 120/blue, 150/teal, 180/red}
+			{
+				\draw[dotted, \j, very thick]  ({cos(\i )-3} , {sin(\i )})--({pi*\i/180- pi/2} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180-pi/2} , {sin(\i )}) circle [radius=2pt];
+			};
+			
+			\foreach \i/\j in  {210/black, 240/orange, 270/purple}
+			{
+				\draw[dotted, \j, very thick]  ({cos(\i )-3} , {sin(\i )})--({pi*\i/180-pi/2} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180-pi/2} , {sin(\i )}) circle [radius=2pt];
+			};
+			
+			\foreach \i/\j in  {300/violet, 330/magenta}
+			{
+				\draw[dotted, \j, very thick]  ({pi*\i/180-pi/2 - pi/3} , {sin(\i )})--({pi*\i/180-pi/2} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180-pi/2} , {sin(\i )}) circle [radius=2pt];
+			};
+			
+			\foreach \i/\j in  {0/pink, 30/green, 60/brown}
+			{
+				\draw[dotted, \j, very thick]  ({pi*\i/180+ 3*pi/2} , {sin(\i )})--({pi*\i/180+pi/6} , {sin(\i )});
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=2pt];
+				\fill[\j] ({pi*\i/180+3*pi/2} , {sin(\i )}) circle [radius=2pt];
+			};
+		\draw[dotted, very thick, brown] (pi/6, {sin(60)} ) -- (pi/2, {sin(60)} );
+			\draw[dotted, very thick, magenta] (2*pi/3, {-sin(30)} ) -- (pi, {-sin(30)} );
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+
+함수 $y=\cos \theta$의 정의역은 실수 전체의 집합이고, 치역은 $\{ y \vert -1 \le y \le 1\}$임을 알 수 있다. 또 $y=\cos\theta$의 그래프는 $y$축에 대하여 대칭이고  주기가 $2\pi$인 주기함수임을 알 수 있다.  이상에서 코사인 함수 $y=\cos\theta$의 그래프는 다음과 같은 성질이 있다.
+\vspace{1em}
+\begin{theorem}[코사인함수 $y=\cos\theta$의 그래프의 성질]
+	\begin{enumerate}[label=(\arabic*)]
+		\item 정의역은 실수 전체의 집합이고, 치역은 $\{y \vert -1 \le y \le 1\}$이다.
+		\item $y=\cos\theta$의 그래프는 $y$축에 대하여 대칭이다.
+		\item 주기가 $2\pi$인 주기함수이다.
+	\end{enumerate}
+\end{theorem}
+	\vspace{1em}
+
+\begin{example}
+	함수 $y=\cos \frac{x}{2}$의 주기를 구하고, 그 그래프를 그려라.
+	\begin{solution}
+		$f(x)=\cos\frac{x}{2}$라고 하면, 
+\begin{align*}
+	f(x) &= \cos\frac{x}{2} = \cos\left(\frac{x}{2}+2\pi\right) \\
+	&=\cos \frac{x+4\pi}{2} = f(x+4\pi)
+\end{align*}
+이므로 함수 $f(x)=\cos\frac{x}{2}$의 주기는 $4\pi$이고 따라서 그래프는 다음과 같다.
+	\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.16\textwidth,
+				xmin=-6.2*pi,xmax=6.2*pi,
+				xlabel= $x$,
+				ylabel=$y$,
+				ymin=-1.5,ymax=1.5,
+				axis lines=middle,
+				xtick={-18.9,-15.7,-12.6,-9.42,-6.28,-3.14,0,3.14,6.28,9.42, 12.6, 15.7, 18.9},
+				xticklabels={$-6\pi$,$-5\pi$,$\,\,\,-4\pi$,$\,\,\,-3\pi$,$\,\,\,-2\pi$,$-\pi$, $0$,$\pi$,$2\pi$,$\,\,\,3\pi$, $\,\,\,4\pi$, $5\pi$,$6\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\addplot[domain=-6*pi:6*pi,samples=200,red]{cos(deg(x))}
+				node[right,pos=0.8,font=\footnotesize, xshift=-15mm, yshift=-12mm]{$f(x)=\cos x$};
+				\addplot[domain=-6*pi:6*pi,samples=200,blue]{cos(deg(x)/2)}
+				node[right,pos=0.8,font=\footnotesize, xshift=-4mm, yshift=3mm]{$f(x)=\cos\frac{x}{2}$};
+				\draw[dotted, thick] (-18.9, 1) -- (18.9, 1);
+				\draw[dotted, thick] (-18.9, -1) -- (18.9, -1);
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 함수의 주기를 구하고, 그 그래프를 그려라.
+	\questwo{y=\cos 4x}{y = \cos \left(-\frac{1}{2}x\right)}
+\end{problem}
+\vspace{1em}
+\begin{example}
+	함수 $y=2 \cos 2x$의 주기와 치역을 구하고, 그 그래프를 그려라.
+	\begin{solution}
+		$f(x) = 2\cos 2x$라고 하면
+		\begin{align*}
+			f(x) &=2 \cos 2x = 2 \cos(2x+2\pi) \\
+			&= 2 \cos2(x+\pi)= f(x+\pi)
+		\end{align*}
+	이므로 주어진 함수의 주기는 $2\pi$이고 
+	\[
+	-1 \le \cos 2x \le 1
+	\]
+	이므로 치역은 $\{y \vert -2 \le y \le 2\}$이므로 그래프는 다음과 같다.
+	\end{solution}
+	\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.16\textwidth,
+				xmin=-2.2*pi,xmax=2.2*pi,
+				xlabel= $x$,
+				ylabel=$y$,
+				ymin=-2.5,ymax=2.5,
+				axis lines=middle,
+				xtick={-6.28,-4.71,-3.14,-1.57,0,1.57,3.14,4.71,6.28},
+				xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,\frac{3}{2}\pi$,$2\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\addplot[domain=-2*pi:2*pi,samples=200,red]{cos(deg(x))}
+				node[right,pos=0.7,font=\footnotesize, xshift=-2mm, yshift=-3mm]{$f(x)=\cos x$};
+				\addplot[domain=-2*pi:2*pi,samples=200,blue]{2*cos(2*deg(x))}
+				node[right,pos=0.7,font=\footnotesize, xshift=-4mm, yshift=8mm]{$f(x)=2\cos 2x$};
+				\draw[dotted, thick] (-6.26, 1) -- (6.28, 1);
+				\draw[dotted, thick] (-6.26, -1) -- (6.28, -1);
+				\draw[dotted, thick] (-6.26, 2) -- (6.28, 2);
+			    \draw[dotted, thick] (-6.26, -2) -- (6.28, -2);
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 함수의 주기와 치역을 구하고, 그 그래프를 그려라.
+	\questwo{y=\frac{\cos 2x}{2}}{y=-\cos\left(x-\frac{\pi}{2}\right)}
+\end{problem}
+
+\vspace{1em}
+
+마지막으로 $y=\tan \theta$의 그래프에 대하여 알아보자. 각 $\theta$에 대한 동경이 단위원과 만나는 점을 $\textrm{P}(x, \;y)$라고 하자. 각 $\theta$의 크기가 $0$에서부터 $\frac{\pi}{6}$만큼씩 증가 또는 감소할 때, $\theta$의 값을 가로축에, 그에 대응하는 $\tan\theta$의 값을 세로축에 나타내면, 동경 \textrm{OP}의 연장선이 $x=1$과 만나는 점을 $\textrm{T}(1, \;m)$이라고 할 때,
+\[
+\tan \theta =\frac{y}{x}=\frac{m}{1} = m (x \ne 0)
+\]
+이므로 $y=\tan \theta$의 그래프를 좌표평면에 그리면 다음과 같은 곡선을 얻을 수 있다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=1.3]
+			%			\draw[gray] (-6, -2) grid (10, 2);
+			\draw [very thick] (-3, 0) circle [radius=1];
+			\draw[-latex, very thick](-4.3, 0) --(-1.5, 0) node[below]{$x$};
+			\draw[-latex, very thick](-3, -1.3) --(-3, 1.5) node[left]{$y$};
+			\draw[ultra thick] (-2, 2.2) -- (-2, -2.2) ;
+			\draw[ultra thick] (-4, 2.2) -- (-4, -2.2) ;
+			
+			\draw[-latex, very thick](-1, 0) -- (7.5, 0) node [below]{$\theta$};
+			\draw[-latex, very thick](0, -2.2) -- (0, 2.3) node [left]{$y$};
+			\draw[dotted, thick, domain=-pi/6: pi/2.7, smooth, variable=\x] plot (\x, {tan(\x r)});
+			\draw[dotted, thick, domain=pi/1.5: 3*pi/2.2, smooth, variable=\x] plot (\x, {tan(\x r)});
+			
+			\foreach \i in {-pi/6, pi/6, pi/3, pi/2, 2*pi/3, 5*pi/6, pi, 7*pi/6, 4*pi/3, 3*pi/2, 5*pi/3, 11*pi/6, 2*pi, 13*pi/6}
+			{
+				\draw[thick, cyan]  (\i , 2.2)--(\i , -2.2);
+				
+			}
+			\foreach \i in {30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330}
+			{
+				\draw (-3,0) -- ++ (\i:1);
+			}
+		
+			\foreach \i /\j in {30/yellow, 60/blue, 90/teal, 120/black, 150/orange, 180/purple, 210/violet, 240/magenta, 270/pink,  300/green, 330/brown}
+			{
+				\fill[\j] ({cos(\i )-3} , {sin(\i )}) circle [radius=1.5pt];
+			}
+			\fill[red] (0,0) circle [radius=1.5pt];
+			\fill[red] (pi,0) circle [radius=1.5pt];
+			\fill[red] (2*pi,0) circle [radius=1.5pt];
+			\node[below right, xshift=-2pt] at (pi/6, 0){$\frac{\pi}{6}$};
+			\node[below left, xshift=-2pt] at (-pi/6, 0){$-\frac{\pi}{6}$};
+			\node[below right, xshift=-2pt] at (pi/3, 0){$\frac{\pi}{3}$};
+			\node[below right, xshift=-2pt] at (pi/2, 0){$\frac{\pi}{2}$};
+			\node[below right, xshift=-2pt] at (2*pi/3, 0){$\frac{2\pi}{3}$};
+			\node[below right, xshift=-2pt] at (5*pi/6, 0){$\frac{5\pi}{6}$};
+			\node[below right, xshift=-2pt] at (pi, 0){$\pi$};	
+			\node[below right, xshift=-2pt] at (7*pi/6, 0){$\frac{7\pi}{6}$};
+			\node[below right, xshift=-2pt] at (4*pi/3, 0){$\frac{4\pi}{3}$};
+			\node[below right, xshift=-2pt] at (3*pi/2, 0){$\frac{3\pi}{2}$};
+			\node[below right, xshift=-2pt] at (5*pi/3, 0){$\frac{5\pi}{3}$};
+			\node[below right, xshift=-2pt] at (11*pi/6, 0){$\frac{11\pi}{6}$};
+			\node[below right, xshift=-2pt] at (2*pi, 0){$2\pi$};
+			\node[below right, xshift=-2pt] at (13*pi/6, 0){$\frac{13\pi}{6}$};
+			
+			
+			\draw[thick, yellow] (-3, 0) --++(30:sec{30});
+			\draw[thick, blue] (-3, 0) --++(60:sec{60});
+			
+			\draw[thick, black] (-3,0) --++(120:sec{120});
+			\draw[thick, orange] (-3,0) --++(150:sec{150});
+			
+			\draw[dotted, yellow, very thick] (-2, tan{30}) -- (7*pi/6, tan{30});
+			\fill[yellow] (-2, tan{30}) circle [radius=1.5pt];
+			\fill[yellow] (pi/6, tan{30}) circle [radius=1.5pt];
+			\fill[yellow] (7*pi/6, tan{30}) circle [radius=1.5pt];
+			
+			\draw[dotted, blue, very thick] (-2, tan{60}) -- (4*pi/3, tan{60});
+			\fill[blue] (-2, tan{60}) circle [radius=1.5pt];
+			\fill[blue] (pi/3, tan{60}) circle [radius=1.5pt];
+			\fill[blue] (4*pi/3, tan{60}) circle [radius=1.5pt];
+			
+			\draw[dotted, blue, very thick] (-2, tan{120}) -- (2*pi/3, tan{120});
+			\fill[black] (-2, tan{120}) circle [radius=1.5pt];
+			\fill[black] (2*pi/3, tan{120}) circle [radius=1.5pt];
+%			\fill[blue] (4*pi/3, tan{120}) circle [radius=1.5pt];
+
+			\draw[dotted, orange, very thick] (-2, tan{150}) -- (5*pi/6, tan{150});
+			\fill[orange] (-2, tan{150}) circle [radius=1.5pt];
+			\fill[orange] (-pi/6, tan{150}) circle [radius=1.5pt];
+			\fill[orange] (5*pi/6, tan{150}) circle [radius=1.5pt];
+			
+	
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+
+그림으로 부터 $y=\tan \theta$의 그래프는 $\theta = \frac{\pi}{2}, \;\frac{3}{2}\pi, \; \cdots$등과 같은 값을 가질 때, 그 값이 정의되지 않음을 알 수 있다. 즉, $\theta$가 $n\pi +\frac{\pi}{2}$($n$은 정수)에 한없이 가까워질수록 점 $\textrm{T}(1, \;m)$은 한없이 위로 올라가거나 아래로 내려간다. 또, $\pi$간격으로 곡선의 모양이 반복됨을 알 수 있다.
+
+$\theta = n \pi +\frac{\pi}{2}$($n$은 정수)의 동경이 단위원과 만나는 점의 $x$좌표가 $0$이므로 $\tan\theta$의 값은 정의되지 않는다. 
+
+따라서 직선 $\theta = n \pi +\frac{\pi}{2}$는 $y =\tan\theta$의 그래프는 원점에 대하여 대칭이고, 주기가 $\pi$인 주기함수임을 알 수 있다.
+
+ 이상에서 탄젠트 함수 $y =\tan \theta$의 그래프는 다음과 같은 성질이 있음을 알 수 있다.
+ 
+ \begin{theorem}[탄젠트함수 $y=\tan\theta$의 그래프의 성질]
+ 	\begin{enumerate}[label=(\arabic*)]
+ 		\item 정의역은 $\theta=n\pi +\frac{\pi}{2}$($n$은 정수)를 제외한 실수 전체의 집합이고, 치역은 실수 전체의 집합이다.
+ 		\item $y=\tan\theta$의 그래프는 원점에 대하여 대칭이다.
+ 		\item 주기가 $\pi$인 주기함수이다.
+ 		\item 그래프의 점근선은 $\theta = n \pi +\frac{\pi}{2}$($n$은 정수)이다.
+ 	\end{enumerate}
+ \end{theorem}
+\vspace{1em}
+
+\begin{example}
+	함수 $y=\tan 2x$의 주기와 치역을 구하고, 그 그래프를 그려라.
+	\begin{solution}
+		${\color{blue}f(x)=\tan 2x}$라고 하면
+		\begin{align*}
+			f(x) &= \tan 2x = \tan(2x+\pi) \\
+			&=\tan2\left(x +\frac{\pi}{2}\right) = f\left(x+\frac{\pi}{2}\right)
+		\end{align*}
+	이다. 따라서 주어진 함수의 주기는 $\frac{\pi}{2}$이고 그 그래프는 다음과 같다.
+	\end{solution}
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\pgfmathsetmacro{\angle}{1.249}
+			
+				\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.3\textwidth,
+				xmin=-2.2*pi,xmax=2.2*pi,
+				xlabel= $x$,
+				ylabel=$y$,
+				ymin=-3.6,ymax=3.6,
+				axis lines=middle,
+				xtick={-6.28,-4.71, -3.14,-1.57,0,1.57,3.14, 4.71, 6.28},
+				xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,\frac{3}{2}\pi$,$\,\,\,2\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\foreach \i in {-pi, 0, pi}
+				{
+						\addplot[domain=-\angle+\i:\angle+\i,samples=200,red]{tan(deg(x))};
+				}
+				\addplot[domain=-2*pi:-2*pi+\angle, samples=200,red]{tan(deg(x))};
+			
+				\foreach \i in {-3*pi/2, -pi, -pi/2, 0, pi/2, pi, 3*pi/2}
+				{
+						\addplot[domain=-\angle/2+\i:\angle/2+\i,samples=200,blue]{tan(2*deg(x))};
+				}
+				\addplot[domain=-2*pi:-2*pi+\angle/2,samples=200,blue]{tan(2*deg(x))};
+			
+				\draw[blue, dotted, very thick] (-pi/4, -3) -- (-pi/4, 3);
+				\draw[blue, dotted, very thick] (pi/4, -3) -- (pi/4, 3);
+ 				\draw[blue, dotted, very thick] (-3*pi/4, -3) -- (-3*pi/4, 3);
+				\draw[blue, dotted, very thick] (3*pi/4, -3) -- (3*pi/4, 3);
+				\draw[blue, dotted, very thick] (-5*pi/4, -3) -- (-5*pi/4, 3);
+				\draw[blue, dotted, very thick] (5*pi/4, -3) -- (5*pi/4, 3);
+				\draw[blue, dotted, very thick] (-7*pi/4, -3) -- (-7*pi/4, 3);
+				\draw[blue, dotted, very thick] (7*pi/4, -3) -- (7*pi/4, 3);
+				\draw[blue, dotted, very thick] (-pi, -3) -- (-pi, 3);
+				\draw[blue, dotted, very thick] (pi, -3) -- (pi, 3);
+				
+				\draw[red, dotted, very thick] (-3*pi/2, -3) -- (-3*pi/2, 3);
+				\draw[red, dotted, very thick] (-pi/2, -3) -- (-pi/2, 3);
+				\draw[red, dotted, very thick] (pi/2, -3) -- (pi/2, 3);
+				\draw[red, dotted, very thick] (3*pi/2, -3) -- (3*pi/2, 3);
+				\node[red, xshift=-2pt] at (pi/2, 3) {$y=\tan x$};
+			 	\node[blue, xshift=-2pt, yshift=-2pt] at (5*pi/4, -3) {$y=\tan 2x$};
+	
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 함수의 주기를 구하고, 그 그래프를 그려라.
+	\questwo{y=\tan 3x}{y = \tan (-2x)}
+\end{problem}
+\vspace{1em}
+\begin{example}
+	함수 $y=\tan \frac{x}{2}$의 주기를 구하고, 그 그래프를 그려라. 또, 점근선의 방정식도 구하여라.
+	\begin{solution}
+		$f(x)=\tan \frac{x}{2}$라고 하면
+		\begin{align*}
+			f(x) & = \tan \frac{x}{2} = \tan \left(\frac{x}{2}+\pi\right) \\
+			&= \tan \frac{1}{2}(x+2\pi) = f(x+\pi)
+		\end{align*}
+	이므로 주어진 함수의 주기는 $2\pi$이고 따라서 그래프는 다음과 같다.
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}
+				\pgfmathsetmacro{\angle}{2.498}
+				
+				\begin{axis}[
+					clip=false,
+					scale only axis = true,
+					width=1\textwidth,
+					height=0.3\textwidth,
+					xmin=-3.2*pi,xmax=3.2*pi,
+					xlabel= $x$,
+					ylabel=$y$,
+					ymin=-3.6,ymax=3.6,
+					axis lines=middle,
+					xtick={-9.42, -6.28, -3.14,0,3.14, 6.28, 9.42},
+					xticklabels={$-3\pi$,$-2 \pi\,$,$-\pi$,$0$, $\pi\,$,$\,\,\,2 \pi$,$\,\,\,3\pi$},
+					%xticklabel style={anchor=north west}
+					]
+					\foreach \i in {-2*pi, 0, 2*pi}
+					{
+						\addplot[domain=-\angle+\i:\angle+\i,samples=200,blue]{tan(deg(x)/2)};
+					}
+				
+					
+					\draw[blue, dotted, very thick] (-3*pi, -3) -- (-3*pi, 3);
+					\draw[blue, dotted, very thick] (-2*pi, -3) -- (-2*pi, 3);
+					\draw[blue, dotted, very thick] (-pi, -3) -- (-pi, 3);
+					\draw[blue, dotted, very thick] (pi, -3) -- (pi, 3);
+					\draw[blue, dotted, very thick] (2*pi, -3) -- (2*pi, 3);
+					\draw[blue, dotted, very thick] (3*pi, -3) -- (3*pi, 3);
+					
+					\node[blue] at (3*pi/2, 2.5){$y = \tan \frac{x}{2}$};
+					
+				\end{axis}
+			\end{tikzpicture}
+		\end{center}
+		\end{figure}
+	또한 점근선의 방정식은 $x = (2n+1)\pi$임을 알 수 있다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+다음 함수의 주기를 구하고 그 그래프를 그려라. 또, 점근선의 방정식도 구하여라.
+\questwo{y=\tan 2 \left( x-\frac{\pi}{2}\right)}{y = - 2 \tan \frac{x}{3}}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	상수 $a$에 대하여 함수 $y=\tan ax$의 주기는 $\frac{\pi}{\vert a\vert}$임을 설명하여라.
+	\processifversion{psol}{%
+	\begin{psolution}
+		$f(x) = \tan x$라 하면
+		\begin{enumerate}[label=(\arabic*)]
+			\begin{minipage}{0.4\textwidth}
+			\item  $a>0$이면 $\vert a \vert=a$
+			\begin{align*}
+				f(x) &= \tan ax \\
+				&= \tan(ax + \pi)\\
+				&=\tan a \left(x+\frac{\pi}{a}\right)\\
+				& = f\left(x+\frac{\pi}{a}\right)
+			\end{align*}
+		따라서 $y=\tan ax$의 주기는 
+		
+		$\frac{\pi}{a}=\frac{\pi}{\vert a\vert }$이다. 
+			\end{minipage}
+\vline\hfill	
+		\begin{minipage}{0.4\textwidth}
+			\item $a<0$이면 $\vert a \vert=-a$
+			\begin{align*}
+				f(x) &= \tan ax \\
+				&= \tan(ax - \pi)\\
+				&=\tan a \left(x-\frac{\pi}{a}\right)\\
+				&= f\left(x+\frac{\phantom{-}\pi}{-a}\right)
+			\end{align*}
+			따라서 $y=\tan ax$의 주기는 
+			
+			$\frac{\phantom{-}\pi}{-a}=\frac{\pi}{\vert a\vert }$이다. 
+		\end{minipage}
+		\end{enumerate}
+(1)과 (2)에서 $y =\tan ax$의 주기는 $\frac{\pi}{\vert a\vert}$로 나타낼 수 있다.
+	\end{psolution}
+}%
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	예제 5에서 $y=\tan 2x$의 점근선은 직선 $y =\frac{n}{2}\pi +\frac{\pi}{4}$($n$은 정수)임을 그래프에서 확인할 수 있다. 이것은 $y=\tan x$의 점근선이 $x=n \pi +\frac{\pi}{2}$($n$은 정수)라는 사실을 이용하면 쉽게 알 수 있다고 한다. $0$이 아닌 상수 $a$에 대하여 $y =\tan ax$의 점근선의 방정식은 $x =\frac{n}{a}\pi +\frac{\pi}{2a}$($n$은 정수)임을 위의 사실을 이용하여 추론하여라.
+\end{problem}
+\newpage
+\section{여러 가지 각의 삼각함수}
+
+일반적으로 $n$이 정수일 때, 각 $\theta$와 각 $2n\pi +\theta$의 동경이 일치하므로 이들 각에 대한 삼각함수의 값은 일치한다. 따라서 다음이 성립한다.
+\vspace{1em}
+\begin{theorem}[$2n \pi +\theta$의 삼각함수(단, $n$은 정수)]
+	\begin{enumerate}[label=(\arabic*)]
+		\item $\sin (2n\pi +\theta) =\sin\theta$
+		\item $\cos(2n\pi + \theta)=\cos\theta$
+		\item $\tan(2n\pi +\theta) = \tan\theta$
+	\end{enumerate}
+\end{theorem}
+
+\begin{sample}
+	$\sin \frac{25}{3}\pi =\sin \left(2\pi \times 4 +\frac{\pi}{3}\right) = \sin \frac{\pi}{3}=\frac{\sqrt{3}}{2}$
+	
+\end{sample}
+\vspace{1em}
+\begin{problem}
+	다음 삼각함수의 값을 구하여라.
+	\questhree{\sin \frac{13}{3}\pi}{\cos \left(-\frac{11}{6}\pi\right)}{\tan \frac{9}{4}\pi}
+\end{problem}
+
+일반적으로 각 $\theta$와 각 $-\theta$의 동경이 단위원과 만나는 점 $\textrm{P}(x, \;y)$, $\textrm{Q}(x^{\prime}, \;y^{\prime})$은 $x$축에 대하여 대칭이므로
+
+\begin{minipage}{0.6\textwidth}
+\[
+x^{\prime} =x, \quad y^{\prime} =- y
+\]
+이다. 따라서
+\begin{align*}
+	\sin(-\theta) &=y^{\prime} =-y = -\sin\theta \\
+	\cos(-\theta) & = x^{\prime} =x=\cos\theta \\
+	\tan(-\theta) & = \frac{y^{\prime}}{x^{\prime}} =-\frac{y}{x} = -\tan\theta
+\end{align*}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{55} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below left] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (-\angle:4);
+
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:1)   arc (0:\angle:1)   node[left, pos=.3, yshift=4pt, xshift=10pt]{$\theta$};
+				
+				\draw [->, green]  (0:1)   arc (0:-\angle:1)   node[right, pos=.8, xshift=-1pt]{$-\theta$};
+				
+				\node[below right, yshift=9pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}(x,\;y)$};
+				\node[below right, yshift=9pt] at ({3*cos(-\angle)}, {3*sin(-\angle)}) {$\textrm{Q}(x^{\prime},\;y^{\prime})$};
+				
+				\draw[very thick] (\angle:3) -- (-\angle:3);
+				
+				\foreach \i in {\angle, -\angle}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				
+				
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+이다.  이상을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[$-\theta$의 삼각함수]
+	\questhree{\sin(-\theta)=-\sin\theta}{\cos(-\theta)=\cos\theta}{\tan(-\theta)=-\tan\theta}
+\end{theorem}
+
+\begin{problem}
+	다음 삼각함수의 값을 구하여라.
+	\questhree{\sin\left(-\frac{\pi}{6}\right)}{\cos\left(-\frac{\pi}{4}\right)}{\tan \left(-\frac{\pi}{4}\right)}
+\end{problem}
+
+이제 $\pi \pm \theta$의 삼각함수를 $\theta$의 함수로 나타내는 방법에 대하여 알아보자. 일반적으로 각 $\theta$와 각 $\pi+\theta$의 동경이 단위원과 만나는 점 $\textrm{P}(x, \;y)$, $\textrm{Q}(x^{\prime}, \; y^{\prime})$은 원점에 대하여 대칭이므로
+
+\begin{minipage}{0.6\textwidth}
+\[
+x^{\prime} = -x, \quad y^{\prime} = -y 
+\]
+이다. 따라서
+	\begin{align*}
+		\sin(\pi+\theta) &=y^{\prime} =-y = -\sin\theta \\
+		\cos(\pi+\theta) & = x^{\prime} =-x=-\cos\theta \\
+		\tan(\pi+\theta) & = \frac{y^{\prime}}{x^{\prime}} =\frac{y}{x} = \tan\theta
+	\end{align*}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{55} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below right] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (\angle+180:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.5, yshift=4pt, xshift=10pt]{$\theta$};
+				
+				\draw [->, purple]  (0:1)   arc (0:180+\angle:1)   node[right, pos=.6, xshift=-5pt, yshift=10pt]{$\pi+\theta$};
+				
+				\node[below right, yshift=9pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}(x,\;y)$};
+				
+				\node[below right, yshift=9pt] at ({3*cos(\angle+180)}, {3*sin(\angle+180)}) {$\textrm{Q}(x^{\prime},\;y^{\prime})$};
+				
+				\foreach \i in {\angle, \angle+180}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				
+				
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+이다.  이상을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[$\pi+\theta$의 삼각함수]
+	\questhree{\sin(\pi+\theta)=-\sin\theta}{\cos(\pi+\theta)=-\cos\theta}{\tan(\pi+\theta)=\tan\theta}
+\end{theorem}
+
+\vspace{1em}
+\begin{problem}
+	다음 삼각함수의 값을 구하여라.
+	\questhree{\sin \frac{5}{4}\pi}{\cos \frac{7}{6}\pi}{\tan \frac{10}{3}\pi}
+\end{problem}
+
+한편 오른쪽 그림에서 각 $\theta$와 각 $\pi-\theta$의 동경이 단위원과 만나는 점 $\textrm{P}(x,\;y)$, $\textrm{Q}(x^{\prime},\;y^{\prime})$은 
+
+\begin{minipage}{0.6\textwidth}
+	$y$축에 대하여 대칭이므로 
+	\[
+	x^{\prime} = -x, \quad y^{\prime} = y 
+	\]
+	이다. 따라서
+	\begin{align*}
+		\sin(\pi-\theta) &=y^{\prime} =y = \sin\theta \\
+		\cos(\pi-\theta) & = x^{\prime} =-x=-\cos\theta \\
+		\tan(\pi-\theta) & = \frac{y^{\prime}}{x^{\prime}} =-\frac{y}{x} =- \tan\theta
+	\end{align*}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{40} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below right] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (-\angle+180:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.5, yshift=4pt, xshift=10pt]{$\theta$};
+				
+				\draw [->, purple]  (0:1)   arc (0:180-\angle:1)   node[right, pos=.9, xshift=-2pt, yshift=6pt]{$\pi-\theta$};
+				
+				\node[below right, yshift=9pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}(x,\;y)$};
+				
+				\node[below left, yshift=9pt] at ({3*cos(-\angle+180)}, {3*sin(-\angle+180)}) {$\textrm{Q}(x^{\prime},\;y^{\prime})$};
+				
+				\foreach \i in {\angle, -\angle+180}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+			
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+\vspace{1em}
+
+위의 사실은 앞의 두 결과를 이용하여 얻을 수 있다. 예를 들어 $\sin(\pi-\theta)=\sin\theta$의 경우
+$\sin(\pi + \theta) = - \sin\theta$와 사인함수가 기함수임을 이용하여 증명할 수도 있다. 즉 $\sin(\pi + \theta) = - \sin\theta$의 양변에 $\theta$대신 $-\theta$를 대입하면
+\[
+\sin(\pi-\theta) = - \sin(-\theta) = \sin\theta
+\]
+이고 코사인 함수와 탄젠트 함수의 경우도 마찬가지 방법으로 보일 수 있다. 이상의 결과를 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[$\pi-\theta$의 삼각함수]
+	\questhree{\sin(\pi-\theta)=\sin\theta}{\cos(\pi-\theta)=-\cos\theta}{\tan(\pi-\theta)=-\tan\theta}
+\end{theorem}
+\vspace{1em}
+
+\begin{example}
+	$\tan \frac{5}{6}\pi$의 값을 구하여라.
+	\begin{solution}
+		$\tan(\pi-\theta)=-\tan \theta$이므로
+		\begin{align*}
+			\tan \frac{5}{6}\pi & = \tan \left(\pi- \frac{\pi}{6}\right) \\
+			& = - \tan \frac{\pi}{6} \\
+			& = - \frac{\sqrt{3}}{3}
+		\end{align*}
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	다음 삼각함수의 값을 구하여라.
+	\questhree{\sin \frac{2}{3}\pi}{\cos \frac{5}{6}\pi}{\tan \left(-\frac{3}{4}\pi\right)}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	다음 식을 간단히 하여라.
+	\begin{enumerate}[label =(\arabic*)]
+		\item $\sin\theta + \sin (\pi+\theta) + \sin(2\pi + \theta) + \sin(3\pi + \theta)$
+		\item $\sin(\pi-\theta) \sin(\pi +\theta) - \cos(\pi-\theta) \cos (\pi + \theta)$
+		\item $\dfrac{\tan(-\theta)-\tan(4\pi+\theta)}{\tan(\pi+\theta) \tan(-3\pi-\theta)}$
+	\end{enumerate}
+\end{problem}
+
+이제 $\frac{\pi}{2} \pm \theta$의 삼각함수를 $\theta$의 삼각함수로 나타내는 방법에 대하여 알아보자. 먼저 $\frac{\pi}{2} - \theta$의 경우부터 살펴본다.
+
+오른쪽 그림과 같이 $\triangle\textrm{OPH}$와 $\triangle \textrm{OQH}^{\prime}$은 합동이므로 일반적으로 
+
+\begin{minipage}{0.6\textwidth}
+$\textrm{P}(x,\;y)$, $\textrm{Q}(x^{\prime},\;y^{\prime})$에 대하여
+	\[
+	x^{\prime} = y,  \quad y^{\prime} = x
+	\]
+	이다. 따라서
+	\begin{align*}
+		\sin\left(\frac{\pi}{2}-\theta\right) &=y^{\prime} =x = \cos\theta \\
+		\cos\left(\frac{\pi}{2}-\theta\right) & = x^{\prime} =y=\sin\theta \\
+		\tan\left(\frac{\pi}{2}-\theta\right) & = \frac{y^{\prime}}{x^{\prime}} =\frac{x}{y} = \frac{1}{\tan\theta}
+	\end{align*}
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{30} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below left, xshift=2pt] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (-\angle+90:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [-, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.2, yshift=4pt, xshift=10pt]{\scriptsize$\theta$};
+				
+				\draw [-, cyan]  (90:1.2)   arc (90:90-\angle:1.2)   node[left, pos=.2, yshift=4pt, xshift=10pt]{\scriptsize$\theta$};
+				
+				\draw [->, purple]  (0:1)   arc (0:90-\angle:1)   node[right, pos=.7, xshift=-2pt, yshift=6pt]{\scriptsize $\frac{\pi}{2}-\theta$};
+				
+				\node[below right, yshift=7pt, xshift=1pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}(x,\;y)$};
+				
+				\node[below right, yshift=9pt] at ({3*cos(-\angle+90)}, {3*sin(-\angle+90)}) {$\textrm{Q}(x^{\prime},\;y^{\prime})$};
+				
+				\foreach \i in {\angle, -\angle+90}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				\draw[very thick, blue] ({3*cos(\angle)}, {3*sin(\angle)}) --({3*cos(\angle)},0) node[below]{\textrm{H}}; 
+				
+				\draw[very thick, blue] ({3*cos(90-\angle)}, {3*sin(90-\angle)}) --(0,{3*sin(90-\angle)}) node[left]{$\textrm{H}^{\prime}$}; 
+				
+				\draw[very thick, orange, domain=-3:3, smooth, variable=\x] plot (\x, \x) ;
+				\node[below] at (-3, -3) {$y=x$};
+				
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+\vspace{1em}
+
+이상을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[$\dfrac{\pi}{2}-\theta$의 삼각함수]
+	\questhree{\sin \left(\frac{\pi}{2}-\theta\right)= \cos\theta}{\cos \left(\frac{\pi}{2}-\theta\right)= \sin\theta }{\tan \left(\frac{\pi}{2}-\theta\right)= \frac{1}{\tan\theta}}
+\end{theorem}
+
+\begin{minipage}{0.6\textwidth}
+	한편, 각 $\theta$와 각 $\frac{\pi}{2}+\theta$의 동경이 단위원과 만나는 점 $\textrm{P}(x,\;y)$,$\textrm{Q}(x^{\prime},\;y^{\prime})$에 대하여 오른쪽 그림과 같이 $\triangle\textrm{OPM}$과 $\triangle \textrm{OQM}^{\prime}$은 서로 합동이므로
+	\[
+	x^{\prime} = - y , \quad y^{\prime} =x
+	\]
+	이다. 따라서 다음이 성립한다.
+\end{minipage}
+\begin{minipage}{0.3\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{60} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};	
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below left, xshift=2pt] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (\angle+90:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:0.8)   arc (0:\angle:0.8)   node[left, pos=.2, yshift=4pt, xshift=10pt]{\scriptsize$\theta$};
+				
+%				\draw [-, cyan]  (90:1.2)   arc (90:90-\angle:1.2)   node[left, pos=.2, yshift=4pt, xshift=10pt]{\scriptsize$\theta$};
+				
+				\draw [->, purple]  (0.5,0)   arc (0:90+\angle:0.5)   node[right, pos=.8, xshift=-2pt, yshift=6pt]{\scriptsize $\frac{\pi}{2}+\theta$};
+				
+				\node[below right, yshift=7pt, xshift=1pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}(x,\;y)$};
+				
+				\node[below left, yshift=9pt] at ({3*cos(\angle+90)}, {3*sin(\angle+90)}) {$\textrm{Q}(x^{\prime},\;y^{\prime})$};
+				
+				\foreach \i in {\angle, \angle+90}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				\draw[very thick, blue] ({3*cos(\angle)}, {3*sin(\angle)}) --({3*cos(\angle)},0) node[below]{\textrm{M}}; 
+				
+				\draw[very thick, blue] ({3*cos(90+\angle)}, {3*sin(90+\angle)}) --(0,{3*sin(90+\angle)}) node[above left]{$\textrm{M}^{\prime}$}; 
+				
+%				\draw[very thick, orange, domain=-3:3, smooth, variable=\x] plot (\x, \x) ;
+%				\node[below] at (-3, -3) {$y=x$};
+				
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+\begin{theorem}[$\dfrac{\pi}{2}+\theta$의 삼각함수]
+	\questhree{\sin\left( \frac{\pi}{2}+\theta\right)=\cos\theta}{\cos \left( \frac{\pi}{2}+\theta\right)=-\sin \theta}{\tan \left( \frac{\pi}{2}+\theta\right)=-\frac{1}{\tan\theta}}
+\end{theorem}
+
+\begin{sample}
+	$\cos \frac{\pi}{3} = \cos\left(\frac{\pi}{2}- \frac{\pi}{6}\right)=\sin \frac{\pi}{6}=\frac{1}{2}$
+\end{sample}
+\vspace{1em}
+
+\begin{problem}
+	$\sin\theta = a\left(0<\theta<\frac{\pi}{2}\right)$라고 할 때, 다음을 $a$에 대한 식으로 나타내어라.
+	\questhree{\cos\left( \frac{\pi}{2}-\theta\right)}{\sin\left( \frac{\pi}{2}+\theta\right)}{\tan\left( -\frac{\pi}{2}+\theta\right)}
+\end{problem}
+
+\begin{example}
+	$\sin\left(\frac{\pi}{2} -\theta \right)\sin(\pi-\theta) -\cos\left(\frac{\pi}{2}+\theta\right)\sin(\pi-\theta) $을 간단히 하여라.
+	\begin{solution}
+		각각의 삼각함수를 변형하면
+		\begin{align*}
+			\sin\left(\frac{\pi}{2}-\theta\right) &=\cos \theta, \phantom{-}\sin(\pi-\theta)=\sin\theta \\
+			\cos\left(\frac{\pi}{2}-\theta\right) &=-\sin \theta, \cos(\pi+\theta)=-\cos\theta			
+		\end{align*}
+	주어진 식을 간단히 나타내면
+	\begin{align*}
+		&\sin\left(\frac{\pi}{2}-\theta\right) \sin(\pi-\theta) -\cos\left(\frac{\pi}{2}+\theta\right)\cos(\pi+\theta) \\
+		&=\cos\theta \sin\theta + \sin\theta(-\cos\theta) \\
+		&=0
+	\end{align*}
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	다음을 간단히 하여라.
+	\[
+	\frac{\sin(2\pi-\theta)}{\cos(\pi+\theta)} +\frac{\cos\left(\frac{\pi}{2}+\theta\right)}{\cos\left( \frac{\pi}{2}-\theta\right)}
+	\]
+\end{problem}
+
+지금까지 배운 삼각함수의 성질들을 이용하면 일반각에 대한 삼각함수를 $0^{\circ}$에서 $90^{\circ}$까지의 각에 대한 삼각함수로 나타낼 수 있다.
+
+\begin{problem}
+	다음 식을 간단히 하여라.
+	\begin{enumerate}[label=(\arabic*)]
+		\item $\sin^20^{\circ} + \sin^21^{\circ} +\sin^22^{\circ} + \;\cdots \; + \sin^{2} 89^{\circ} +\sin^{2} 90^{\circ}$
+		\item $\tan 1^{\circ} \times \tan 2^{\circ} \times \tan 3^{\circ} \times \; \cdots \; \times \tan89^{\circ}$
+	\end{enumerate}
+\end{problem}
+
+\section{삼각방정식과 삼각부등식}
+$0 \le \theta < 2\pi$일 때, 등식 $\sin\theta =\frac{1}{2}$을 만족시키는 $\theta$의 값을 구하는 	방법을 탐구해 보자. 
+
+먼저 사인함수의 그래프를 이용하여 구할 수 있다. 함수 $y =\sin \theta$의 그래프와 직선 $y =\frac{1}{2}$을 좌표평면에 나타내면 다음과 같다.
+
+	\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.32\textwidth,
+				xmin=-0.2*pi,xmax=2.2*pi,
+				xlabel= $\theta$,
+				ylabel=$y$,
+				ymin=-1.4,ymax=1.4,
+				axis lines=middle,
+				xtick={-6.28,-4.71, -3.14,-1.57,0,1.57,3.14, 6.28},
+				xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,2\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\addplot[domain=0:2*pi,samples=200,red, very thick]{sin(deg(x))}
+				node[right,pos=0.3,font=\footnotesize, xshift=5mm, yshift=-2mm]{$y=\sin x$};
+%				\addplot[domain=-2*pi:2*pi,samples=200,blue]{2*sin(deg(x))}
+%				node[right,pos=0.2,font=\footnotesize, xshift=-4mm, yshift=3mm]{$y=2 \sin x$};
+%				\draw[dotted, thick] (-0.63, 1) -- (6.28, 1);
+%				\draw[dotted, thick] (-0.63, -1) -- (6.28, -1);
+				\draw[very thick, blue] (0, 1/2) -- (6.26, 1/2) node[right]{$y=\frac{1}{2}$};
+				\draw[dotted, very thick]  (0.5236, 1/2) -- (0.5236,0) node[below]{$\frac{\pi}{6}$};
+				\draw[dotted, very thick] (0, 1) -| (1.5708, 0) ;
+				\draw[dotted, very thick]  (2.61799, 1/2) -- (2.61799,0) node[below]{$\frac{5}{6}\pi$};
+				
+				\draw[dotted, very thick] (0, -1) -| (4.71, 0) node[above]{$\frac{3}{2}\pi$};
+				
+				\fill[black] (pi/6, 1/2) circle [radius=3pt];
+				\fill[black] (5*pi/6, 1/2) circle [radius=3pt];
+				\fill[red] (0,0) circle [radius=3pt];
+				\filldraw[draw=red, fill=pink!20] (2*pi, 0) circle [radius=3pt];
+				
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+이때, $\sin\frac{\pi}{6}=\frac{1}{2}$이고 앞에서 배운 삼각함수의 성질에서 $\sin(\pi-\theta)=\sin\theta$가 성립하므로 
+\[
+\sin\frac{5}{6}\pi =\sin\left(\pi -\frac{5}{6}\pi\right) = \sin\frac{\pi}{6} =\frac{1}{2}
+\]
+이다. 따라서 등식 $\sin \theta=\frac{1}{2}$을 만족시키는 $\theta$의 값은 $\frac{\pi}{6}$, $\frac{5}{6}\pi$이다.
+
+\begin{minipage}{0.5\textwidth}
+한편 단위원을 이용하여 $\sin \theta =\frac{1}{2}$를 만족시키는 $\theta$의 값을 구할 수 도 있다. 
+
+오른쪽 그림에서 단위원과 직선 $y=\frac{1}{2}$과의 교점 $\textrm{P}, \;\textrm{Q}$에 대하여 동경 
+$\textrm{OP}$, $\textrm{OQ}$가 나타 내는 각의 크기는 각각 $\frac{\pi}{6}$, $\frac{5}{6}\pi$이다.
+
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{30} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below right] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (-\angle+180:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.5, yshift=2pt, xshift=13pt]{$\frac{\pi}{6}$};
+				
+				\draw [->, purple]  (0:1)   arc (0:180-\angle:1)   node[right, pos=.9, xshift=-2pt, yshift=9pt]{$\frac{5}{6}\pi$};
+				
+				\node[above, yshift=-1pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}$};
+				
+				\node[above, yshift=-1pt, xshift=2pt] at ({3*cos(-\angle+180)}, {3*sin(-\angle+180)}) {$\textrm{Q}$};
+				
+				\foreach \i in {\angle, -\angle+180}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				\draw[thick, blue] (-3.5,3/2) -- (3.5, 3/2) node[right]{$y=\frac{1}{2}$};
+				\draw[dotted, very thick] (2.598, 3/2) -- (2.598, 0);
+				\draw[dotted, very thick] (-2.598, 3/2) -- (-2.598, 0);				
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+ 
+ 일반적으로 등식 $\sin \theta = a$를 만족시키는 $\theta$의 값은 함수 $y =\sin \theta$와 $y=a$와의 교점을 이용하여 구하거나 단위원과 직선 $y=a$와의 교점을 이용하여 구할 수 있다.
+ 
+$\sin\theta =\frac{1}{2}$과 같이 각의 크기가 미지수인 삼각함수를 포함하는 방정식을 {\color{red}삼각방정식}이라고 한다. 삼각방정식의 해는 삼각함수의 그래프나 단위원을 이용하여 구할 수 있다.
+
+\begin{example}
+	삼각방정식 $\cos\theta =-\frac{1}{2}$을 풀어라.(단, $0 \le \theta < 2\pi$)
+	\begin{solution}
+		함수 $y=\cos\theta$의 그래프와 $y=-\frac{1}{2}$의 그래프는 다음 그림과 같다.
+		\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}
+				\begin{axis}[
+					clip=false,
+					scale only axis = true,
+					width=1\textwidth,
+					height=0.32\textwidth,
+					xmin=-0.2*pi,xmax=2.2*pi,
+					xlabel= $\theta$,
+					ylabel=$y$,
+					ymin=-1.4,ymax=1.4,
+					axis lines=middle,
+					xtick={-6.28,-4.71, -3.14,-1.57,0,1.57,3.14,4.71, 6.28},
+					xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\,\,\,\,\,\pi\,$,$\frac{3}{2}\pi$,$\,\,\,2\pi$},
+					%xticklabel style={anchor=north west}
+					]
+					\addplot[domain=0:2*pi,samples=200,red, very thick]{cos(deg(x))}
+					node[right,pos=0.8,font=\footnotesize, xshift=5mm, yshift=13mm]{$y=\cos x$};
+					%				\addplot[domain=-2*pi:2*pi,samples=200,blue]{2*sin(deg(x))}
+					%				node[right,pos=0.2,font=\footnotesize, xshift=-4mm, yshift=3mm]{$y=2 \sin x$};
+					%				\draw[dotted, thick] (-0.63, 1) -- (6.28, 1);
+					%				\draw[dotted, thick] (-0.63, -1) -- (6.28, -1);
+					\draw[very thick, blue] (0, -1/2) -- (6.26, -1/2) node[right]{$y=-\frac{1}{2}$};
+					\draw[dotted, very thick]  (2*pi/3, -1/2) -- (2*pi/3,0) node[above]{$\frac{2}{3}\pi$};
+					\draw[dotted, very thick] (0, 1/2)node[left]{$\frac{1}{2}$}-| (pi/3, 0) node[below]{$\frac{\pi}{3}$};
+					\draw[dotted, very thick]  (4*pi/3, -1/2) -- (4*pi/3,0) node[above]{$\frac{4}{3}\pi$};
+					
+					\draw[dotted, very thick] (0, -1) -| (pi, 0) ;
+					
+					\fill[black] (2*pi/3, -1/2) circle [radius=3pt];
+					\fill[black] (4*pi/3, -1/2) circle [radius=3pt];
+					\fill[red] (0,1) circle [radius=3pt];
+					\filldraw[draw=red, fill=pink!20] (2*pi, 1) circle [radius=3pt];
+					\draw[ultra thick, orange](0,0) -- (pi/3,0);
+					\draw[ultra thick, orange] (2*pi/3, 0) -- (4*pi/3, 0);
+					\draw[pink, thick] ({pi/6-0.03}, 0.07) -- ({pi/6-0.03}, -0.07);
+					\draw[pink, thick] ({pi/6+0.03}, 0.07) -- ({pi/6+0.03}, -0.07);
+
+					\draw[pink, thick] ({5*pi/6-0.03}, 0.07) -- ({5*pi/6-0.03}, -0.07);
+					\draw[pink, thick] ({5*pi/6+0.03}, 0.07) -- ({5*pi/6+0.03}, -0.07);
+					
+					\draw[pink, thick] ({7*pi/6-0.03}, 0.07) -- ({7*pi/6-0.03}, -0.07);
+					\draw[pink, thick] ({7*pi/6+0.03}, 0.07) -- ({7*pi/6+0.03}, -0.07);
+					
+				\end{axis}
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+$\cos \frac{\pi}{3} =\frac{1}{2}$, $\cos(\pi-\theta)=-\cos\theta$, $\cos(\pi+\theta)=-\cos\theta$이므로
+\begin{align*}
+	\cos\frac{2}{3}\pi & = \cos\left(\pi -\frac{\pi}{3}\right) = -\cos \frac{\pi}{3} =-\frac{1}{2} \\
+	\cos\frac{3}{3}\pi & = \cos\left(\pi +\frac{\pi}{3}\right) = -\cos \frac{\pi}{3} =-\frac{1}{2} 
+\end{align*}
+이므로 구하는 해는 $\theta =\frac{2}{3}\pi,\;\frac{4}{3}\pi$이다.
+\end{solution}
+\begin{solution}
+	이번에는 단위원을 이용하여 삼각방정식을 풀어보자.
+	
+\begin{minipage}{0.5\textwidth}
+	직선 $x= -\frac{1}{2}$과 단위원의 교점을 $\textrm{P}$, \textrm{Q}라고 하면 동경 \textrm{OP}, \textrm{OQ}가 나타내는 각의 크기는 $\frac{2}{3}\pi$, $\frac{4}{3}\pi$이므로 삼각방정식 
+	\[
+	\cos \theta = -\frac{1}{2}
+	\]
+	의 해는 $\frac{2}{3}\pi$, $\frac{4}{3}\pi$이다.
+	
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{120} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below right] at (0, 0){\textrm{O}};
+				\draw[very thick, red] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (-\angle+360:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.5, yshift=2pt, xshift=13pt]{$\frac{2}{3}\pi$};
+				
+				\draw [->, purple]  (0:1)   arc (0:360-\angle:1)   node[right, pos=.8, xshift=-10pt, yshift=9pt]{$\frac{4}{3}\pi$};
+				
+				\node[right, yshift=-1pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}$};
+				
+				\node[right, yshift=-1pt, xshift=2pt] at ({3*cos(-\angle+360)}, {3*sin(-\angle+360)}) {$\textrm{Q}$};
+				
+				\foreach \i in {\angle, -\angle}
+				{
+					\fill[red] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				\draw[thick, blue] (-3/2,3.5) -- (-3/2, -3.5) node[below]{$x=-\frac{1}{2}$};
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 삼각방정식을 풀어라.(단, $0 \le \theta < 2\pi$)
+	\questwo{\cos \theta =\frac{\sqrt{2}}{2}}{\tan\theta=1}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	다음 삼각방정식을 풀어라.(단, $0 \le \theta < 2\pi$)
+	\questwo{2 \sin \theta - \sqrt{3}=0}{1- 2\cos \theta =0}
+\end{problem}
+\vspace{2em}
+
+$0 \le \theta < 2\pi$일 때, 등식 $\sin\theta >\frac{1}{2}$을 만족시키는 $\theta$의 값을 구하는 	방법을 탐구해 보자. 
+
+먼저 사인함수의 그래프를 이용하여 구할 수 있다. 함수 $y =\sin \theta$의 그래프와 직선 $y =\frac{1}{2}$을 좌표평면에 나타내면 다음과 같다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}
+			\begin{axis}[
+				clip=false,
+				scale only axis = true,
+				width=1\textwidth,
+				height=0.32\textwidth,
+				xmin=-0.2*pi,xmax=2.2*pi,
+				xlabel= $\theta$,
+				ylabel=$y$,
+				ymin=-1.4,ymax=1.4,
+				axis lines=middle,
+				xtick={-6.28,-4.71, -3.14,-1.57,0,1.57,3.14, 6.28},
+				xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\pi\,$,$\,\,\,2\pi$},
+				%xticklabel style={anchor=north west}
+				]
+				\addplot[domain=0:2*pi,samples=200,black, very thick]{sin(deg(x))}
+				node[right,pos=0.3,font=\footnotesize, xshift=5mm, yshift=-2mm]{$y=\sin x$};
+				
+				\addplot[domain=pi/6:5*pi/6, samples=200,red, very thick]{sin(deg(x))}
+				node[right,pos=0.3,font=\footnotesize, xshift=5mm, yshift=-2mm]{$y=\sin x$};
+				
+				%				\addplot[domain=-2*pi:2*pi,samples=200,blue]{2*sin(deg(x))}
+				%				node[right,pos=0.2,font=\footnotesize, xshift=-4mm, yshift=3mm]{$y=2 \sin x$};
+				%				\draw[dotted, thick] (-0.63, 1) -- (6.28, 1);
+				%				\draw[dotted, thick] (-0.63, -1) -- (6.28, -1);
+				\draw[very thick, blue] (0, 1/2) -- (6.26, 1/2) node[right]{$y=\frac{1}{2}$};
+				\draw[dotted, very thick]  (0.5236, 1/2) -- (0.5236,0) node[below]{$\frac{\pi}{6}$};
+				\draw[dotted, very thick] (0, 1) -| (1.5708, 0) ;
+				\draw[dotted, very thick]  (2.61799, 1/2) -- (2.61799,0) node[below]{$\frac{5}{6}\pi$};
+				
+				\draw[dotted, very thick] (0, -1) -| (4.71, 0) node[above]{$\frac{3}{2}\pi$};
+				
+				\filldraw[draw=black, fill=red!10] (pi/6, 1/2) circle [radius=3pt];
+				\filldraw[draw=black, fill=red!10] (5*pi/6, 1/2) circle [radius=3pt];
+				\fill[red] (0,0) circle [radius=3pt];
+				\filldraw[draw=red, fill=pink!20] (2*pi, 0) circle [radius=3pt];
+				\draw[very thick, red] (pi/6, 0) -- (5*pi/6, 0);
+				
+			\end{axis}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+이때, $\sin\frac{\pi}{6}=\frac{1}{2}$을 만족시키는 $\theta$의 값은 $\frac{\pi}{6}$, $\frac{5}{6}\pi$이므로 부등식 $\sin\theta > \frac{1}{2}$을 만족시키는 $\theta$의 범위는 $\frac{\pi}{6}<\theta<\frac{5}{6}\pi$이다.
+
+\begin{minipage}{0.5\textwidth}
+	한편 단위원을 이용하여 $\sin \theta >\frac{1}{2}$를 만족시키는 $\theta$의 범위를 구할 수 도 있다. 
+	
+	오른쪽 그림에서 단위원과 직선 $y=\frac{1}{2}$과의 교점 $\textrm{P}, \;\textrm{Q}$에 대하여 동경 
+	$\textrm{OP}$, $\textrm{OQ}$가 나타 내는 각의 크기는 각각 $\frac{\pi}{6}$, $\frac{5}{6}\pi$이다. 이때, 단위원과 만나는 교점의 $y$좌표가 $\frac{1}{2}$보다 큰 동경이 나타내는 각 $\theta$의 값의 범위는 $\frac{\pi}{6} <\theta < \frac{5}{6}\pi$이다.
+	
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.6]
+				\pgfmathsetmacro{\angle}{30} % math mode에서 작동함.
+				\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+				\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+				\node[below right] at (0, 0){\textrm{O}};
+				\draw[very thick, black] (0,0) circle [radius=3];
+				\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+				\draw[-latex, blue, very thick](0,0) -- (-\angle+180:4);
+				
+				\node[below left] at (-3, 0) {$-1$};
+				\node[below right] at (3, 0) {$1$};
+				\node[below left] at (0, -3) {$-1$};
+				\node[above left] at (0, 3) {$1$};
+				\draw [->, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.5, yshift=2pt, xshift=13pt]{$\frac{\pi}{6}$};
+				\draw [very thick, red]  (\angle:3)   arc (\angle:180-\angle:3) ;
+				
+				\draw [->, purple]  (0:1)   arc (0:180-\angle:1)   node[right, pos=.9, xshift=-2pt, yshift=9pt]{$\frac{5}{6}\pi$};
+				
+				\node[above, yshift=-1pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}$};
+				
+				\node[above, yshift=-1pt, xshift=2pt] at ({3*cos(-\angle+180)}, {3*sin(-\angle+180)}) {$\textrm{Q}$};
+				
+				\foreach \i in {\angle, -\angle+180}
+				{
+					\filldraw[draw=black!30, fill=red!10] ({3*cos(\i)}, 3*sin(\i) circle [radius=3pt];
+				}
+				\draw[thick, blue] (-3.5,3/2) -- (3.5, 3/2) node[right]{$y=\frac{1}{2}$};
+
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+일반적으로 등식 $\sin \theta > a$를 만족시키는 $\theta$의 값의 범위는 함수 $y =\sin \theta$와 직선 $y=a$와의 교점을 이용하여 구하거나, 단위원과 직선 $y=a$와의 교점을 이용하여 구할 수 있다.
+
+$\sin\theta >\frac{1}{2}$과 같이 각의 크기가 미지수인 삼각함수를 포함하는 방정식을 {\color{red}삼각부등식}이라고 한다. 삼각방정식의 해는 삼각방정식의 경우와 마찬가지로 삼각함수의 그래프나 단위원을 이용하여 구할 수 있다.
+
+\begin{example}
+	삼각부등식 $\cos\theta <\frac{1}{2}$을 풀어라.(단, $0 \le \theta < 2\pi$)
+	\begin{solution}
+		함수 $y=\cos\theta$의 그래프와 $y=\frac{1}{2}$의 그래프는 다음 그림과 같다.
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}
+					\begin{axis}[
+						clip=false,
+						scale only axis = true,
+						width=1\textwidth,
+						height=0.32\textwidth,
+						xmin=-0.2*pi,xmax=2.2*pi,
+						xlabel= $\theta$,
+						ylabel=$y$,
+						ymin=-1.4,ymax=1.4,
+						axis lines=middle,
+						xtick={-6.28,-4.71, -3.14,-1.57,0,1.57,3.14,4.71, 6.28},
+						xticklabels={$-2\pi$,$-\frac{3\pi}{2}\,$,$-\pi$,$\,\,\,-\frac{\pi}{2}$,$0$, $\frac{\pi}{2}$,$\,\,\,\,\,\pi\,$,$\frac{3}{2}\pi$,$\,\,\,2\pi$},
+						%xticklabel style={anchor=north west}
+						]
+						\addplot[domain=0:2*pi,samples=200,black!70, very thick]{cos(deg(x))}
+						node[right,pos=0.8,font=\footnotesize, xshift=5mm, yshift=13mm]{$y=\cos x$};
+
+						\addplot[domain=pi/3:5*pi/3,samples=200,orange, very thick]{cos(deg(x))} ;
+										
+						
+						%				\addplot[domain=-2*pi:2*pi,samples=200,blue]{2*sin(deg(x))}
+						%				node[right,pos=0.2,font=\footnotesize, xshift=-4mm, yshift=3mm]{$y=2 \sin x$};
+						%				\draw[dotted, thick] (-0.63, 1) -- (6.28, 1);
+						%				\draw[dotted, thick] (-0.63, -1) -- (6.28, -1);
+						\draw[very thick, blue] (0, 1/2) -- (6.26, 1/2) node[right]{$y=\frac{1}{2}$};
+						\draw[dotted, very thick]  (2*pi/3, -1/2) -- (2*pi/3,0) node[above]{$\frac{2}{3}\pi$};
+						\draw[dotted, very thick] (0, 1/2)node[left]{$\frac{1}{2}$}-| (pi/3, 0) node[below]{$\frac{\pi}{3}$};
+						\draw[dotted, very thick]  (4*pi/3, -1/2) -- (4*pi/3,0) node[above]{$\frac{4}{3}\pi$};
+						
+						\draw[dotted, very thick] (0, -1) -| (pi, 0) ;
+						
+						\filldraw[draw=black!30, fill=white] (pi/3, 1/2) circle [radius=3pt];
+						\filldraw[draw=black!30, fill=white] (5*pi/3, 1/2) circle [radius=3pt];
+						
+						\filldraw[draw=black!30, fill=white] (pi/3, 0) circle [radius=3pt];
+						\filldraw[draw=black!30, fill=white] (5*pi/3, 0) circle [radius=3pt];
+
+						\fill[orange] (0,1) circle [radius=3pt];
+						\filldraw[draw=red, fill=pink!20] (2*pi, 1) circle [radius=3pt];
+%						\draw[ultra thick, orange](0,0) -- (pi/3,0);
+						\draw[ultra thick, orange] (pi/3, 0) -- (5*pi/3, 0);
+
+%						\draw[pink, thick] ({pi/6-0.03}, 0.07) -- ({pi/6-0.03}, -0.07);
+%						\draw[pink, thick] ({pi/6+0.03}, 0.07) -- ({pi/6+0.03}, -0.07);
+%						
+%						\draw[pink, thick] ({5*pi/6-0.03}, 0.07) -- ({5*pi/6-0.03}, -0.07);
+%						\draw[pink, thick] ({5*pi/6+0.03}, 0.07) -- ({5*pi/6+0.03}, -0.07);
+%						
+%						\draw[pink, thick] ({7*pi/6-0.03}, 0.07) -- ({7*pi/6-0.03}, -0.07);
+%						\draw[pink, thick] ({7*pi/6+0.03}, 0.07) -- ({7*pi/6+0.03}, -0.07);
+						
+					\end{axis}
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	이때, 방정식 $\cos\theta =\frac{1}{2}$의 해는 두 그래프의 교점의 $\theta$좌표인 $\frac{\pi}{3}$, $\frac{5}{3}\pi$이다. 따라서 부등식 $\cos\theta < \frac{1}{2}$의 해는 $y=\cos\theta$의 그래프가 직선 $y=\frac{1}{2}$보다 아랫부분에 있는 $\theta$의 값의 범위인 $\frac{\pi}{3}<\theta < \frac{5}{3}\pi$이다.
+	\end{solution}
+	\begin{solution}
+		이번에는 단위원을 이용하여 삼각방정식을 풀어보자.
+		
+		\begin{minipage}{0.5\textwidth}
+			직선 $x= \frac{1}{2}$의 그래프와 단위원의 교점을 $\textrm{P}$, \textrm{Q}라고 하면 동경 \textrm{OP}, \textrm{OQ}가 나타내는 각의 크기는 $\frac{\pi}{3}$, $\frac{5}{3}\pi$이다.
+			
+			이때,
+			\[
+			\left(\text{교점의 }x\text{좌표}\right) < \frac{1}{2}
+			\]
+			인 동경이 나타내는 각 $\theta$의 범위는 $\frac{\pi}{3}<\theta < \frac{5}{3}\pi$이다.
+		\end{minipage}
+		\begin{minipage}{0.4\textwidth}
+			\begin{figure}[H]
+				\begin{center}
+					\begin{tikzpicture}[scale=0.6]
+						\pgfmathsetmacro{\angle}{60} % math mode에서 작동함.
+						\draw[-latex, very thick] (-4, 0) -- (4, 0) node[below]{$x$};
+						\draw[-latex, very thick] (0, -4) -- (0, 4) node[left]{$y$};
+						\node[below right] at (0, 0){\textrm{O}};
+						\draw[very thick, black!60] (0,0) circle [radius=3];
+						\draw[-latex, blue, very thick](0,0) -- (\angle:4);
+						\draw[-latex, blue, very thick](0,0) -- (-\angle+360:4);
+						
+						\draw[very thick, orange] (\angle:3) arc (\angle:360-\angle:3);
+						
+						\node[below left] at (-3, 0) {$-1$};
+						\node[below right] at (3, 0) {$1$};
+						\node[below left] at (0, -3) {$-1$};
+						\node[above left] at (0, 3) {$1$};
+						\draw [->, cyan]  (0:1.2)   arc (0:\angle:1.2)   node[left, pos=.5, yshift=2pt, xshift=13pt]{$\frac{\pi}{3}$};
+						
+						\draw [->, purple]  (0:1)   arc (0:360-\angle:1)   node[right, pos=.8, xshift=-10pt, yshift=9pt]{$\frac{5}{3}\pi$};
+						
+						\node[right, yshift=-1pt] at ({3*cos(\angle)}, {3*sin(\angle)}) {$\textrm{P}$};
+						
+						\node[right, yshift=-1pt, xshift=2pt] at ({3*cos(-\angle+360)}, {3*sin(-\angle+360)}) {$\textrm{Q}$};
+						
+						\foreach \i in {\angle, -\angle}
+						{
+							\filldraw[draw=black!30, fill=white] ({3*cos(\i)}, 3*sin(\i) circle [radius=3.5pt];
+						}
+						\draw[very thick, blue] (3/2,3.5) -- (3/2, -3.5) node[below]{$x=\frac{1}{2}$};
+					\end{tikzpicture}
+				\end{center}
+			\end{figure}
+		\end{minipage}
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	다음 삼각부등식을 풀어라.(단, $0 \le \theta < 2\pi$)
+	\questhree{2 \sin \theta < \sqrt{2}}{\cos \theta > -\frac{1}{2}}{\sqrt{3}\tan\theta -1 \le 0}
+\end{problem}
+
+\vspace{1em}
+\begin{problem}
+삼각함수의 그래프를 이용하여 부등식 $\sin \theta > \cos \theta$를 만족시키는 $\theta$의 값의 범위를 정하여라.(단, $0 \le \theta < 2\pi$)
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	다음 삼각부등식을 풀어라.(단, $0 \le \theta < 2 \pi$)
+	\[
+	2 \cos^2\theta + (2-\sqrt{2}) \cos\theta -\sqrt{2} \le 0
+	\]
+\end{problem}
+
+\chapter{\Huge 삼각형에의 응용}
+
+\section{사인법칙}
+$\triangle \textrm{ABC}$에서 점 \textrm{A}에서 $\ovr{BC}$에 내린 수선의 발을 \textrm{H}라고 하면 $\ovr{AH}$의 값을 \textrm{C}가 예각, 직각, 둔각일 때로 나누어 구할 수 있다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(i) \textrm{C}가 예각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1, 1);
+				\coordinate [label=right:$\textrm{C}$] (C) at (2.2, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [above right] (b) {$b$} cycle;        
+				\draw [dashed] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				%					\draw [dotted] (B) -- (b);
+			\end{tikzpicture}\vspace{-1em}
+			\begin{align*}
+			\ovr{AH} &= c \sinrm{B}\\
+			 &=b \sinrm{C}
+			\end{align*}
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(ii) \textrm{C}가 직각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1.3, 1);
+				\coordinate [label=right:$\textrm{C(H)}$] (C) at (1.3, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [right] (b) {$b$} cycle;        
+				%			\draw [dashed] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				%			\draw [dotted] (B) -- (b);
+			\end{tikzpicture}\vspace{-1em}
+			\begin{align*}
+			\ovr{AH} &= c \sinrm{B} \\
+						&=b \sinrm{C}
+			\end{align*}
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(iii) $\textrm{C}$가 둔각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1.3, 1);
+				\coordinate [label=below:$\textrm{C}$] (C) at (0.5, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [right] (b) {$b$} cycle;        
+				\draw [dotted, thick] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				\draw [dotted, thick] (C) -- (1.3,-1);
+				\node[right] at(1.3, 0) {$h$};
+			\end{tikzpicture}\vspace{-2em}
+			\begin{align*}
+				\ovr{AH} &=c \sinrm{B}=c \sin(\pi- \textrm{C}) \\
+				&= c \sinrm{C}
+			\end{align*}
+		\end{minipage}
+	\end{center}
+\end{figure}
+
+(i), (ii), (iii)에서 $\ovr{AH}=c \sinrm{B} =b \sinrm{C}$이므로 $\dfrac{b}{\sinrm{B}}=\dfrac{c}{\sinrm{C}}$임을 알 수 있다.
+
+같은 방법으로
+\[
+\frac{a}{\sinrm{A}} = \frac{b}{\sinrm{B}} =\frac{c}{\sinrm{C}}
+\]
+임을 알 수 있다. 이것을 {\color{red}사인법칙}이라고 한다. 
+
+	\begin{minipage}{0.5\textwidth}
+또, 오른쪽 그림에서 $\triangle \textrm{ABC}$의 외접원의 반지름의 길이를 $R$라 할 때, $\triangle \textrm{ABC}$의 한 예각을 \textrm{A}라고 하면 원주각의 성질에 의하여 $\text{A}=\text{D}$이므로
+\[
+\sinrm{A} = \sinrm{D} =\frac{a}{2R}, \text{ 즉} \frac{a}{\sinrm{A}} = 2R
+\]
+가 성립한다. 이상을 정리하면 다음과 같다.
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+		\begin{tikzpicture}[x=0.5pt,y=0.5pt,yscale=-1,xscale=1]
+			%uncomment if require: \path (0,443); %set diagram left start at 0, and has height of 443
+			
+			%Shape: Circle [id:dp5718712433412914] 
+			\draw  [line width=1.5]  (14,139) .. controls (14,66.65) and (72.65,8) .. (145,8) .. controls (217.35,8) and (276,66.65) .. (276,139) .. controls (276,211.35) and (217.35,270) .. (145,270) .. controls (72.65,270) and (14,211.35) .. (14,139) -- cycle ;
+			%Straight Lines [id:da17877715182382015] 
+			\draw [line width=1.5]    (35,211) -- (254,211) ;
+			%Straight Lines [id:da8983724538003544] 
+			\draw [line width=1.5]    (36,67) -- (254,211) ;
+			%Straight Lines [id:da33654864043549026] 
+			\draw [line width=1.5]    (36,67) -- (35,211) ;
+			%Straight Lines [id:da03730997181046547] 
+			\draw [line width=1.5]    (221,32) -- (35,211) ;
+			%Straight Lines [id:da9356162176146439] 
+			\draw [line width=1.5]    (221,32) -- (254,211) ;
+			%Shape: Circle [id:dp28083081633186] 
+
+			\draw   (142,139) .. controls (142,137.34) and (143.34,136) .. (145,136) .. controls (146.66,136) and (148,137.34) .. (148,139) .. controls (148,140.66) and (146.66,142) .. (145,142) .. controls (143.34,142) and (142,140.66) .. (142,139) -- cycle ; % for border 
+			
+			%Curve Lines [id:da8629054373723684] 
+			\draw  [dash pattern={on 0.84pt off 2.51pt}]  (36,67) .. controls (76,76) and (122,105) .. (143,122) ;
+			%Curve Lines [id:da7454893765315114] 
+			\draw  [dash pattern={on 0.84pt off 2.51pt}]  (169,136) .. controls (199,155) and (224,175) .. (254,211) ;
+			%Shape: Rectangle [id:dp8786595476865284] 
+			\draw  [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ][line width=1.5]  (35,196) -- (49,196) -- (49,211) -- (35,211) -- cycle ;
+			%Curve Lines [id:da8928614531852126] 
+			\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ][line width=1.5]    (208,46) .. controls (214,53) and (216,53) .. (225,50) ;
+			%Curve Lines [id:da011136534923241959] 
+			\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ][line width=1.5]    (37,91) .. controls (49,93) and (49,92) .. (55,80) ;
+			
+			
+			% Text Node
+			\draw (256,211) node [anchor=west] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont C}};
+			% Text Node
+			\draw (145,145) node [anchor=north] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont O}};
+			% Text Node
+			\draw (34,67) node [anchor=east] [inner sep=0.75pt]  [font=\normalsize] [align=left] {{\fontfamily{pcr}\selectfont D}};
+			% Text Node
+			\draw (33,211) node [anchor=east] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont B}};
+			% Text Node
+			\draw (223,29) node [anchor=south west] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont A}};
+			% Text Node
+			\draw (147,117.4) node [anchor=north west][inner sep=0.75pt]  [font=\normalsize]  {$2\text{R}$};
+			
+			
+		\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+\begin{theorem}[사인법칙]
+	$\triangle \textrm{ABC}$의 외접원의 반지름의 길이를 $R$라고 하면 
+	\[
+	\frac{a}{\sinrm{A}} =\frac{b}{\sinrm{B}} =\frac{c}{\sinrm{C}} =2R
+	\]
+\end{theorem}
+\vspace{1em}
+\begin{example}
+	$\triangle \textrm{ABC}$에서 $b=4$, $\textrm{A}=75^{\circ}$, $\textrm{B}=45^{\circ}$일 때, $c$의 값을 구하여라.
+	\begin{solution}
+		삼각형의 내각의 합은 $180^{\circ}$이므로 $\triangle \textrm{ABC}$에서
+		\begin{align*}
+			\textrm{C} &=180^{\circ} - (75^{\circ}+45^{\circ})\\
+			&=60^{\circ}
+		\end{align*}
+	이고 사인법칙에 의하여 $\frac{4}{\sin 45^{\circ}}=\frac{c}{\sin 60^{\circ}}$이다. 여기서 $c$를 구하면
+	\[
+	c = \sin 60^{\circ} \times \frac{4}{\sin 45^{\circ}} =\frac{\sqrt{3}}{\Ccancel[red]{2}} \times \frac{4}{\frac{\sqrt{2}}{\Ccancel[red]{2}}}=\frac{4\sqrt{3}}{\sqrt{2}} =2\sqrt{6}
+	\]
+	
+	\end{solution}
+\end{example}
+
+\vspace{1em}
+
+\begin{problem}
+	$\triangle \textrm{ABC}$에서 $b=5$, $\textrm{B}=30^{\circ}$, $\textrm{C}=45^{\circ}$일 때, $c$의 값을 구하여라.
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	$\triangle \textrm{ABC}$에서 $\textrm{A}=45^{\circ}$, $\textrm{C}=60^{\circ}$, $c=5$일 때, $\triangle \textrm{ABC}$의 외접원의 반지름의 길이 $R$와 $a$의 값을 구하여라.
+\end{problem}
+\vspace{1em}
+\begin{example}
+	$\triangle \textrm{ABC}$에서
+	\[
+	a \sinrm{A} = b \sinrm{B} = c \sinrm{C}
+	\]
+	이면 이 삼각형은 정삼각형임을 보여라.
+	\begin{solution}
+		$\triangle \textrm{ABC}$의 외접원의 반지름의 길이를 $R$라고 하면 사인법칙에 의하여
+		\[
+		\sinrm{A} =\frac{a}{2R}, \quad	\sinrm{B} =\frac{b}{2R}, \quad 	\sinrm{C} =\frac{c}{2R}
+		\]
+	\end{solution}
+이고 이를 $a \sinrm{A}=b \sinrm{B} = c \sinrm{C}$에 대입하면
+\[
+\frac{a^2}{2R} =\frac{b^2}{2R} =\frac{c^2}{2R} \qquad \therefore a^2=b^2=c^2
+\]
+그런데 삼각형의 세 변의 길이 $a,\;b,\;c$는 모두 양수이므로 $a=b=c$이고 따라서 $\triangle \textrm{ABC}$는 정삼각형이다.
+\end{example}
+\vspace{1em}
+\begin{problem}
+	$\triangle \textrm{ABC}$에서
+	\[
+	\sin^2(\textrm{A}) = \sin^2(\textrm{B}) + \sin^2(\textrm{C})
+	\]
+	이면 이 삼각형은 직각삼각형임을 보여라.
+\end{problem}
+
+\vspace{1em}
+\begin{problem}
+물과 메탄의 분자식은 각각 $\text{H}_2 \text{O}$, $\text{CH}_4$이며 이들 분자의 구조는 다음 그림과 같다. 삼각함수표와 계산기를 이용하여 수소 $\left(\textrm{H}\right)$ 원자 사이의 거리를 구하여라. 물 분자에서 산소와 수소 사이의 거리는 $96\textrm{Pm}$이고 메탄에서 탄소와 수소 사이의 거리는 $110\textrm{Pm}$이다.(단, 1$\textrm{Pm}=10^{-12}\textrm{m}$)
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.4\linewidth}
+			\centering
+		\begin{tikzpicture}[scale=0.9]
+			\shade[ball color=blue!40!] (0,0) coordinate(Hp) circle (.9) ;
+			\shade[ball color=red!30!] (2,-1.53) coordinate(O) circle (1.62) ;
+			\shade[ball color=blue!40!] (4,0) coordinate(Hm) circle (.9) ;
+			\draw[thick,dashed] (0,0) -- (2,-1.53) -- (4,0) ;
+%			\draw[thick] (2,.2) -- (2,1.5) node[right]{$\mathbf{p}$} ;
+			\draw (2.48,-1.2) arc (33:142:.6)  ;
+			\draw (2,-.95) node[above]{$104.5^{\circ}$} ;
+			\draw (0,.2) node[left]{H$^+$} ;
+			\draw (4,.2) node[right]{H$^+$} ;
+			\draw (2,-1.63) node[below]{O$^{2-}$} ;
+			\foreach \point in {O,Hp,Hm}
+				\fill [black] (\point) circle (2pt) ;
+		\end{tikzpicture}
+		\end{minipage}
+		\begin{minipage}{0.4\linewidth}
+			\centering
+
+		\begin{tikzpicture}
+			[   oxygen/.style={circle, ball color=red, minimum size=6mm, inner sep=0},
+			hydrogen/.style={circle, ball color=white, minimum size=6mm, inner sep=0},
+			carbon/.style={circle, ball color=black!40, minimum size=15mm, inner sep=0}
+			]
+			\node[carbon] (C1) at (0,0) {};
+			\node[hydrogen] (H1) at (0:1.5) {};
+			\node[hydrogen] (H2) at (90:1.5) {};
+			\node[hydrogen] (H3) at (180:1.5){};
+			\node[hydrogen] (H4) at (270:1.5){} ;
+			\RedBond{C1}{H1}
+			\RedBond{C1}{H2}
+			\RedBond{C1}{H3}
+			\RedBond{C1}{H4}
+			\foreach \i in {0, 90, 180, 270}
+			 {
+			 	\draw[dashed, thick] (0,0 ) -- (\i: 1.5);
+			 	\fill [red!30] (\i:1.5) circle (2pt) ;
+			 }
+			\draw (180:1) arc (180:270:1)  ;
+			\draw[rotate=-45] (225:2) node[below, pos=0.5, yshift=-30pt]{$109.5^{\circ}$} ;
+			
+%			\SingleBond{O1}{H1}
+%			\SingleBond{O1}{H2}
+			
+%			\foreach \c in {1,...,6}
+%			{   \node[carbon] (C-\c) at ($(2,3)+(\c*60:1.5)$) {};
+%				\node[hydrogen] (H-\c-a) at ($(2,3)+(\c*60-15:2.5)$) {};
+%				\node[hydrogen] (H-\c-b) at ($(2,3)+(\c*60+15:2.5)$) {};
+%				\RedBond{C-\c}{H-\c-a}
+%				\BlueBond{C-\c}{H-\c-b}
+%			}
+%			\foreach \c [evaluate={\c as \n using int(mod(\c,6)+1)}] in {1,...,6}
+%			{   \GreenBond{C-\c}{C-\n}
+%			}
+		\end{tikzpicture}
+			
+		\end{minipage}
+	\end{center}
+\end{figure}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+
+	\begin{minipage}{0.5\textwidth}
+\textrm{A}지점에서 강 건너편의 $\textrm{P}$지점까지의 거리를 구하기 위하여 측정한 결과가 오른쪽 그림과 같았다. 이때, 두 지점 $\textrm{A,  B}$ 사이의 거리를 구하여라.
+\[
+\phantom{test}
+\]
+\[
+\phantom{test}
+\]
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\pgfmathsetmacro{\angle}{30}
+			\begin{tikzpicture}[scale=0.5, line join=round, rotate=-\angle]
+				\draw[very thick] (0, 0) -- (0:5)  --++(120:6.83013) --cycle ;
+				\node[left] at (0,0) {\textrm{O}};
+				\node[right] at (0:5) {\textrm{A}} ;
+				\node[right] at (75:6.12372) {\textrm{P}} ;
+				\node[below] at (2.5, -0.2){$50\textrm{m}$} ;
+				\draw[red] (1, 0) arc (0:75:1)  node[right, pos=0.5]{$75^{\circ}$};
+				\draw[red] (4, 0) arc (180:120:1)  node[left, pos=0.5, xshift=10pt, yshift=6pt]{$60^{\circ}$};
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+\end{problem}
+
+\section{코사인 법칙}
+
+코사인 법칙에 대하여 알아보자. $\triangle \textrm{ABC}$에서 $\ovr{BC}=a$의 값을 예각, 직각, 둔각일 때로 나누어 구할 수 있다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(i) \textrm{C}가 예각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1, 1);
+				\coordinate [label=right:$\textrm{C}$] (C) at (2.2, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [above right] (b) {$b$} cycle;        
+				\draw [dashed] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				%					\draw [dotted] (B) -- (b);
+			\end{tikzpicture}\vspace{-1em}
+			\begin{align*}
+				a &= \ovr{BC}=\ovr{BH}+\ovr{CH}\\
+				&=c \cosrm{B} + b \cosrm{C}
+			\end{align*}
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(ii) \textrm{C}가 직각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1.3, 1);
+				\coordinate [label=right:$\textrm{C}$] (C) at (1.3, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [right] (b) {$b$} cycle;        
+				%			\draw [dashed] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				%			\draw [dotted] (B) -- (b);
+			\end{tikzpicture}\vspace{-1em}
+			\begin{align*}
+			a &= \ovr{BC}=c \cosrm{B} \\
+				&=c \cosrm{B} + b\cosrm{C}
+			\end{align*}
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(iii) $\textrm{C}$가 둔각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1.3, 1);
+				\coordinate [label=below:$\textrm{C}$] (C) at (0.5, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [right] (b) {$b$} cycle;        
+				\draw [dotted, thick] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				\draw [dotted, thick] (C) -- (1.3,-1);
+				\node[right] at(1.3, 0) {$h$};
+			\end{tikzpicture}\vspace{-2em}
+			\begin{align*}
+				a &=\ovr{BC}=\ovr{BH} -\ovr{CH} \\
+				&= c \cosrm{B}+ b\cos(\pi-\textrm{C}) \\
+				&= c \cosrm{B} + b\cosrm{C}
+			\end{align*}
+		\end{minipage}
+	\end{center}
+\end{figure}
+(i), (ii), (iii)에서 $a =b\cosrm{C} = c\cosrm{B}$임을 알 수 있다. 
+같은 방법으로
+\[
+b =c \cosrm{A} + a \cosrm{C}, \qquad c =a \cosrm{B} + b\cosrm{A}
+\]
+임을 알 수 있다. 이 세 등식을 {\color{red}제일코사인법칙}이라고 한다. 
+
+이상을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[제일코사인법칙]
+	$\triangle \textrm{ABC}$에 대하여 다음이 성립한다.
+	\begin{align*}
+		a&= b\cosrm{C} + c\cosrm{B} \\
+		b&=c \cosrm{A} + a \cosrm{C} \\
+		c& = a \cosrm{B} + b \cosrm{A}
+	\end{align*}
+\end{theorem}
+\begin{sample}
+	
+	\vspace{0.5em}
+	\begin{minipage}{0.45\linewidth}
+	$\triangle \textrm{ABC}$에서 $b=3$, $c=4$, $\textrm{B}=30^{\circ}$, $\textrm{C}=45^{\circ}$일 때, $a$의 값은
+	\begin{align*}
+		a &=3 \cos 45^{\circ} + 4 \cos30^{\circ} \\
+		&=\frac{3\sqrt{2}}{2} + 2\sqrt{3}
+	\end{align*}
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
+	\begin{tikzpicture}[line join=round]
+			\draw[very thick] (0,0) node[left, xshift=2pt]{\textrm{B}} -- (0:5.58674) node[right, xshift=-2pt]{\textrm{C}} -- ++(135:3) node[above, yshift=-2pt]{\textrm{A}} --cycle ;
+			
+			\draw[red] (1, 0) arc (0:30:1)  node[right, pos=0.5]{$30^{\circ}$};
+			\draw[red] (0:4.58674) arc (180:135:1)  node[left, pos=0.5]{$45^{\circ}$};
+			
+			\node[below] at (2.79, -0.1) {$a$} ;
+			\node[left] at (34: 2.1) {$4$} ;
+			\node[right] at (15:4.7) {$3$};
+	\end{tikzpicture}
+
+\end{minipage}
+\end{sample}
+
+\vspace{1em}						
+\begin{problem}
+	
+	\begin{minipage}{0.5\linewidth}
+	오른쪽 그림의 $\triangle \textrm{ABC}$에서 $c=4$, $\angle\textrm{A}=75^{\circ}$, $\angle\textrm{B}=45^{\circ}$일 때, $a$의 값을 구하여라.
+	\[
+	\phantom{굥가놈이 대통령이라니.}
+	\]
+	
+\end{minipage}
+\begin{minipage}{0.4\linewidth}
+	\begin{tikzpicture}[line join=round]
+		\pgfmathsetmacro{\anga}{45}
+		\pgfmathsetmacro{\angb}{60}
+		\draw[very thick] (0,0) node[left, xshift=2pt]{\textrm{B}}-- (0:{(2*sin(\anga)/sin(\angb) + 4* cos(45))}) node[right, xshift=-2pt]{\textrm{C}} --++(120:{(4*sin(\anga))/sin(\angb)}) node[above, yshift=-2pt]{\textrm{A}}-- cycle ;
+		
+		\draw[red] (1, 0) arc (0:\anga:1)  node[right, pos=0.5]{$45^{\circ}$};
+		\draw[red] (\anga:3) arc (225:300:1)  node[below, pos=0.5]{$75^{\circ}$};
+		
+		\node[below] at ({(sin(\anga)/sin(\angb) + 2* cos(\anga))},-0.1) {$a$} ;
+		\node at (54:2) {$4$} ;
+	\end{tikzpicture}
+\end{minipage}
+\end{problem}
+\vspace{1em}
+이제, 삼각형에서 두 변의 길이와 그 끼인각의 크기를 알 때, 나머지 한 변의 길이를 구하는 방법을 알아보자. 제일코사인법칙에서 
+\begin{align*}
+	a & = b \cosrm{C} + c \cosrm{B} \\
+	b &= c \cosrm{A} + a \cosrm{C} \\
+	c &= a \cosrm{B} + b \cosrm{A}
+\end{align*}
+위 식의 양변에 차례로 $a,\;b,\;c$를 곱하면
+\begin{align*}
+	a^2 & = ab \cosrm{C} + ac \cosrm{B}  \tag{1}\\
+	b^2 &= bc \cosrm{A} + ab \cosrm{C}  \tag{2}\\
+	c^2 &= ca \cosrm{B} + bc \cosrm{A} \tag{3}
+\end{align*}
+위의 (2)식과 (3)식을 더하여 (1)식에서 빼고 정리하면((1)-((2)+(3)))
+\[
+a^2-b^2-c^2 =-2bc \cosrm{A}\qquad \therefore a^2=b^2+c^2-2bc \cosrm{A}
+\]
+이고 같은 방법으로
+\begin{align*}
+	b^2 &=c^2+a^2 -2ca \cosrm{B}\\
+	c^2 &=a^2+b^2 -2ab \cosrm{C}
+\end{align*}
+임을 알 수 있다. 이 세 등식을 {\color{red}제이코사인법칙}이라고 한다.
+
+이상을 정리하면 다음과 같다.
+\begin{theorem}[제이코사인법칙(SAS)]\vspace{-1em}
+	\begin{align*}
+		a^2 & = b^2+c^2 - 2bc \cosrm{A} \\
+		b^2 &=c^2+a^2 -2ca \cosrm{B}\\
+		c^2 &=a^2+b^2 -2ab \cosrm{C}
+	\end{align*}
+\end{theorem}
+이 형태의 제이코사인법칙은 주로 두 변의 길이와 그 끼인 각의 크기를 주고 끼인각의 대변의 길이를 구하는 경우에 주로 사용하므로 제이코사인법칙(SAS)라고 하였다.
+\vspace{1em}
+
+\begin{example}
+	
+	\begin{minipage}{0.5\linewidth}
+		
+		오른쪽 그림의 $\triangle \textrm{ABC}$에서  $\textrm{A}=45^{\circ}$, $b=6$, $c=5\sqrt{2}$일 때, $a$의 값을 구하여라.
+		\[
+		\phantom{test}\\
+		\phantom{text}
+		\]
+	\end{minipage}
+	\begin{minipage}{0.4\linewidth}
+		\begin{tikzpicture}[line join=round, scale=0.6]
+			\draw[very thick] (0,0) node[left, xshift=2pt]{\textrm{A}} -- (0:{5*sqrt(2)}) node[right, xshift=-2pt]{\textrm{B}} --++ ({180- asin(6*sin(45)/sqrt(26))}:{sqrt(26)}) node[above, yshift=-2pt]{\textrm{C}} --cycle ;
+			
+			\draw[red] (1, 0) arc (0:45:1)  node[right, pos=0.7]{$45^{\circ}$};
+			
+			\node[below] at ({2.5*sqrt(2)}, -0.2) {$5\sqrt{2}$} ;
+			\node[right] at(22.5:6.1) {$a$} ;
+			\node[left] at (48:3.3) {$6$} ;
+		\end{tikzpicture}
+	\end{minipage}
+
+\begin{solution}
+	제이코사인법칙에 의하여
+	\begin{align*}
+		a^2 &=b^2+c^2-2bc \cosrm{A} \\
+		&=6^2+(5\sqrt{2})^2 -2\times6\times 5\Ccancel[red]{\sqrt{2}} \times \frac{\Ccancel[red]{\sqrt{2}}}{\Ccancel[red]{2}} \\
+		&= 36 +50 -60 =26
+	\end{align*}
+이다. 따라서 $a>0$이므로 $a=\sqrt{2}$이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	$\triangle \textrm{ABC}$에서 $\textrm{C}=120^{\circ}$, $a=8$, $b=10$일 때, $c$의 값을 구하여라.
+\end{problem}
+\vspace{1em}
+  위의 제이코사인 법칙
+  \[
+  a^2 = b^2+c^2-2bc \cosrm{A}
+  \]
+  의 좌변의 $a^2$을 우변으로 이항하고 좌변의 $-2bc \cosrm{A}$를 우변으로 이항하면
+  \[
+  2bc \cosrm{A} = b^2 +c^2 -a^2
+  \]
+  이고 이 식의 양변을 $2bc$로 나누면
+  \[
+  \cosrm{A} =\frac{b^2+c^2-a^2}{2bc}
+  \]
+  를 얻는다. 마찬가지 방법으로 다음을 얻을 수 있다.
+  
+  \begin{align*}
+  \cosrm{B} &= \frac{c^2+a^2-b^2}{2ca} \\
+  \cosrm{C} &=\frac{a^2+b^2-c^2}{2ab}
+  \end{align*}
+이상을 정리하면 다음과 같다.
+
+\begin{theorem}[제이코사인법칙(SSS)]
+	\begin{align*}
+		\cosrm{A} &=\frac{b^2+c^2-a^2}{2bc} \\
+		 \cosrm{B} &= \frac{c^2+a^2-b^2}{2ca} \\
+		\cosrm{C} &=\frac{a^2+b^2-c^2}{2ab}
+	\end{align*}
+\end{theorem}
+ 이 형태의 제이코사인법칙은 삼각형의 세 변의 길이가 주어진 경우 각의 크기를 계산할 때 사용되므로 앞의 형태와 구별하기 위해 제이코사인법칙(SSS)라고 하였다.  공식을 구성하는 식을 잘 분석하면 각각의 공식이 어떠한 경우에 사용되는 가를 알 수 있는 경우가 있다.
+ \begin{example}
+ 	삼각형 $\triangle \text{ABC}$에서 $a=3$, $b=5$, $c=7$일 때, $C$를 구하시오.
+ 	\begin{solution}
+ 		제이코사인법칙에 의해
+ 		\[
+ 		\cosrm{C} =\frac{a^2+b^2-c^2}{2ab} = \frac{3^2+5^2-7^2}{2\times 3 \times 5} = -\frac{1}{2}
+ 		\]
+ 		이다. 이때 $0^{\circ}<C<180^{\circ}$이므로 $C =120^{\circ}$이다.
+ 	\end{solution}
+ \end{example}
+
+\begin{problem}
+	$\triangle \textrm{ABC}$의 세 변의 길이가 다음과 같을 때, \textrm{A}의 크기를 구하여라.
+	\questwo{a=3, \; b=5, \;c=7}{a=8,\;b=10, \; c=15}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+
+	\begin{minipage}{0.4\linewidth}
+	
+	오른쪽 그림과 같은 직육면체 모양의 건물 높이를 구하려고 한다. 이를 위해서 지면 위의 한 직선 위에 있는 세 점 \textrm{A, \;B, \;C}에서 건물의 꼭대기 \textrm{D}를 올려다 본 각의 크기를 측정하였더니 각각 $60^{\circ}$, $45^{\circ}$, $30^{\circ}$이었다. $\ovr{AB}=6\si{m}$, $\ovr{BC}=6 \si{m}$일 때, 이 건물의 높이를 구하여라.
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\tikzset {_p2fl4uhla/.code = {\pgfsetadditionalshadetransform{ \pgftransformshift{\pgfpoint{0 bp } { 0 bp }  }  \pgftransformrotate{0 }  \pgftransformscale{2 }  }}}
+	\pgfdeclarehorizontalshading{_3t81jmuwd}{150bp}{rgb(0bp)=(1,0.84,0.37);
+		rgb(37.5bp)=(1,0.84,0.37);
+		rgb(62.5bp)=(1,0.75,0.02);
+		rgb(100bp)=(1,0.75,0.02)}
+	
+	% Gradient Info
+	
+	\tikzset {_a6nxnwg0d/.code = {\pgfsetadditionalshadetransform{ \pgftransformshift{\pgfpoint{0 bp } { 0 bp }  }  \pgftransformrotate{0 }  \pgftransformscale{2 }  }}}
+	\pgfdeclarehorizontalshading{_z4ird9a6e}{150bp}{rgb(0bp)=(0.95,0.91,0.4);
+		rgb(37.5bp)=(0.95,0.91,0.4);
+		rgb(62.5bp)=(1,0.71,0.27);
+		rgb(62.5bp)=(1,0.71,0.27);
+		rgb(100bp)=(1,0.71,0.27)}
+	\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+	
+	\begin{tikzpicture}[x=0.55pt,y=0.55pt,yscale=-1,xscale=1]
+		%uncomment if require: \path (0,454); %set diagram left start at 0, and has height of 454
+		
+		%Shape: Cube [id:dp23508866759040403] 
+		\path  [shading=_3t81jmuwd,_p2fl4uhla] (45.84,114.67) -- (103.14,57.37) -- (236.84,57.37) -- (236.84,255.07) -- (179.54,312.37) -- (45.84,312.37) -- cycle ; % for fading 
+		\draw   (45.84,114.67) -- (103.14,57.37) -- (236.84,57.37) -- (236.84,255.07) -- (179.54,312.37) -- (45.84,312.37) -- cycle ; % for border 
+		\draw   (236.84,57.37) -- (179.54,114.67) -- (45.84,114.67) ; \draw   (179.54,114.67) -- (179.54,312.37) ;
+		%Shape: Cube [id:dp9402962932752121] 
+		\path  [shading=_z4ird9a6e,_a6nxnwg0d] (176.84,32.37) -- (194.84,14.37) -- (236.84,14.37) -- (236.84,57.37) -- (218.84,75.37) -- (176.84,75.37) -- cycle ; % for fading 
+		\draw   (176.84,32.37) -- (194.84,14.37) -- (236.84,14.37) -- (236.84,57.37) -- (218.84,75.37) -- (176.84,75.37) -- cycle ; % for border 
+		\draw   (236.84,14.37) -- (218.84,32.37) -- (176.84,32.37) ; \draw   (218.84,32.37) -- (218.84,75.37) ;
+		%Shape: Rectangle [id:dp5685102180869106] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (64,278.3) -- (84,278.3) -- (84,298.3) -- (64,298.3) -- cycle ;
+		%Shape: Rectangle [id:dp024983215778524803] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (104,122.3) -- (124,122.3) -- (124,142.3) -- (104,142.3) -- cycle ;
+		%Shape: Rectangle [id:dp35509417068458116] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (64,122.3) -- (84,122.3) -- (84,142.3) -- (64,142.3) -- cycle ;
+		%Shape: Rectangle [id:dp9372056366094368] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (104,159.3) -- (124,159.3) -- (124,179.3) -- (104,179.3) -- cycle ;
+		%Shape: Rectangle [id:dp6392693625179249] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (144,159.3) -- (164,159.3) -- (164,179.3) -- (144,179.3) -- cycle ;
+		%Shape: Rectangle [id:dp746007913115851] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (64,159.3) -- (84,159.3) -- (84,179.3) -- (64,179.3) -- cycle ;
+		%Shape: Rectangle [id:dp026362432113795853] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (144,200.3) -- (164,200.3) -- (164,220.3) -- (144,220.3) -- cycle ;
+		%Shape: Rectangle [id:dp591054223032015] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (104,200.3) -- (124,200.3) -- (124,220.3) -- (104,220.3) -- cycle ;
+		%Shape: Rectangle [id:dp4223178615460006] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (64,200.3) -- (84,200.3) -- (84,220.3) -- (64,220.3) -- cycle ;
+		%Shape: Rectangle [id:dp14402817168806092] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (144,240.3) -- (164,240.3) -- (164,260.3) -- (144,260.3) -- cycle ;
+		%Shape: Rectangle [id:dp7905053508523647] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (104,240.3) -- (124,240.3) -- (124,260.3) -- (104,260.3) -- cycle ;
+		%Shape: Rectangle [id:dp6995104987052048] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (64,241.3) -- (84,241.3) -- (84,261.3) -- (64,261.3) -- cycle ;
+		%Shape: Rectangle [id:dp642456753742682] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (144,278.3) -- (164,278.3) -- (164,298.3) -- (144,298.3) -- cycle ;
+		%Shape: Rectangle [id:dp6538047418955697] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (104,278.3) -- (124,278.3) -- (124,298.3) -- (104,298.3) -- cycle ;
+		%Shape: Rectangle [id:dp9888476124081691] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (144,122.3) -- (164,122.3) -- (164,142.3) -- (144,142.3) -- cycle ;
+		%Shape: Rectangle [id:dp21103685185526366] 
+		\draw  [fill={rgb, 255:red, 255; green, 255; blue, 255 }  ,fill opacity=1 ] (188,46) -- (209,46) -- (209,75.3) -- (188,75.3) -- cycle ;
+		%Straight Lines [id:da2795735060678597] 
+		\draw    (246,337) -- (444,182) ;
+		%Straight Lines [id:da8474511696951217] 
+		\draw    (236.84,255.07) -- (277,313) ;
+		%Straight Lines [id:da766735834608294] 
+		\draw    (236.84,14.37) -- (277,313) ;
+		%Straight Lines [id:da6220254318455043] 
+		\draw    (236.84,255.07) -- (345,259.5) ;
+		%Straight Lines [id:da7965990978264375] 
+		\draw    (236.84,14.37) -- (345,259.5) ;
+		%Straight Lines [id:da5535228072611018] 
+		\draw    (236.84,255.07) -- (414,205) ;
+		%Straight Lines [id:da6494456381123139] 
+		\draw    (236.84,14.37) -- (414,205) ;
+		%Curve Lines [id:da35147588795369167] 
+		\draw  [dash pattern={on 0.84pt off 2.51pt}]  (277,313) .. controls (291,316) and (301,310) .. (310,306) ;
+		%Curve Lines [id:da8876916302979141] 
+		\draw  [dash pattern={on 0.84pt off 2.51pt}]  (345,259.5) .. controls (338,282) and (327,290) .. (324,296) ;
+		%Curve Lines [id:da45551059318241083] 
+		\draw  [dash pattern={on 0.84pt off 2.51pt}]  (345,259.5) .. controls (359,262.5) and (369,256.5) .. (378,252.5) ;
+		%Curve Lines [id:da5710245396720977] 
+		\draw  [dash pattern={on 0.84pt off 2.51pt}]  (414,205) .. controls (407,227.5) and (396,235.5) .. (393,241.5) ;
+		%Curve Lines [id:da2633027610522847] 
+		\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ]   (264,295) .. controls (263,290) and (265,285) .. (273,286) ;
+		%Curve Lines [id:da6395376263857391] 
+		\draw [color={rgb, 255:red, 241; green, 5; blue, 33 }  ,draw opacity=1 ]   (324,258) .. controls (319,248) and (324,238) .. (335,237) ;
+		%Curve Lines [id:da6511935323571647] 
+		\draw [color={rgb, 255:red, 246; green, 10; blue, 1 }  ,draw opacity=1 ]   (393,210) .. controls (389,201) and (392,196) .. (400,189) ;
+		%Curve Lines [id:da3978413794335296] 
+		\draw    (237,299) .. controls (237.98,287.24) and (233.2,284.12) .. (262.18,283.06) ;
+		\draw [shift={(264,283)}, rotate = 178.15] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+		%Curve Lines [id:da1838974861893108] 
+		\draw    (295,231) .. controls (300.88,248.64) and (317.32,216.34) .. (321.74,244.22) ;
+		\draw [shift={(322,246)}, rotate = 262.65] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+		
+		
+		% Text Node
+		\draw (277,316) node [anchor=north] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont A}};
+		% Text Node
+		\draw (238.84,14.37) node [anchor=west] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont D}};
+		% Text Node
+		\draw (414,208) node [anchor=north] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont C}};
+		% Text Node
+		\draw (347,262.5) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont B}};
+		% Text Node
+		\draw (311,290.4) node [anchor=north west][inner sep=0.75pt]    {$6$};
+		% Text Node
+		\draw (380,236.4) node [anchor=north west][inner sep=0.75pt]    {$6$};
+		% Text Node
+		\draw (237,302.4) node [anchor=north] [inner sep=0.75pt]  [font=\small]  {${\textstyle 60^{\degree }}$};
+		% Text Node
+		\draw (383,191.4) node [anchor=north] [inner sep=0.75pt]  [font=\small]  {${\textstyle 30^{\degree }}$};
+		% Text Node
+		\draw (295,227.6) node [anchor=south] [inner sep=0.75pt]  [font=\small]  {${\textstyle 45^{\degree }}$};
+		
+		
+	\end{tikzpicture}
+\end{minipage}
+\end{problem}
+
+\vspace{1em}
+\section{삼각형의 넓이}
+\begin{minipage}{0.5\textwidth}
+	오른쪽 그림과 같은 $\triangle \textrm{ABC}$에서 $\angle \textrm{A}$, $\angle \textrm{B}$, $\angle \textrm{C}$의 크기를 각각 $\textrm{A, B, C}$라 하고, 꼭짓섬 \textrm{A, B, C}와 마주보는 변 $\textrm{BC}$, $\textrm{CA}$, $\textrm{AB}$의 길이를 각각 $a,\;b,\;c$로 나타내기로 한다. 
+	
+	이때, \textrm{A}, \textrm{B}, \textrm{C}, $a,\; b,\;c$를 {\color{red}삼각형의 $6$요소}라고 한다.
+\end{minipage}
+\begin{minipage}{0.4\textwidth}
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=1.2]
+				\coordinate [label=left:$\textrm{A}$] (A) at (-2, -1);
+				\coordinate [label=above:$\textrm{C}$] (C) at (1, 1);
+				\coordinate [label=right:$\textrm{B}$] (B) at (2.2, -1);
+				\draw (A) -- node [sloped, below] (c) {$c$} (B) -- node [sloped, above] (a) {$a$} (C) -- node [above] (b) {$b$} cycle;        
+				%					\draw [dashed] (B) -- ($(A)!(B)!(C)$);
+				%					\draw [dotted] (B) -- (b);
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{minipage}
+
+일반적으로 삼각형 $\textrm{ABC}$에서 두 변의 길이와 그 끼인각의 크기를 알면 사인함수를 이용하여 삼각형 $\textrm{ABC}$의 넓이를 구할 수 있다. 
+
+$\triangle \textrm{ABC}$의 꼭짓점 \textrm{A}에서 $\ovr{BC}$ 또는 그 연장선 위에 내린 수선의 발을 \textrm{H}라 하고, $\ovr{AH} = h$라고 하자. 그러면 \textrm{B}의 크기에 따라 다음 세 가지 경우가 있다.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(i) \textrm{B}가 예각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1, 1);
+				\coordinate [label=right:$\textrm{C}$] (C) at (2.2, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [above right] (b) {$b$} cycle;        
+				\draw [dashed] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				%					\draw [dotted] (B) -- (b);
+			\end{tikzpicture}\vspace{-1em}
+			\[
+			h = c \sinrm{B}
+			\]
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(ii) \textrm{B}가 직각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1.3, 1);
+				\coordinate [label=right:$\textrm{C}$] (C) at (1.3, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [right] (b) {$b=h$} cycle;        
+				%			\draw [dashed] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				%			\draw [dotted] (B) -- (b);
+			\end{tikzpicture}\vspace{-1em}
+			\[
+			h = c \sinrm{B}
+			\]
+		\end{minipage}
+		\begin{minipage}{0.3\linewidth}
+			\centering
+			(iii) $\textrm{B}$가 둔각일 때
+			\begin{tikzpicture}[scale=0.9]
+				\coordinate [label=left:$\textrm{B}$] (B) at (-2, -1);
+				\coordinate [label=above:$\textrm{A}$] (A) at (1.3, 1);
+				\coordinate [label=below:$\textrm{C}$] (C) at (0.5, -1);
+				\draw (A) -- node [sloped, above] (c) {$c$} (B) -- node [sloped, below] (a) {$a$} (C) -- node [right] (b) {$b$} cycle;        
+				\draw [dotted, thick] (A) -- ($(B)!(A)!(C)$) node[below]{\textrm{H}};
+				\draw [dotted, thick] (C) -- (1.3,-1);
+				\node[right] at(1.3, 0) {$h$};
+			\end{tikzpicture}\vspace{-2em}
+			\begin{align*}
+				h &=c \sin(\pi- \textrm{B}) \\
+				&= c \sinrm{B}
+			\end{align*}
+		\end{minipage}
+	\end{center}
+\end{figure}
+
+(i), (ii), (iii)에서 알 수 있듯이 \textrm{B}의 크기에 관계없이 $h = c \sinrm{B}$이므로
+\[
+S = \frac{1}{2} ah = \frac{1}{2} ac \sinrm{B}
+\]
+이다. 이때, 꼭짓점 \textrm{A}를 \text{B}, \text{C}로 바꾸어 위의 과정을 반복하면
+\[
+S =\frac{1}{2}ab \sinrm{C} =\frac{1}{2}  bc \sinrm{A}
+\]
+임을 알 수 있다.
+
+이상을 정리하면 다음과 같다.
+\vspace{1em}
+\begin{theorem}[삼각형의 넓이]
+	$\triangle \textrm{ABC}$의 넓이를 $S$라고 하면
+	\[
+	S =\frac{1}{2} ab \sinrm{C} =\frac{1}{2}bc \sinrm{A} =\frac{1}{2} \sinrm{B}
+	\]
+\end{theorem}
+
+\begin{sample}
+	
+	\begin{minipage}{0.5\textwidth}
+		오른쪽 그림과 같은 $\triangle \textrm{ABC}$의 넓이 $S$는
+		\begin{align*}
+			S &=\frac{1}{2} \cdot \ovr{AB} \cdot \ovr{AC} \cdot \sinrm{A} \\
+			&=\frac{1}{2} \cdot 5 \cdot 4 \cdot \sin 60^{\circ} =5 \sqrt{3}
+		\end{align*}
+		이다.	
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=1.8]
+					\coordinate [label=left:$\textrm{B}$] (B) at (-1.9, -2);
+					\coordinate [label=above:$\textrm{A}$] (A) at (0, 0);
+					\coordinate [label=right:$\textrm{C}$] (C) at (0.6, -2);
+					\draw (A) -- node [sloped, above] (c) {$5$} (B) -- (C) -- node [right] (b) {$4$} cycle;        
+					\draw [-, cyan]  (227:0.5)   arc (227:287:0.5)   node[below, pos=.5]{$60^{\circ}$};
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	\end{minipage}
+\end{sample}
+
+\begin{problem}
+	다음과 같은 $\triangle \textrm{ABC}$의 넓이를 구하여라.
+	\quesfour{b=5\;c=8, \text{A}=30^{\circ}}{a=90, \;b=20, \text{C}=135^{\circ}}{\cosrm{A}=\frac{1}{2}, \;b=3, \;c=6}{\tanrm{A}=1,\;b=4,\;c=3}
+\end{problem}
+
+\vspace{1em}
+\begin{example}
+	
+	\begin{minipage}{0.5\textwidth}
+		오른쪽 그림과 같은 부채꼴에서 색칠한 부분의 넓이를 구하여라.
+		\[
+		\phantom{test}
+		\]
+		\[
+		\phantom{text}
+		\]
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=1, line join=round]
+					\filldraw[thick, fill=orange!30, draw=black] (0:3) arc (0:120:3) --(120:3) ;
+					\draw[thick] (0,0) node[below]{$\text{O}$} -- (0:3) -- (120:3)  --cycle ;
+					\draw[thick, red] (0.5, 0) arc (0:120:0.5)  node[above, pos=0.4, xshift=4pt]{$120^{\circ}$};
+					\node[below] at (1.5, -0.1) {$6$};
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	\end{minipage}
+	\begin{solution}
+		$120^{\circ}=\frac{2}{3}\pi$이므로 부채꼴의 넓이 $S$는
+		\[
+		S=\frac{1}{2}r^2\theta =\frac{1}{2} \times 6^2\times\frac{2}{3}\pi = 12\pi
+		\]
+		이고 삼각형의 넓이를 $S^{\prime}$이라고 하면
+		\[
+		S^{\prime} =\frac{1}{2}\cdot 6\cdot \sin\frac{2}{3} \pi = 9\sqrt{3}
+		\]
+		이다. 따라서 색칠한 부분의 넓이는
+		\[
+		S- S^{\prime} = 12\pi - 9\sqrt{3}
+		\]
+	\end{solution}
+\end{example}
+
+\vspace{1em}
+\begin{problem}
+	
+	\begin{minipage}{0.5\textwidth}
+		오른쪽 그림과 같은 평행사변형 \textrm{ABCD}에서
+		\[
+		\ovr{AB} =6, \; \ovr{BC} =8, \; \textrm{B} =60^{\circ}
+		\]
+		일 때, 그 넓이를 구하여라.
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=1, line join=round, very thick]
+					\draw (0,0)  node[left, xshift=2pt]{\textrm{B}} -- (0: 4) node[right]{\text{C}}  --++ (60:3) node[right, xshift=-2pt]{\text{D}} --++(180:4) node[above, yshift=-2pt]{\text{A}} --cycle;
+					\draw[red] (0.5, 0) arc (0:60:0.5)  node[right, pos=0.6]{$60^{\circ}$};
+					\node[below] at (2, -0.1) {$8$};
+					\node[left] at (0.75, 1.4) {$6$} ;
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	\end{minipage}
+\end{problem}
+
+\vspace{1em}
+
+\begin{problem}
+	\vspace{0.4em}
+	
+	\begin{minipage}{0.5\textwidth}
+		오른쪽 그림에서 사각형 \textrm{ABCD}의 두 대각선은 평행사변형 \textrm{EFGH}의 네 변과 서로 평행하다고 한다. 이때,
+		\[
+		\square \textrm{EFGH} = 2\times \square \textrm{ABCD}
+		\]
+		임을 설명하고, 사각형 \textrm{ABCD}의 넓이를 구하여라.
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[x=0.7pt,y=0.7pt,yscale=-1,xscale=1]
+					%uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+					
+					%Shape: Parallelogram [id:dp2864677686342545] 
+					\draw  [dash pattern={on 4.5pt off 4.5pt}] (210,30) -- (386,30) -- (283,209) -- (107,209) -- cycle ;
+					%Straight Lines [id:da9552737504241582] 
+					\draw    (298,30) -- (195,209) ;
+					%Straight Lines [id:da5967297726787648] 
+					\draw    (171,98) -- (347,98) ;
+					%Straight Lines [id:da5495589826610505] 
+					\draw    (171,98) -- (298,30) ;
+					%Straight Lines [id:da057140482030076045] 
+					\draw    (171,98) -- (195,209) ;
+					%Straight Lines [id:da7810086337836457] 
+					\draw    (298,30) -- (347,98) ;
+					%Straight Lines [id:da13130055777652627] 
+					\draw    (195,209) -- (347,98) ;
+					%Curve Lines [id:da018773661291430876] 
+					\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ]   (267,84) .. controls (278,85) and (280,89) .. (279,98) ;
+					%Curve Lines [id:da35569828672606896] 
+					\draw  [dash pattern={on 0.84pt off 2.51pt}]  (298,30) .. controls (255,69) and (247,86) .. (230,116) ;
+					%Curve Lines [id:da5903880339516785] 
+					\draw  [dash pattern={on 0.84pt off 2.51pt}]  (195,209) .. controls (199,179) and (203,165) .. (216,142) ;
+					%Curve Lines [id:da5617081242978503] 
+					\draw  [dash pattern={on 0.84pt off 2.51pt}]  (171,98) .. controls (197,106) and (210,114) .. (257,116) ;
+					%Curve Lines [id:da09021592883773155] 
+					\draw  [dash pattern={on 0.84pt off 2.51pt}]  (277,116) .. controls (300,114) and (307,114) .. (347,98) ;
+					
+					
+					% Text Node
+					\draw (105,209) node [anchor=east] [inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont E}}};
+					% Text Node
+					\draw (285,212) node [anchor=north west][inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont F}}};
+					% Text Node
+					\draw (388,30) node [anchor=west] [inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont G}}};
+					% Text Node
+					\draw (210,27) node [anchor=south] [inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont H}}};
+					% Text Node
+					\draw (169,98) node [anchor=east] [inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont A}}};
+					% Text Node
+					\draw (298,27) node [anchor=south] [inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont D}}};
+					% Text Node
+					\draw (349,98) node [anchor=west] [inner sep=0.75pt]   [align=left] {{\fontfamily{pcr}\selectfont {\small C}}};
+					% Text Node
+					\draw (195,212) node [anchor=north] [inner sep=0.75pt]   [align=left] {{\small {\fontfamily{pcr}\selectfont B}}};
+					% Text Node
+					\draw (278,89.78) node [anchor=south west] [inner sep=0.75pt]  [font=\footnotesize]  {$60^{\circ }$};
+					% Text Node
+					\draw (215,120.4) node [anchor=north west][inner sep=0.75pt]  [font=\small]  {$12$};
+					% Text Node
+					\draw (263,107.4) node [anchor=north west][inner sep=0.75pt]  [font=\small]  {$8$};\
+				\end{tikzpicture}
+				
+			\end{center}
+		\end{figure}
+	\end{minipage}
+\end{problem}
+
+\vspace{1em}
+\begin{problem}
+	
+	\begin{minipage}{0.5\textwidth}
+		$\triangle \textrm{ABC}$에서 $\angle \textrm{A}$의 이등분선이 변 $\textrm{BC}$와 만나는 점을 \textrm{D}라고 할 때,
+		\[
+		\ovr{AB} : \ovr{AC} = \ovr{BD} : \ovr{CD}
+		\]
+		가 성립함을 다음 단계에 따라 증명하여 보자.
+	\end{minipage}
+	\begin{minipage}{0.4\textwidth}
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[line join=round, scale=0.8]
+					\draw[blue, very thick]
+					(0,0) coordinate (a) node[black,left] {B}
+					-- (2,4) coordinate (b) node[black,above] {A}
+					-- (6,0) coordinate (c) node[black,right] {C}
+					-- cycle;
+					%					\tkzInCenter(a,b,c)
+					%					\tkzGetPoint{d}
+					%					\tkzDrawPoint(d)
+					%					\draw[red] (a) -- (d)--(intersection of  a--d and b--c);
+					%					\draw[red] (b) -- (d)--(intersection of  b--d and a--c);
+					%					\draw[red] (c) -- (d)--(intersection of  c--d and b--a);
+					
+					\draw[blue, very thick] (2, 4) -- (2.65, 0) node[below]{\textrm{D}};
+					\fill[red, very thick] (1.9, 3.4) circle [radius=2pt] ;
+					\fill[red, very thick](2.3, 3.4) circle [radius=2pt] ;
+				\end{tikzpicture}
+			\end{center}
+		\end{figure}
+	\end{minipage}
+	
+	\begin{enumerate}[label=(\arabic*)]
+		\item 앞에서 배운 삼각형의 넓이를 구하는 식을 이용하여 $\triangle \textrm{ABD}$와 $\triangle \textrm{ACD}$의 넓이의 비를 구하여라.
+		\item 꼭짓점 \textrm{A}에서 변 \textrm{BC} 또는 그 연장선에 내린 수선의 길이를 이용하여 $\triangle \textrm{ABD}$와 $\triangle \textrm{ACD}$의 넓이의 비를 구하여라.
+		\item 위 (1), (2)의 결과를 비교하여라.
+	\end{enumerate}
+\end{problem}
+\vspace{1em}
+
+\begin{example}
+	$\triangle \textrm{ABC}$의 외접원의 반지름의 길이를 $R$라 할 때 이 삼각형의 넓이 $S$는 
+	\[
+	S  =2R^{2} \sinrm{A} \sinrm{B}\sinrm{C}
+	\]
+	임을 보이시오.
+	\begin{solution}
+		$S=\frac{1}{2} ab \sinrm{C}$에서 사인법칙에 의해 $a =2R \sinrm{A}$, $b=2R \sinrm{B}$이므로 
+		\begin{align*}
+			S &=\frac{1}{2} a b \sinrm{C} \\
+				&=\frac{1}{\Ccancel[red]{2}} \Ccancel[red]{2}R \sinrm{A} \cdot 2R \sinrm{B} \cdot \sinrm{C} \\
+				& = 2R^{2} \sinrm{A}\sinrm{B}\sinrm{C}
+			\end{align*}
+		이다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	$\triangle \textrm{ABC}$의 외접원의 반지름의 길이를 $R$라 할 때 이 삼각형의 넓이 $S$는 
+	\[
+	S  = \frac{abc}{4R}
+	\]
+	임을 보이시오.
+	\processifversion{psol}{%
+	\begin{psolution}
+		$S =\frac{1}{2}ab \sinrm{C}$에서 $\sinrm{C} =\frac{c}{2R}$이므로 
+		\[
+		S =\frac{1}{2}ab \sinrm{C} = \frac{1}{2} a b \frac{c}{2R} =\frac{abc}{4R}
+		\]
+		이다.
+	\end{psolution}
+}%
+\end{problem}
+\vspace{1em}
+이제 헤론 공식을 유도해 보자. 헤론 공식은 세 변의 길이가 주어졌을 때 삼각형의 넓이를 구할 수 있게 해 주는 공식이다. 물론 세 변의 길이가 주어지면 제이코사인법칙(SSS)를 이용하여 $\cosrm{C}$를 구하고 $\sin^{2} \textrm{C} = 1 - \cos^{2}\textrm{C}$를 이용하여 $\sinrm{C}$를 구한 다음
+$S =\frac{1}{2} ab \sinrm{C}$를 이용하면 헤론 공식을 몰라도 삼각형의 넓이를 구할 수 있다.
+  
+  재미있는 사실은 위의 설명과정이 헤론공식을 유도하는 과정 자체라는 사실이다. 
+  
+  먼저
+ \begin{align*}
+ 	S &=\frac{1}{2}a b \sinrm{C} \\
+ 	 & = \frac{1}{2}ab \sqrt{1- \cos^{2}\textrm{C}}\\
+ 	 & = \frac{1}{2} ab \sqrt{1 - \left(\frac{a^2 +b^2 - c^2}{2ab}\right)^2}\\
+ 	 &= \sqrt{\frac{1}{4}a^2b^2 - \frac{(a^2+b^2-c^2)^2}{16}} \\
+ 	 &=\sqrt{\frac{4a^2b^2 -(a^2+b^2-c^2)^2}{16}} \\
+ 	 &=\sqrt{\frac{(2ab)^2 -(a^2+b^2-c^2)^2}{16}} \\
+ 	 &=\sqrt{\frac{(2ab - a^2 -b^2 +c^2)(2ab + a^2+b^2 -c^2)}{16}} \\
+ 	 & = \sqrt{\frac{(c^2 - (a-b)^2)((a+b)^2 -c^2)}{16}} \\
+ 	 &= \sqrt{\frac{(c-a+b)}{2}\cdot \frac{(c+a-b)}{2}\cdot \frac{(a+b-c)}{2} \cdot \frac{(a+b+c)}{2}}
+ \end{align*}
+이다. 이 때, 삼각형의 둘레의 길이의 $\frac{1}{2}$인 반둘레를 $s=\frac{a+b+c}{2}$라 하면
+$s-a =\frac{b+c-a}{2}$, $s-b =\frac{c+a-b}{2}$, $s-c =\frac{a+b-c}{2}$이다. 따라서 최종적으로 헤론 공식은 다음과 같이 표현된다.
+\[
+S = \sqrt{s(s-a)(s-b)(s-c)}, \text{ 단 } s =\frac{a+b+c}{2}
+\]
+한편 헤론의 공식은 인수정리를 이용하여 유도할 수도 있다. 먼저 삼각형의 세 변의 길이가 주어지면 삼각형의 합동조건 SSS에 의하여 삼각형이 유일하게 결정되므로 삼각형의 넓이 $S$는 세 변의 길이의 함수 $f(a, \;b,\;c)$라 가정할 수 있다. 이제 나머지 정리에 의해
+\[
+	f(a,\;b, \;c) =(a+b+c) Q(a,\;b,\;c) + R
+\]
+이고 삼각형의 둘레 $a+b+c=0$이면 넓이도 $0$이므로 $f(a,\;b, \;c)=0$이고 따라서 $R=0$이다. 즉 $f(a,\;b, \;c)$는 $a+b+c$를 인수로 갖는다.  또 $a+b-c=0$이면 삼각형의 높이가 $0$인 경우가 되어 삼각형의 넓이가 $0$이 되므로 마찬가지 이유로 $f(a,\;b, \;c)$는 $a+b-c$를 인수로 갖는다.  마찬가지 방법으로 $a-b+c$, $-a+b+c$도 $f(a,\;b, \;c)$를 나눈다. 따라서 어떤 상수 $k$가 존재하여
+\[
+f(a,\;b, \;c)^2 = k (a+b+c)(-a+b+c)(a-b+c)(a+b-c)
+\]
+이고 이 식은 삼각부등식을 만족시키는 세 양의 실수 $a,\;b,\;c$에 대한 항등식이다. 세 변의 길이가 각각 $1$인 정삼각형의 넓이는 $\frac{\sqrt{3}}{4}$이므로 
+\[
+\frac{3}{16} =k\cdot 3 \cdot 1 \cdot 1 \cdot 1
+\]
+이고 따라서 $k =\frac{1}{16}$이고 헤론 공식이 증명되었다.
+이상을 정리하면 다음과 같다.
+\begin{theorem}[헤론 공식]
+	$\triangle \textrm{ABC}$의 세 변의 길이를 각각 $a,\;b,\;c$라 하고 $s =\frac{a+b+c}{2}$라 할 때, 이 삼각형의 넓이 $S$는 다음과 같다.
+	\[
+	S =\sqrt{s(s-a)(s-b)(s-c)}
+	\]
+\end{theorem}
+
+한편 지금까지 넓이 공식들을 삼각형의 합동 조건이라는 측면에서 살펴보자. 삼각형의 합동 조건을 다른 측면에서 생각하면 주어진 조건에 의해 삼각형이 유일하게 결정된다는 것과 같은 의미이고 따라서 주어진 조건으로 삼각형의 넓이 공식을 구성할 수 있다는 것을 의미한다. 실제로 SAS 합동조건과 관련이 되는 공식은 $\frac{1}{2}ab \sinrm{C}$이고 SSS 합동 조건과 관련이 되는 공식은 헤론공식이다. 그런데 나머지 한가지 ASA 합동조건, 즉 두 각과 그 사이에 끼인 변의 길이가 주어졌을 때의 삼각형의 넓이 공식을 유도하지 않았다. 이제 이 경우의 공식을 생각해 보자.
+
+먼저 앞에서 유도한 공식 $2R^2 \sinrm{A}\sinrm{B}\sinrm{C}$에서 $R =\frac{a}{2\sinrm{A}}$이므로
+\begin{align*}
+	S & = 2R^2 \sinrm{A}\sinrm{B}\sinrm{C} \\
+	& = 2 \left(\frac{a}{2 \sinrm{A}}\right)^2 \sinrm{A}\sinrm{B}\sinrm{C} \\
+	& = 2 \frac{a^2}{4 \sin^2 \textrm{A}} \sinrm{A}\sinrm{B}\sinrm{C} \\
+	& = \frac{a^2 \sinrm{B} \sinrm{C}}{2 \sinrm{A}} \\
+	&= \frac{a^2 \sinrm{B}\sinrm{C}}{2 \sin(\pi -(\textrm{B+C}))} \\
+	&= \frac{a^2 \sinrm{B}\sinrm{C}}{2 \sin(\textrm{B+C})}
+\end{align*}
+이다.
+
+각과 변, 내접과 외접이 쌍대 개념임을 이용하여 지금까지의 삼각형의 넓이 공식을 서로 쌍대인 것을 짝지어 나타내면 다음과 같다.
+\begin{align*}
+	\frac{1}{2} a b \sinrm{C} &\Leftrightarrow \frac{c^2 \sinrm{A} \sinrm{B}}{2 \sinrm{(A+B)}} \\
+	rs =\frac{a+b+c}{2} \cdot r & \Leftrightarrow 2R^2 \sinrm{A} \sinrm{B} \sinrm{C} \\
+	\frac{abc}{4R} & \Leftrightarrow  \phantom{text} ? 
+\end{align*}
+쌍대 개념을 이용하여 분류해 봄으로써 우리는 세 내각의 크기와 내접원의 반지름의 길이가 주어졌을 때의 삼각형의 넓이 공식이 존재함을 알 수 있다. 이제 삼각형의 세 내각의 크기와 내접원의 반지름의 길이가 주어졌을 때의 삼각형의 넓이 공식을 유도해 보자.
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[sty/.style={fill=cyan, circle, inner sep=1.5pt}, scale=1.3]
+			\def\r{5}
+			\coordinate[sty, label=left:A] (A) at (0,0) ;
+			\coordinate[sty, label=right:B] (B) at (5,0) ;
+			\coordinate[sty, label=above:C] (C) at (1,3) ;
+			\draw (A) -- (B) -- (C) -- (A);
+			\path[name path=h1]
+				(C) -- ($($(C)! \r cm!(A)$)!0.5!($(C)! \r cm! (B)$)$) ;
+			\path[name path=h2]
+				(A) -- ($($(A)! \r cm!(C)$)!0.5!($(A)! \r cm! (B)$)$) ;	
+			\draw[name intersections ={of=h1 and h2, by =O}];
+			\node[sty, label = below right:O] at (O) {} ;
+			\coordinate (X) at ($(A)!(O)!(B)$);
+			\coordinate (Y) at ($(A)!(O)!(C)$);
+			\coordinate (Z) at ($(B)!(O)!(C)$);	
+			\node [draw, circle through = {(X)}] at (O) {} ;
+			\foreach \t in {A, B, C}{\draw[dotted] (O) -- (\t);}
+			\foreach \t in {A, B, C, O, X, Y, Z} {\coordinate [sty] (\t) at (\t);}
+			\foreach \t in {X, Y, Z}{\draw (O) --(\t);}
+			\foreach \t/\s in {X/below, Y/left, Z/right}{\node[\s] at (\t) {\t} ;}
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+위의 그림에서 $\ovr{BZ}= x$, $\ovr{ZC}=y$, $\ovr{AY}=z$라 하고 내접원의 반지름을 $r$라 하면
+\begin{align*}
+	a &= x +y \\
+	b &=y+z\\
+	c &=z+x
+\end{align*}
+이고 $x+y+z=s$이다. 또한 
+\[
+\tan \left( \frac{\textrm{B}}{2}\right) =\frac{r}{x}
+\]
+에서 $x = r \cot \left(\frac{\textrm{B}}{2}\right)$이다. 마찬가지 방법으로 다음을 보일 수 있다.
+\[
+y = r \cot \left( \frac{\textrm{C}}{2}\right), \quad x = r \cot \left( \frac{\textrm{A}}{2}\right)
+\]
+따라서 
+\[
+\frac{a+b+c}{2} = x+y+z =r \left(\cot \left( \frac{\textrm{A}}{2}\right)+ \cot \left( \frac{\textrm{B}}{2}\right)+\cot \left( \frac{\textrm{C}}{2}\right)\right)
+\]
+이고 이 결과를 $S=rs$에 대입하면
+\[
+S = rs = r^2  \left(\cot \left( \frac{\textrm{A}}{2}\right)+ \cot \left( \frac{\textrm{B}}{2}\right)+\cot \left( \frac{\textrm{C}}{2}\right)\right)
+\]
+이고 이 공식은 내접원과 세 내각의 크기가 주어졌을 때 넓이 구하는 식이다.
+
+\newpage
+\begin{tcolorbox}
+	\textbf{\Large 제이코사인 법칙의 증명}
+\end{tcolorbox}
+
+\textbf{\large{그림으로 증명하는 제이코사인법칙}}
+\vspace{2em}
+
+그림으로 증명하기는 영어로  proof without words 라고 한다. 우리 말로는 그림증명 정도로 번역할 수 있을 것이다. 그림증명은 그려진 그림 자체가 어떤 특정한 사실을 증명하는 것을 의미한다. 코사인제이법칙을 그림증명으로 증명하여 보자. 먼저 다음 그림을 살펴보자.
+
+\vspace{1em}
+
+\begin{figure}[h]
+	\begin{center}
+		\begin{tikzpicture}
+			\pgfmathsetmacro{\angle}{30}
+			\pgfmathsetmacro{\ang}{45}
+			\pgfmathsetmacro{\radi}{4}
+%			\draw[thin] (-5, -5) grid (5, 5) ;
+			
+			\draw[thick] (0,0) circle [radius=\radi] ;
+			\draw[very thick] (\radi, 0) -- (-\radi, 0) -- ++(90-\angle:{2*\radi*sin(\angle)}) --cycle ;
+			\fill[black] (0,0) circle (2.5pt) ;
+			
+			\foreach \i in {0, 180-2*\angle, 180, \ang, 180+\ang}
+			{
+				\fill[black] (\i:\radi) circle (2.5pt) ;
+			}
+		
+			\draw[very thick] (\ang:\radi) -- (180+\ang:\radi) ;
+			\draw[thick, red] (3, 0) arc (180:180-\angle:1) node[left, pos=0.5]{$\theta$};
+			
+			\foreach \i/\j in {0/\radi, 180/\radi}
+			{
+				\draw[very thick, red](0,0) -- (\i:\j)  node[below, pos=0.5]{\Large$a$} ;
+			}
+			
+			\draw[very thick, blue] (180+\ang:\radi) -- (0,0) node[anchor=north west, pos=0.5] {\Large$a$} ;
+			\draw[very thick, blue] (\ang:{sin(\angle)*\radi /sin(105)}) -- (0,0) node[anchor=south east, pos=0.5] {\Large$c$} ;
+			
+			\fill[black] (\ang:{sin(\angle)*\radi /sin(105)}) circle (2.5pt) ;
+			
+			\draw[very thick, cyan] (\ang:{sin(\angle)*\radi /sin(105)}) -- (0:\radi) node[anchor=south west, pos=0.5] {\Large$b$} ;
+			
+			\draw[very thick, cyan] (\ang:{sin(\angle)*\radi /sin(105)}) -- (180-2*\angle:\radi) node[anchor=south west, pos=0.8, rotate=-\angle] {\Large$2a \cos \theta - b$} ;
+			
+			\draw[very thick, blue] (\ang:{sin(\angle)*\radi /sin(105)}) -- (\ang:\radi) node[anchor=north west, pos=0.15, rotate=\ang] {\Large$a-c$} ;
+			
+			\node[below] at (0,0) {\textrm{O}} ;
+			\node[right] at (\radi, 0) {\textrm{A}} ;
+			\node[below] at (\ang:{sin(\angle)*\radi /sin(105)}) {\textrm{B}} ;
+			\node[anchor=south east, xshift=2pt, yshift=-1.5pt] at (180-2*\angle:\radi) {\textrm{C}} ;
+			\node[right] at (\ang:\radi) {\textrm{Q}} ;
+			\node[anchor=north east, xshift=2pt, yshift=2pt] at (180+\ang:\radi) {\textrm{P}} ;
+			
+			
+		\end{tikzpicture}
+	\end{center}
+\end{figure} 
+
+위의 그림에서 
+\[
+{\color{blue}\ovr{PB} \times \ovr{BQ} }={\color{cyan}\ovr{AB}\times \ovr{BC}}
+\]
+이다.
+
+따라서 
+\[
+(a+c)(a-c) = b(2a\cos \theta -b)
+\]
+이고
+\[
+a^2-c^2=2ab \cos \theta -b^2
+\]
+이다. 즉
+\[
+c^2=a^2+b^2 -2ab \cos\theta
+\]
+이다.
+
+
+
+\end{document}

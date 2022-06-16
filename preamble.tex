@@ -1,0 +1,335 @@
+\usepackage{amsmath,amsthm,amssymb,marvosym,mathrsfs,amsfonts,amscd,mathtools}
+
+% Hyperlinks and URLs
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+% Colors
+\usepackage{xcolor}
+
+% Bold math
+\usepackage{bm}
+
+% Bra Ket (Dirac) Notation
+\usepackage{braket}
+
+% Slashed characters (e.g. in Dirac equation)
+\usepackage{slashed}
+
+% Clean SI Units
+\usepackage{siunitx}
+
+% Enumerate thingies
+\usepackage{enumitem}
+
+% Cancel things out in equations
+\usepackage[makeroom]{cancel}
+
+% Graphics and figures
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{float}
+
+% Caption figures and tables
+\usepackage{caption}
+
+% Generate symbols
+\usepackage{textcomp} % Include this line to avoid output errors
+\usepackage{gensymb}
+
+% Make multiple rows in a table
+\usepackage{multirow}
+
+% Booktabs tables
+\usepackage{booktabs}
+
+% Nice-looking frames
+\usepackage{mdframed}
+
+% Comment-out large sections
+\usepackage{comment}
+
+% No auto-indent
+\setlength{\parindent}{0pt}
+
+% Asymptote - 3D vector graphics
+\usepackage{asymptote}
+
+% Tikz Package Stuff
+\usepackage{pgf,tikz,pgfplots}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{decorations.pathmorphing, decorations.markings, decorations.pathreplacing, patterns}
+\pgfplotsset{compat=1.15}
+\usetikzlibrary{calc}
+\usetikzlibrary{scopes}
+\usetikzlibrary{angles, quotes}
+\usetikzlibrary{svg.path}
+\usetikzlibrary{arrows, arrows.meta}
+\usetikzlibrary{fadings}
+
+% Circled numbers - Uses Tikz!
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+% Control size of text
+\usepackage{relsize}
+
+% Extend conditional commands
+\usepackage{xifthen}
+
+% Scale math by size
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}
+
+% Big integerals
+\usepackage{bigints}
+
+% Number equations within sections
+\numberwithin{equation}{section}
+
+% Generate blind text
+\usepackage{blindtext}
+
+% Useful symbols
+\usepackage{marvosym}
+
+
+%%%% THEOREMS %%%%
+\newenvironment{theorem}[1][\hspace{-0.36em}]
+{
+    \begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {#1 정리}]
+}
+{
+    \end{mdframed}
+}
+
+%%%% LEMMAS (LEMONS) %%%%
+\newenvironment{lemma}[1][\hspace{-0.36em}]
+{
+    \begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {#1 보조정리}]
+}
+{
+    \end{mdframed}
+}
+
+%%%% COROLLARY %%%%
+\newenvironment{corollary}[1][\hspace{-0.36em}]
+{
+    \begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {#1 따름정리}]
+}
+{
+    \end{mdframed}
+}
+
+%%%% DEFINITIONS %%%%
+\newenvironment{definition}[1][\hspace{-0.36em}]
+{
+    \begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {#1 정의}]
+}
+{
+    \end{mdframed}
+}
+
+%%%% PROPOSITION %%%%
+\newenvironment{proposition}
+{
+    \begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {Proposition}]
+}
+{
+    \end{mdframed}
+}
+
+%%%%PROBLEM %%%%
+\newenvironment{problem}
+{
+\begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {문제}]
+}
+{
+\end{mdframed}
+}
+
+%%%%EXAMPLE %%%%
+\newenvironment{example}
+{
+\begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {예제}]
+}
+{
+\end{mdframed}
+}
+
+
+% Change end-of-proof symbol
+\renewcommand\qedsymbol{$\blacksquare$}
+
+
+%%%% BLACKBOARD BOLD %%%%
+\newcommand{\bbN}{\mathbb{N}} % Natural numbers
+\newcommand{\bbZ}{\mathbb{Z}} % Zahlen
+\newcommand{\bbR}{\mathbb{R}} % Real numbers
+\newcommand{\bbQ}{\mathbb{Q}} % Rational numbers
+\DeclareSymbolFont{bbold}{U}{bbold}{m}{n} % Identity matrix
+\DeclareSymbolFontAlphabet{\mathbbold}{bbold} % Identity matrix
+\newcommand{\identitymatrix}{\mathbbold{1}} % Identity matrix
+
+
+%%%% CODE LISTING %%%%
+\usepackage{listings}
+\definecolor{greencomments}{HTML}{00BA00}
+\definecolor{graynumbers}{HTML}{4F4F4F}
+\definecolor{purplestrings}{HTML}{AD00AA}
+\definecolor{backgroundcolor}{HTML}{E8E8E8}
+\lstdefinestyle{kostin}{
+    backgroundcolor=\color{backgroundcolor},   
+    commentstyle=\color{greencomments},
+    keywordstyle=\color{blue},
+    numberstyle=\tiny\color{graynumbers},
+    stringstyle=\color{purplestrings},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=kostin}
+
+
+
+%%%% UNIT BASIS VECTORS %%%%
+\newcommand{\ihat}{\mathbf{\hat{i}}}
+\newcommand{\jhat}{\mathbf{\hat{j}}}
+\newcommand{\khat}{\mathbf{\hat{k}}}
+\newcommand{\xhat}{\mathbf{\hat{x}}}
+\newcommand{\yhat}{\mathbf{\hat{y}}}
+\newcommand{\zhat}{\mathbf{\hat{z}}}
+\newcommand{\rhat}{\mathbf{\hat{r}}}
+\newcommand{\nhat}{\mathbf{\hat{n}}}
+\newcommand{\ezhat}{\mathbf{\hat{e}}_z}
+\newcommand{\ephihat}{\mathbf{\hat{e}}_{\phi}}
+\newcommand{\erhohat}{\mathbf{\hat{e}}_{\varrho}}
+\newcommand{\erhat}{\mathbf{\hat{e}}_r}
+\newcommand{\ethetahat}{\mathbf{\hat{e}}_{\theta}}
+
+
+%%%% COLORS: DEFINITIONS AND COMMANDS %%%%
+\definecolor{DARKBLUE}{HTML}{040080}
+\definecolor{DARKBROWN}{HTML}{8B4513}
+\definecolor{LIGHTBROWN}{HTML}{CD853F}
+\definecolor{BLUEE}{HTML}{1C758A}
+\definecolor{BLUED}{HTML}{29ABCA}
+\definecolor{BLUEC}{HTML}{58C4DD}
+\definecolor{BLUEB}{HTML}{9CDCEB}
+\definecolor{BLUEA}{HTML}{C7E9F1}
+\definecolor{TEALE}{HTML}{49A88F}
+\definecolor{TEALD}{HTML}{55C1A7}
+\definecolor{TEALC}{HTML}{5CD0B3}
+\definecolor{TEALB}{HTML}{76DDC0}
+\definecolor{TEALA}{HTML}{ACEAD7}
+\definecolor{GREENE}{HTML}{699C52}
+\definecolor{GREEND}{HTML}{77B05D}
+\definecolor{GREENC}{HTML}{83C167}
+\definecolor{GREENB}{HTML}{A6CF8C}
+\definecolor{GREENA}{HTML}{C9E2AE}
+\definecolor{YELLOWE}{HTML}{E8C11C}
+\definecolor{YELLOWD}{HTML}{F4D345}
+\definecolor{YELLOWC}{HTML}{FFFF00}
+\definecolor{YELLOWB}{HTML}{FFEA94}
+\definecolor{YELLOWA}{HTML}{FFF1B6}
+\definecolor{GOLDE}{HTML}{C78D46}
+\definecolor{GOLDD}{HTML}{E1A158}
+\definecolor{GOLDC}{HTML}{F0AC5F}
+\definecolor{GOLDB}{HTML}{F9B775}
+\definecolor{GOLDA}{HTML}{F7C797}
+\definecolor{REDE}{HTML}{CF5044}
+\definecolor{REDD}{HTML}{E65A4C}
+\definecolor{REDC}{HTML}{FC6255}
+\definecolor{REDB}{HTML}{FF8080}
+\definecolor{REDA}{HTML}{F7A1A3}
+\definecolor{MAROONE}{HTML}{94424F}
+\definecolor{MAROOND}{HTML}{A24D61}
+\definecolor{MAROONC}{HTML}{C55F73}
+\definecolor{MAROONB}{HTML}{EC92AB}
+\definecolor{MAROONA}{HTML}{ECABC1}
+\definecolor{PURPLEE}{HTML}{644172}
+\definecolor{PURPLED}{HTML}{715582}
+\definecolor{PURPLEC}{HTML}{9A72AC}
+\definecolor{PURPLEB}{HTML}{B189C6}
+\definecolor{PURPLEA}{HTML}{CAA3E8}
+\definecolor{WHITE}{HTML}{FFFFFF}
+\definecolor{BLACK}{HTML}{000000}
+\definecolor{LIGHTGRAY}{HTML}{BBBBBB}
+\definecolor{GRAY}{HTML}{888888}
+\definecolor{DARKGRAY}{HTML}{444444}
+\definecolor{DARKERGRAY}{HTML}{222222}
+\definecolor{GRAYBROWN}{HTML}{736357}
+\definecolor{PINK}{HTML}{D147BD}
+\definecolor{LIGHTPINK}{HTML}{DC75CD}
+\definecolor{GREENSCREEN}{HTML}{00FF00}
+\definecolor{ORANGE}{HTML}{FF862F}
+\newcommand{\DARKBLUE}{\color{DARKBLUE}}
+\newcommand{\DARKBROWN}{\color{DARKBROWN}}
+\newcommand{\LIGHTBROWN}{\color{LIGHTBROWN}}
+\newcommand{\BLUEE}{\color{BLUEE}}
+\newcommand{\BLUED}{\color{BLUED}}
+\newcommand{\BLUEC}{\color{BLUEC}}
+\newcommand{\BLUEB}{\color{BLUEB}}
+\newcommand{\BLUEA}{\color{BLUEA}}
+\newcommand{\TEALE}{\color{TEALE}}
+\newcommand{\TEALD}{\color{TEALD}}
+\newcommand{\TEALC}{\color{TEALC}}
+\newcommand{\TEALB}{\color{TEALB}}
+\newcommand{\TEALA}{\color{TEALA}}
+\newcommand{\GREENE}{\color{GREENE}}
+\newcommand{\GREEND}{\color{GREEND}}
+\newcommand{\GREENC}{\color{GREENC}}
+\newcommand{\GREENB}{\color{GREENB}}
+\newcommand{\GREENA}{\color{GREENA}}
+\newcommand{\YELLOWE}{\color{YELLOWE}}
+\newcommand{\YELLOWD}{\color{YELLOWD}}
+\newcommand{\YELLOWC}{\color{YELLOWC}}
+\newcommand{\YELLOWB}{\color{YELLOWB}}
+\newcommand{\YELLOWA}{\color{YELLOWA}}
+\newcommand{\GOLDE}{\color{GOLDE}}
+\newcommand{\GOLDD}{\color{GOLDD}}
+\newcommand{\GOLDC}{\color{GOLDC}}
+\newcommand{\GOLDB}{\color{GOLDB}}
+\newcommand{\GOLDA}{\color{GOLDA}}
+\newcommand{\REDE}{\color{REDE}}
+\newcommand{\REDD}{\color{REDD}}
+\newcommand{\REDC}{\color{REDC}}
+\newcommand{\REDB}{\color{REDB}}
+\newcommand{\REDA}{\color{REDA}}
+\newcommand{\MAROONE}{\color{MAROONE}}
+\newcommand{\MAROOND}{\color{MAROOND}}
+\newcommand{\MAROONC}{\color{MAROONC}}
+\newcommand{\MAROONB}{\color{MAROONB}}
+\newcommand{\MAROONA}{\color{MAROONA}}
+\newcommand{\PURPLEE}{\color{PURPLEE}}
+\newcommand{\PURPLED}{\color{PURPLED}}
+\newcommand{\PURPLEC}{\color{PURPLEC}}
+\newcommand{\PURPLEB}{\color{PURPLEB}}
+\newcommand{\PURPLEA}{\color{PURPLEA}}
+\newcommand{\WHITE}{\color{WHITE}}
+\newcommand{\BLACK}{\color{BLACK}}
+\newcommand{\LIGHTGRAY}{\color{LIGHTGRAY}}
+\newcommand{\GRAY}{\color{GRAY}}
+\newcommand{\DARKGRAY}{\color{DARKGRAY}}
+\newcommand{\DARKERGRAY}{\color{DARKERGRAY}}
+\newcommand{\GRAYBROWN}{\color{GRAYBROWN}}
+\newcommand{\PINK}{\color{PINK}}
+\newcommand{\LIGHTPINK}{\color{LIGHTPINK}}
+\newcommand{\GREENSCREEN}{\color{GREENSCREEN}}
+\newcommand{\ORANGE}{\color{ORANGE}}
+\newcommand{\blue}{\color{blue}}
+\newcommand{\red}{\color{red}}
+\newcommand{\black}{\color{black}}

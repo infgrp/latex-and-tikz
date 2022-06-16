@@ -1,0 +1,478 @@
+% AMS and mathtools
+\usepackage{amsmath,amsthm,amssymb,marvosym,mathrsfs,amsfonts,amscd,mathtools}
+% Hyperlinks and URLs
+\usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks,
+	citecolor=BLACK,
+	filecolor=BLACK,
+	linkcolor=BLACK,
+	urlcolor=BLACK
+}
+
+% Colors
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+
+% shadowing mdframed
+\usepackage[framemethod=tikz]{mdframed}
+\usetikzlibrary{shadows}
+% Bold math
+\usepackage{bm}
+
+%Use Korean Letter when enumerate
+\usepackage{dhucs-enumerate}
+
+\usepackage{anyfontsize}
+
+% Bra Ket (Dirac) Notation
+\usepackage{braket}
+
+% Slashed characters (e.g. in Dirac equation)
+\usepackage{slashed}
+\usepackage{pifont} % 원문자 사용시 필요한 패키지
+
+% chapter decoration
+\usepackage{type1cm}
+\usepackage[explicit]{titlesec}
+
+\titleformat{\chapter}[display]
+{\normalfont\Large\rmfamily}
+{\sffamily\flushright\fontsize{60}{0}\textbf{\textcolor{blue!40}{{\Huge\chaptername}~\thechapter\vskip0pt\rule{\textwidth}{2pt}}}}{0pt}
+{\flushleft\fontsize{30}{0}{#1}\vskip60pt}
+\titlespacing*{\chapter}
+{0pt}{-40pt}{0pt}
+
+%\usetikzlibrary{shadows}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{shapes.symbols}
+
+% Tcolorbox
+\usepackage[most]{tcolorbox}
+
+% Clean SI Units
+\usepackage{siunitx}
+
+% Enumerate thingies
+\usepackage{enumitem}
+
+% Cancel things out in equations
+\usepackage[makeroom]{cancel}
+
+\usepackage{multicol}
+
+% Graphics and figures
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{float}
+
+\usepackage{cancel}
+
+% Caption figures and tables
+\usepackage{caption,subcaption}
+
+% Generate symbols
+\usepackage{textcomp} % Include this line to avoid output errors
+\usepackage{gensymb}
+
+% Make multiple rows in a table
+\usepackage{multirow}
+
+% Booktabs tables
+\usepackage{booktabs}
+
+%\usepackage[utopia,sfscaled]{mathdesign}
+% Useful frames
+\usepackage{mdframed}
+
+% Comment-out large sections
+\usepackage{comment}
+
+% No auto-indent
+\setlength{\parindent}{0pt}
+
+% Asymptote - 3D vector graphics
+\usepackage{asymptote}
+
+% Tikz Package Stuff
+\usepackage{pgf,tikz,pgfplots}
+\usepackage{tikz-3dplot}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\tcbuselibrary{skins}
+\usepackage{tkz-euclide}
+
+\newcolumntype{Y}{>{\raggedleft\arraybackslash}X}
+
+\tcbset{tab1/.style={fonttitle=\bfseries\large,fontupper=\normalsize\sffamily,
+		colback=yellow!10!white,colframe=red!75!black,colbacktitle=Salmon!40!white, halign=center,
+		coltitle=black,center title,freelance,frame code={
+			\foreach \n in {north east,north west,south east,south west}
+			{\path [fill=red!75!black] (interior.\n) circle (3mm); };},}}
+
+\tcbset{tab2/.style={enhanced,fonttitle=\bfseries,fontupper=\normalsize\sffamily, halign=center, box align=center,
+		colback=yellow!10!white,colframe=red!50!black,colbacktitle=Salmon!40!white,
+		coltitle=black,center title}}
+
+
+% Use various tikz libraries
+\usetikzlibrary{decorations.pathmorphing, decorations.markings, decorations.pathreplacing, patterns} % Decorate paths!
+\usetikzlibrary{calc, patterns, shapes.geometric, positioning, through, intersections}
+\usetikzlibrary{scopes}
+\usetikzlibrary{angles, quotes}
+\usetikzlibrary{svg.path}
+\usetikzlibrary{arrows, arrows.meta}
+\usetikzlibrary{fadings}
+% pgfplots package settings
+\pgfplotsset{compat=1.15}
+% \pgfplotsset{width=10cm,compat=1.9} % Taken from latest overleaf.
+% plot arc easily
+\def\centerarc[#1](#2)(#3:#4:#5)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+{ \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+
+% Awesome circled numbers
+\newcommand*\circled[4]{\tikz[baseline=(char.base)]{\node[shape=circle, fill=#2, draw=#3, text=#4, inner sep=2pt] (char) {#1};}}
+
+% Control size of text
+\usepackage{relsize}
+
+% Extend conditional commands
+\usepackage{xifthen}
+\usepackage{xcolor}
+\definecolor{termcolor}{cmyk}{.21,.97,.0,.0}
+\definecolor{darkred}{cmyk}{.27,1,1,.32}
+\definecolor{darkblue}{cmyk}{1,.98,.10,.11}
+\definecolor{darkgreen}{cmyk}{.29,0,87,0}
+\definecolor{darkmycolor}{cmyk}{99,59,22,3}
+\definecolor{for_eyes}{RGB}{253,247,228}
+%change color of math equation
+%\everymath{\color{darkred}}
+% Scale math by size
+\newcommand*{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}
+
+% Big integrals
+\usepackage{bigints}
+
+% Number equations within sections
+\numberwithin{equation}{section}
+
+% Generate blind text
+\usepackage{blindtext}
+
+% Useful symbols
+\usepackage{marvosym}
+
+\newcounter{problem}[section]
+\newcounter{example}[section]
+
+% cancel 색상 변경
+\newcommand\Ccancel[2][black]{\renewcommand\CancelColor{\color{#1}}\cancel{#2}}
+
+%%%% 원문자
+\newcommand*\ocircled[1]{\tikz[baseline=(char.base)]{
+		\node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+	
+%%%%% 보기 스타일 %%%%%
+\usepackage{tabu}
+\newcommand{\questwo}[2]{
+	\vskip 6pt
+	\noindent\begin{tabu}{X[0.2] X[6] X[0.2] X[6]}
+		(1)&$#1$ &(2) &$#2$
+	\end{tabu}
+}
+\newcommand{\questhree}[3]{
+	\vskip 3pt
+	\noindent\begin{tabu}{X[0.2] X[6] X[0.2] X[6] X[0.2] X[6]}
+		(1)&$#1$ &(2) &$#2$ &(3) & $#3$
+	\end{tabu}
+	\vskip 5pt
+}
+\newcommand{\quesfour}[4]{
+	\vskip 6pt
+	\noindent\begin{tabu}{X[0.2] X[6] X[0.2] X[6]}
+		(1)&$#1$ &(2) &$#2$\\
+		(3)&$#3$ &(4) &$#4$
+	\end{tabu}
+}
+\newcommand{\quesfive}[5]{
+	\vskip 6pt
+	\noindent\begin{tabu}{X[0.2] X[3] X[0.2] X[3] X[0.2] X[3]}
+		(1)&$#1$ &(2) &$#2$ &(3) &$#3$\\
+		(4)&$#4$ &(5) &$#5$
+	\end{tabu}
+}
+
+\newcommand{\oquesfive}[5]{
+	\vskip 6pt
+	\noindent\begin{tabu}{X[0.2] X[3] X[0.2] X[3] X[0.2] X[3] X[0.2] X[3] X[0.2] X[3]}
+		\ding{172}&$#1$ &\ding{173} &$#2$ &\ding{174} &$#3$&	\ding{175}&$#4$ &\ding{176} &$#5$
+	\end{tabu}
+}
+%%%% sample(보기) %%%%
+\newenvironment{sample}{\vskip 10pt\noindent\begin{tikzpicture}[yshift=1.5pt]%
+		\draw[rounded corners=1ex,overlay,draw=blue] (0pt,-4pt) rectangle (19pt,9pt);
+		\node[rectangle,overlay,xshift=9.8pt,yshift=2pt,color=blue] {{\footnotesize\sffamily 보기}};\end{tikzpicture}\phantom{\footnotesize\sffamily보기...}}{\vskip 10pt}
+%%%% THEOREMS %%%%
+\newenvironment{theorem}[1][\hspace{-0.36em}]
+{
+	\begin{mdframed}[backgroundcolor=purple!5, align=center, userdefinedwidth=40em, linecolor=purple!30, linewidth=2pt, roundcorner=7pt, innertopmargin=10pt, shadow=true, shadowcolor=black!20, roundcorner=7pt, innerbottommargin=10pt, frametitle = {#1}]
+	}
+	{
+	\end{mdframed}
+}
+
+%%%% LEMMAS %%%%
+\newenvironment{lemma}[1][\hspace{-0.36em}]
+{
+	\begin{mdframed}[backgroundcolor=black!8, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {#1 보조정리}]
+	}
+	{
+	\end{mdframed}
+}
+
+%%%% COROLLARY %%%%
+\newenvironment{corollary}[1][\hspace{-0.36em}]
+{
+	\begin{mdframed}[backgroundcolor=black!8, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {#1 따름정리}]
+	}
+	{
+	\end{mdframed}
+}
+
+%%%% DEFINITIONS %%%%
+\newenvironment{definition}[1][\hspace{-0.36em}]
+{
+	\begin{mdframed}[backgroundcolor=cyan!14, align=center, userdefinedwidth=40em, linecolor=cyan!60, linewidth=2pt,roundcorner=7pt, innertopmargin=10pt, shadow=true, shadowcolor=black!20, roundcorner=7pt, innerbottommargin=10pt, frametitle = {정의 : #1}]
+	}
+	{
+	\end{mdframed}
+}
+
+%%%% PROPOSITION %%%%
+\newenvironment{proposition}
+{
+	\begin{mdframed}[backgroundcolor=black!4, align=center, userdefinedwidth=40em, topline=false, bottomline = false, leftline = false, rightline = false, frametitle = {Proposition}]
+	}
+	{
+	\end{mdframed}
+}
+%%%% PROBLEM %%%%
+\newenvironment{problem}{\refstepcounter{problem}
+	\begin{mdframed}[linecolor=blue!35, linewidth=2pt, roundcorner=7pt, innertopmargin=10pt, shadow=true, shadowcolor=black!20, roundcorner=7pt, innerbottommargin=10pt, backgroundcolor=blue!5]
+		\noindent 
+		\noindent\begin{tikzpicture}[overlay,xshift=6pt,yshift=5pt]
+			\draw[fill=violet!15,draw=violet!15] (0,0) circle (8pt);
+			\draw[fill=violet!15,draw=violet!15] (9pt,0) circle (8pt);
+			\node[rectangle,overlay,xshift=4pt] {\color{black}\sffamily\bfseries 문제};
+		\end{tikzpicture}{\phantom{.........}\fontspec[Scale=1.1]{TeX Gyre Adventor}\color{darkblue} \theproblem}\hspace{5pt}}{
+\end{mdframed}}
+%%%% SOLUTION OF PROBLEM %%%%
+\newenvironment{psolution}{\begin{description}\item[{\begin{tikzpicture}%
+				\draw[rounded corners=1ex,overlay] (-3pt,-3pt) rectangle (20pt,9pt);\end{tikzpicture}\footnotesize\sffamily풀이}\hspace{6pt}]}{\end{description}}
+			
+%%%% EXAMPLE %%%%		
+\newenvironment{example}{\refstepcounter{example}
+	\begin{mdframed}[roundcorner=7pt,linecolor=termcolor,linewidth=2pt,innertopmargin=10pt, shadow=true, shadowcolor=black!20, innerbottommargin=10pt, backgroundcolor=termcolor!2]
+		\noindent 
+		\noindent\begin{tikzpicture}[overlay,xshift=6pt,yshift=5pt]
+			\draw[fill=darkred!60,draw=darkred!60] (0,0) circle (7pt);
+			\draw[fill=darkred!60,draw=darkred!60] (9pt,0) circle (7pt);
+			\node[rectangle,overlay,xshift=4pt] {\color{white}\sffamily\bfseries 예제};
+		\end{tikzpicture}{\phantom{.........}\fontspec[Scale=1.1]{TeX Gyre Adventor}\color{darkred} \theexample}\hspace{5pt}}{
+\end{mdframed}}		
+%%%%%%% SOLUTION OF EXAMPLE %%%%%%%%%
+\newenvironment{solution}{\begin{description}\item[{\begin{tikzpicture}%
+				\draw[rounded corners=1ex,overlay] (-3pt,-3pt) rectangle (20pt,9pt);\end{tikzpicture}\footnotesize\sffamily풀이}\hspace{6pt}]}{\end{description}}
+
+% 보기 박스 정의 시작
+\tcbuselibrary{breakable, skins}
+\tcbset{enhanced}
+\newtcolorbox{ChoiceBox}[1]{
+		enhanced,
+		before skip=2ex, after skip=2ex,
+		boxrule=0.5pt, colframe=black, colback=white, arc=0.5ex,
+		boxsep=0.5ex, top=1.5ex, bottom=1.5ex, left=0.5em, right=o0.5em,
+		colbacktitle=white, coltitle=black,
+		attach boxed title to top center={xshift=0cm, yshift=-1.5mm},
+		boxed title style={size=minimal, enhanced, boxrule=0.25pt, colframe=white},
+		breakable=false, title ={< #1 >}
+}
+% 보기 박스 정의 끝.
+	
+% Change end-of-proof symbol
+\renewcommand\qedsymbol{$\blacksquare$}
+%overline
+\newcommand{\ovr}[1]{\overline{\textrm{#1}}}
+% trigonometric function
+\newcommand{\cosrm}[1]{\cos \textrm{#1}}
+\newcommand{\sinrm}[1]{\sin \textrm{#1}}
+\newcommand{\tanrm}[1]{\tan \textrm{#1}}
+\newcommand{\cotrm}[1]{\cot \textrm{#1}}
+\newcommand{\cscrm}[1]{\csc \textrm{#1}}
+\newcommand{\secrm}[1]{\sec \textrm{#1}}
+%%%% BLACKBOARD BOLD %%%%
+\newcommand{\bbN}{\mathbb{N}} % Natural numbers
+\newcommand{\bbZ}{\mathbb{Z}} % Zahlen
+\newcommand{\bbQ}{\mathbb{Q}} % Rational numbers
+\newcommand{\bbR}{\mathbb{R}} % Real numbers
+\newcommand{\bbC}{\mathbb{C}} % Complex numbers
+\DeclareSymbolFont{bbold}{U}{bbold}{m}{n} % Identity matrix
+\DeclareSymbolFontAlphabet{\mathbbold}{bbold} % Identity matrix
+\newcommand{\identitymatrix}{\mathbbold{1}} % Identity matrix
+
+%%%% CODE LISTING %%%%
+\usepackage{listings}
+\definecolor{greencomments}{HTML}{00BA00}
+\definecolor{graynumbers}{HTML}{4F4F4F}
+\definecolor{purplestrings}{HTML}{AD00AA}
+\definecolor{backgroundcolor}{HTML}{E8E8E8}
+
+
+%%%% UNIT BASIS VECTORS %%%%
+\newcommand{\ihat}{\bm{\hat{\imath}}} % Cartesian i hat (x-direction)
+\newcommand{\jhat}{\bm{\hat{\jmath}}} % Cartesian j hat (y-direction)
+\newcommand{\khat}{\bm{\hat{k}}} % Cartesian k hat (z-direction)
+\newcommand{\rhat}{\bm{\hat{r}}} % Spherical r hat
+\newcommand{\phihat}{\bm{\hat{\phi}}} % Spherical phi hat
+\newcommand{\thetahat}{\bm{\hat{\theta}}} % Spherical theta hat
+\newcommand{\nhat}{\bm{\hat{n}}} % Unit normal vector
+\newcommand{\rhohat}{\bm{\hat{\rho}}} % Cylindrical rho hat
+\newcommand{\zhat}{\bm{\hat{z}}} % Cylindrical z hat
+
+
+%%%% COLORS: DEFINITIONS AND COMMANDS %%%%
+% Miscellaneous
+\definecolor{DARKBLUE}{HTML}{040080}
+\definecolor{DARKBROWN}{HTML}{8B4513}
+\definecolor{LIGHTBROWN}{HTML}{CD853F}
+\definecolor{PINK}{HTML}{D147BD}
+\definecolor{LIGHTPINK}{HTML}{DC75CD}
+\definecolor{GREENSCREEN}{HTML}{00FF00}
+\definecolor{ORANGE}{HTML}{FF862F}
+\newcommand{\DARKBLUE}{\color{DARKBLUE}}
+\newcommand{\DARKBROWN}{\color{DARKBROWN}}
+\newcommand{\LIGHTBROWN}{\color{LIGHTBROWN}}
+\newcommand{\PINK}{\color{PINK}}
+\newcommand{\LIGHTPINK}{\color{LIGHTPINK}}
+\newcommand{\GREENSCREEN}{\color{GREENSCREEN}}
+\newcommand{\ORANGE}{\color{ORANGE}}
+% Blue
+\definecolor{BLUEE}{HTML}{1C758A}
+\definecolor{BLUED}{HTML}{29ABCA}
+\definecolor{BLUEC}{HTML}{58C4DD}
+\definecolor{BLUEB}{HTML}{9CDCEB}
+\definecolor{BLUEA}{HTML}{C7E9F1}
+\definecolor{BLUE}{HTML}{0000FF}
+\newcommand{\BLUEE}{\color{BLUEE}}
+\newcommand{\BLUED}{\color{BLUED}}
+\newcommand{\BLUEC}{\color{BLUEC}}
+\newcommand{\BLUEB}{\color{BLUEB}}
+\newcommand{\BLUEA}{\color{BLUEA}}
+\newcommand{\BLUE}{\color{BLUE}}
+% Teal
+\definecolor{TEALE}{HTML}{49A88F}
+\definecolor{TEALD}{HTML}{55C1A7}
+\definecolor{TEALC}{HTML}{5CD0B3}
+\definecolor{TEALB}{HTML}{76DDC0}
+\definecolor{TEALA}{HTML}{ACEAD7}
+\definecolor{TEAL}{HTML}{00FFFF}
+\newcommand{\TEALE}{\color{TEALE}}
+\newcommand{\TEALD}{\color{TEALD}}
+\newcommand{\TEALC}{\color{TEALC}}
+\newcommand{\TEALB}{\color{TEALB}}
+\newcommand{\TEALA}{\color{TEALA}}
+\newcommand{\TEAL}{\color{TEAL}}
+% Green
+\definecolor{GREENE}{HTML}{699C52}
+\definecolor{GREEND}{HTML}{77B05D}
+\definecolor{GREENC}{HTML}{83C167}
+\definecolor{GREENB}{HTML}{A6CF8C}
+\definecolor{GREENA}{HTML}{C9E2AE}
+\definecolor{GREEN}{HTML}{00FF00}
+\newcommand{\GREENE}{\color{GREENE}}
+\newcommand{\GREEND}{\color{GREEND}}
+\newcommand{\GREENC}{\color{GREENC}}
+\newcommand{\GREENB}{\color{GREENB}}
+\newcommand{\GREENA}{\color{GREENA}}
+\newcommand{\GREEN}{\color{GREEN}}
+% Yellow
+\definecolor{YELLOWE}{HTML}{E8C11C}
+\definecolor{YELLOWD}{HTML}{F4D345}
+\definecolor{YELLOWC}{HTML}{FFFF00}
+\definecolor{YELLOWB}{HTML}{FFEA94}
+\definecolor{YELLOWA}{HTML}{FFF1B6}
+\definecolor{YELLOW}{HTML}{FFFF00}
+\newcommand{\YELLOWE}{\color{YELLOWE}}
+\newcommand{\YELLOWD}{\color{YELLOWD}}
+\newcommand{\YELLOWC}{\color{YELLOWC}}
+\newcommand{\YELLOWB}{\color{YELLOWB}}
+\newcommand{\YELLOWA}{\color{YELLOWA}}
+\newcommand{\YELLOW}{\color{YELLOW}}
+% Gold
+\definecolor{GOLDE}{HTML}{C78D46}
+\definecolor{GOLDD}{HTML}{E1A158}
+\definecolor{GOLDC}{HTML}{F0AC5F}
+\definecolor{GOLDB}{HTML}{F9B775}
+\definecolor{GOLDA}{HTML}{F7C797}
+\newcommand{\GOLDE}{\color{GOLDE}}
+\newcommand{\GOLDD}{\color{GOLDD}}
+\newcommand{\GOLDC}{\color{GOLDC}}
+\newcommand{\GOLDB}{\color{GOLDB}}
+\newcommand{\GOLDA}{\color{GOLDA}}
+% Red
+\definecolor{REDE}{HTML}{CF5044}
+\definecolor{REDD}{HTML}{E65A4C}
+\definecolor{REDC}{HTML}{FC6255}
+\definecolor{REDB}{HTML}{FF8080}
+\definecolor{REDA}{HTML}{F7A1A3}
+\definecolor{RED}{HTML}{FF0000}
+\newcommand{\REDE}{\color{REDE}}
+\newcommand{\REDD}{\color{REDD}}
+\newcommand{\REDC}{\color{REDC}}
+\newcommand{\REDB}{\color{REDB}}
+\newcommand{\REDA}{\color{REDA}}
+\newcommand{\RED}{\color{RED}}
+% Maroon
+\definecolor{MAROONE}{HTML}{94424F}
+\definecolor{MAROOND}{HTML}{A24D61}
+\definecolor{MAROONC}{HTML}{C55F73}
+\definecolor{MAROONB}{HTML}{EC92AB}
+\definecolor{MAROONA}{HTML}{ECABC1}
+\newcommand{\MAROONE}{\color{MAROONE}}
+\newcommand{\MAROOND}{\color{MAROOND}}
+\newcommand{\MAROONC}{\color{MAROONC}}
+\newcommand{\MAROONB}{\color{MAROONB}}
+\newcommand{\MAROONA}{\color{MAROONA}}
+% Purple
+\definecolor{PURPLEE}{HTML}{644172}
+\definecolor{PURPLED}{HTML}{715582}
+\definecolor{PURPLEC}{HTML}{9A72AC}
+\definecolor{PURPLEB}{HTML}{B189C6}
+\definecolor{PURPLEA}{HTML}{CAA3E8}
+\definecolor{PURPLE}{HTML}{FF00FF}
+\newcommand{\PURPLEE}{\color{PURPLEE}}
+\newcommand{\PURPLED}{\color{PURPLED}}
+\newcommand{\PURPLEC}{\color{PURPLEC}}
+\newcommand{\PURPLEB}{\color{PURPLEB}}
+\newcommand{\PURPLEA}{\color{PURPLEA}}
+\newcommand{\PURPLE}{\color{PURPLE}}
+% White and Black
+\definecolor{WHITE}{HTML}{FFFFFF}
+\newcommand{\WHITE}{\color{WHITE}}
+\definecolor{BLACK}{HTML}{000000}
+\newcommand{\BLACK}{\color{BLACK}}
+% Different Grays
+\definecolor{LIGHTGRAY}{HTML}{BBBBBB}
+\definecolor{GRAY}{HTML}{888888}
+\definecolor{DARKGRAY}{HTML}{444444}
+\definecolor{DARKERGRAY}{HTML}{222222}
+\definecolor{GRAYBROWN}{HTML}{736357}
+\newcommand{\LIGHTGRAY}{\color{LIGHTGRAY}}
+\newcommand{\GRAY}{\color{GRAY}}
+\newcommand{\DARKGRAY}{\color{DARKGRAY}}
+\newcommand{\DARKERGRAY}{\color{DARKERGRAY}}
+\newcommand{\GRAYBROWN}{\color{GRAYBROWN}}
+

@@ -1,0 +1,55 @@
+\documentclass[11pt, b4paper]{book}
+%\documentclass[11pt,a4paper]{article} 
+\usepackage[T1]{fontenc}
+\usepackage{kotex}
+\usepackage{secdot}
+% Set page geometry
+\usepackage[margin=2.5cm,headsep=0.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{versions}
+%\RequirePackage{latexalpha2wlua}
+%\includeversion{aftercal}
+\excludeversion{aftercal}
+\includeversion{nogeo}
+%\excludeversion{nogeo}
+\includeversion{psol}
+%\excludeversion{psol}
+\input{../preamblex} % 작업하는 파일의 상위 디렉토리에 둬야 하는 파일.
+\usetikzlibrary{intersections,decorations.text}
+\definecolor{c1}{RGB}{62, 97, 127}
+\definecolor{c2}{RGB}{104, 182, 182}
+\definecolor{c3}{RGB}{107, 190, 190}
+\definecolor{c4}{RGB}{100, 172, 174}
+\title{보충 교재}
+\author{유익승}
+\date{\today}
+\newcommand{\plogo}{\fbox{\color{c4}$\mathcal{YHHS}$}}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{c4}지수와 로그}
+\rhead{\plogo}
+\lfoot{\color{c1}\texttt{양현고등학교}}
+\rfoot{\color{c1}\pageref{LastPage}페이지 중 \thepage 페이지}
+
+\usetikzlibrary{positioning,calc,arrows.meta,bending}
+\newcommand{\tikzmark}[3][]{\tikz[overlay,remember picture,baseline] \node 
+	[anchor=base,#1](#2) {#3};}
+\begin{document}
+	
+	
+\setlength{\columnseprule}{0.2pt}
+	\begin{multicols*}{2}
+		\begin{problem}
+				다음 문제를 해결하시오.
+		\end{problem}
+	
+\columnbreak
+
+\begin{problem}
+	다음 문제들을 풀거나 말거나 하시오. 그런데 문제가 해결 안된다고 해서 짜증을 내거나 하지 마시고 하여간에...
+\end{problem}
+		
+
+	\end{multicols*}
+\end{document}

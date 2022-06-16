@@ -1,0 +1,2809 @@
+% 반드시 XeLatex으로 컴파일을 해야 합니다.
+% 같이 제공하는 preamblex.tex은 trig.tex보다 상위 디렉토리에 두어야 컴파일이 됩니다. 두 파일을 같은 디렉토리에 두려면 몇 줄 아래에 있는 \input{../preamblex}를 \input{preamblex}로 수정하시기 바랍니다.
+
+\documentclass[11pt, a4paper]{book}
+%\documentclass[11pt,a4paper]{article} 
+\usepackage[T1]{fontenc}
+\usepackage{kotex}
+\usepackage{secdot}
+% Set page geometry
+\usepackage[margin=2.5cm,headsep=0.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{versions}
+%\includeversion{aftercal}
+\excludeversion{aftercal}
+\includeversion{nogeo}
+%\excludeversion{nogeo}
+%\includeversion{psol}
+\excludeversion{psol}
+\input{../preamblex} % 작업하는 파일의 상위 디렉토리에 둬야 하는 파일.
+\usetikzlibrary{intersections,decorations.text}
+\definecolor{c1}{RGB}{62, 97, 127}
+\definecolor{c2}{RGB}{104, 182, 182}
+\definecolor{c3}{RGB}{107, 190, 190}
+\definecolor{c4}{RGB}{100, 172, 174}
+\title{삼각함수의 여러 성질과 문제}
+\author{유익승}
+\date{\today}
+\newcommand{\plogo}{\fbox{\color{c4}$\mathcal{JBSH}$}}
+\usepackage{fancyhdr,lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\color{c4}Trigonometry}
+\rhead{\plogo}
+\lfoot{\color{c1}\texttt{전북과학고등학교}}
+\rfoot{\color{c1}\pageref{LastPage}페이지 중 \thepage 페이지}
+
+\begin{document}
+	\thispagestyle{empty}
+\begin{tikzpicture}[overlay,remember picture,font=\sffamily\bfseries]
+	\draw[very thick,red,name path=big arc] ([xshift=-2mm]current page.north) arc(150:285:11)
+	coordinate[pos=0.225] (x0);
+	\begin{scope}
+		\clip ([xshift=-2mm]current page.north) arc(150:285:11) --(current page.north
+		east);
+		\fill[c4!50,opacity=0.25] ([xshift=4.55cm]x0) circle (4.55);
+		\fill[c4!50,opacity=0.25] ([xshift=3.4cm]x0) circle (3.4);
+		\fill[c4!50,opacity=0.25] ([xshift=2.25cm]x0) circle (2.25);
+		\draw[very thick,c4!50] (x0) arc(-90:30:6.5);
+		\draw[very thick,c4] (x0) arc(90:-30:8.75);
+		\draw[very thick,c4!50,name path=arc1] (x0) arc(90:-90:4.675);
+		\draw[very thick,c4!50] (x0) arc(90:-90:2.875);
+		\path[name intersections={of=big arc and arc1,by=x1}];
+		\draw[very thick,c4,name path=arc2] (x1) arc(135:-20:4.75);
+		\draw[very thick,c4!50] (x1) arc(135:-20:8.75);
+		\path[name intersections={of=big arc and arc2,by={aux,x2}}];
+		\draw[very thick,c4!50] (x2) arc(180:50:2.25);
+	\end{scope} 
+	\path[decoration={text along path,text color=c4,
+		raise = -2.8ex,
+		text  along path,
+		text = {|\sffamily\bfseries|\today},
+		text align = center,
+	},
+	decorate
+	] ([xshift=-2mm]current page.north) arc(150:245:11);
+	%
+	\begin{scope}
+		\path[clip,postaction={fill=c3}]
+		([xshift=2cm,yshift=-8cm]current page.center) rectangle ++ (4.2,7.7);
+		\fill[c2] ([xshift=0.5cm,yshift=-8cm]current page.center)
+		([xshift=0.5cm,yshift=-8cm]current page.center)  arc(180:60:2)
+		|- ++ (-3,6) --cycle;
+		\draw[very thick,c4] ([xshift=-1.5cm,yshift=-8cm]current page.center) 
+		arc(180:0:2);
+		\draw[very thick,c4] ([xshift=0.5cm,yshift=-8cm]current page.center) 
+		arc(180:0:2);
+		\draw[very thick,c4] ([xshift=2.5cm,yshift=-8cm]current page.center) 
+		arc(180:0:2);
+		\draw[very thick,c4] ([xshift=4.5cm,yshift=-8cm]current page.center) 
+		arc(180:0:2);
+		\fill[red] ([xshift=2.5cm,yshift=-8cm]current page.center) +(60:2) circle(1mm)
+		node[above=1mm]{$\displaystyle \phantom{xx}\sin^{2}\theta + \cos^{2}\theta= 1$};
+	\end{scope}
+	%
+	\fill[c1] ([xshift=2cm,yshift=-8cm]current page.center) rectangle ++ (-12.7,7.7);
+	\node[text=white,anchor=west,scale=5,inner sep=0pt] at
+	([xshift=-8cm,yshift=-3.25cm]current page.center) {삼각함수};
+	\node[text=white,anchor=west,scale=2.5,inner sep=0pt] at
+	([xshift=-3.5cm,yshift=-6cm]current page.center) {유익승};
+	%
+	\draw[gray,line width=5mm] 
+	([xshift=2mm,yshift=-1mm]current page.south west) rectangle ([xshift=-2mm,yshift=1mm]current
+	page.north east);
+\end{tikzpicture}
+\setstretch{1.4}
+\tikzset{every shadow/.style={opacity=1}}	
+%	\maketitle
+	\chapter{\Huge 삼각함수의 정리들}
+ 두 함수 $\cos(\theta)$와 $\sin(\theta)$는 아래 그림과 같이 단위원 위의 점 \textrm{P}에 대하여 직선 $\textrm{OP}$가 $x$축의 양의 방향과 이루는 각의 크기가 $\theta$일 때, 각각 점 \textrm{P}의 $x$좌표와 $y$좌표로 정의된다. 
+	
+\begin{figure}[H]
+\begin{center}
+
+\begin{tikzpicture}[scale=0.8]
+	\pgfmathsetmacro{\angle}{56} % math mode에서 작동함.
+	
+	%\draw[lightgray] (-5, -5) grid (5, 5);
+	\draw[-stealth,  very thick] (-5, 0) -- (5, 0) node[below]{$x$};  %x축
+	\draw[-stealth, very thick] (0, -5) -- ( 0, 5) node[left]{$y$} ; % y축
+	\draw[thick] (0,0) circle[radius=4]; 
+	
+	
+%	\filldraw[draw=green, fill=green!30] (0.5, 0) arc[radius=0.5, start angle=0, end angle=\angle] node[below=1pt, right=0.8pt]{$\theta$}--(0,0) --cycle;
+	
+	\filldraw[draw=green, fill=green!30] (0.5, 0) arc[radius=0.5, start angle=0, end angle=\angle] node[midway]{$\theta$}--(0,0) --cycle;
+	
+	\draw[thick] node[below=0.2cm, left]{O} (0,0) -- (\angle:4) node[right]{P$(x, y)$};
+	
+	\draw[very thick, blue] (0, 0) -- node[below] {$\cos \theta$} (4* cos{\angle}, 0);
+	\draw[very thick, red] (4* cos{\angle}, 0) -- node[right] {$\sin \theta$}  (4* cos{\angle}, 4 * sin{\angle}) ;
+\end{tikzpicture}
+\end{center}
+\end{figure}
+
+따라서
+	$\sin(-\theta) = -\sin(\theta)$, $\cos(-\theta) = \cos(\theta)$, 이고
+	\[
+	\sin^2(\theta) + \cos^2(\theta) = 1
+	\]
+	가 성립한다. 
+	
+	
+	다른 삼각함수들은 모두 사인함수와 코사인함수에 의해 정의 된다.
+	\[
+	\begin{array}{rclrcl}
+		\tan(\theta) &=& \sin(\theta)/\cos(\theta)\quad & \quad
+		\cot(\theta) &=& \cos(\theta)/\sin(\theta) = 1/\tan(\theta)\\
+		\sec(\theta) &=& 1/\cos(\theta)\quad & \quad
+		\csc(\theta) &=& 1/\sin(\theta)
+	\end{array}
+	\]
+	식 $\sin^2(\theta) + \cos^2(\theta) = 1$의 양변을
+	$\cos^2(\theta)$ 또는 $\sin^2(\theta)$으로 나누면 각각 다음을 얻는다.
+	\begin{eqnarray*}
+		\tan^2(\theta) + 1 &=& \sec^2(\theta)\\
+		1 + \cot^2(\theta) &=& \csc^2(\theta)
+	\end{eqnarray*}
+	
+	\section{합의 법칙}
+사인함수와 코사인 함수의 {\color{red}덧셈정리}는 다음과 같이 정의된다. 
+	\begin{eqnarray*}
+		\sin(\alpha+\beta) &=& \sin(\alpha)\cos(\beta) + \cos(\alpha)\sin(\beta) \\
+		\cos(\alpha+\beta) &=& \cos(\alpha)\cos(\beta) - \sin(\alpha)\sin(\beta)
+	\end{eqnarray*}
+
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=0.8]
+			\pgfmathsetmacro{\angle}{56} % math mode에서 작동함.
+			\pgfmathsetmacro{\ang}{35}
+			
+%			\draw[lightgray] (-5, -5) grid (5, 5);
+			\draw[-latex, ultra thick] (-5, 0) -- (5, 0) node[below]{$x$};
+			\draw[-latex, ultra thick] (0, -5) -- ( 0, 5) node[left]{$y$};
+			\draw[ultra thick] (0,0) -- (4, 0) node[below]{P(1, 0)};
+			\draw[ultra thick] (0,0) circle[radius=4];
+			
+			
+			\filldraw[draw=green, fill=green!30] (1, 0) arc[radius=1, start angle=0, end angle=35] node[anchor=north west]{$\alpha$}--(0,0) --cycle;
+			
+			\filldraw[draw=red, fill=red!30] (1, 0) arc[radius=1, start angle=0, end angle=35-\angle] node[right=0.8pt]{$-\beta$}--(0,0) --cycle;
+			
+			\filldraw[draw=red, fill=red!30] (cos{\ang}, sin{\ang}) arc[radius=1, start angle=\ang, end angle=\angle] node[ right=0.8pt]{$\beta$}--(0,0) --cycle;
+			
+			\draw[thick] (0,0) -- (\angle:4) node[right]{R$(\cos(\alpha+\beta), \sin(\alpha +\beta))$};
+			\draw[thick] (0,0) -- (\ang:4)node[right]{Q$(\cos(\alpha), \sin(\alpha))$} ;
+			
+			\draw[thick] (0,0) -- (\ang-\angle:4)node[right]{S$(\cos(\beta), -\sin(\beta))$} ;
+			
+			\draw[very thick, blue](4, 0) -- (\angle:4);
+			\draw[very thick, red](\ang:4) --(\ang-\angle:4);
+			%	\draw[very thick, blue] (0, 0) -- node[below] {$\cos \theta$} (4* cos{\angle}, 0);
+			%	\draw[very thick, red] (4* cos{\angle}, 0) -- node[right] {$\sin \theta$}  (4* cos{\angle}, 4 * sin{\angle}) ;
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+위의 그림에서 $\overline{\textrm{PR}} = \overline{\textrm{QS}}$이므로 다음이 성립한다. 먼저 $\sin^{2}\left(\alpha+\beta\right) +\cos^{2}\left(\alpha +\beta\right)=1$이므로
+\begin{align*}
+\overline{\textrm{PR}}^{2} &= \left(\cos (\alpha + \beta) - 1\right)^{2} + \sin^{2}(\alpha + \beta)\\
+	&= \cos^{2}(\alpha + \beta) - 2 \cos (\alpha + \beta) + 1 + \sin^{2}(\alpha + \beta) \\
+	&= 2 - 2\cos (\alpha + \beta)
+\end{align*}
+이고 사인함수는 {\color{red}기함수}, 코사인함수는 {\color{red}우함수}이므로
+\begin{align*}
+	\overline{\textrm{QS}}^{2} &= \left(\cos(\alpha) - \cos (-\beta)\right)^{2} + \left(\sin(\alpha) - \sin (-\beta)\right)^{2}\\
+	&= \cos^{2}(\alpha) - 2 \cos(\alpha) \cos(-\beta) + \cos^{2}(-\beta) + \sin^{2}(\alpha) - 2 \sin(\alpha) \sin(-\beta) + \sin^{2}(-\beta)\\
+	&= 2 - 2\cos(\alpha) \cos(-\beta) - 2\sin(\alpha) \sin(-\beta)\\
+	&= 2 - 2 \cos(\alpha) \cos(\beta)	+ 2 \sin(\alpha)\sin(\beta)
+\end{align*}
+이다. 따라서
+\[
+2-2\cos\left(\alpha+\beta\right) = 2 - 2 \cos(\alpha)\cos(\beta) + 2 \sin(\alpha)\sin(\beta)
+\]
+이고 이 식의 양 변에서 $2$를 빼고 $-2$로 양변을 나누면
+\[
+\cos(\alpha + \beta) = \cos(\alpha)\cos(\beta) - \sin(\alpha)\sin(\beta)
+\]
+가 성립한다. 이 공식에 $\beta$대신 $-\beta$를 대입하면
+\begin{align*}
+\cos(\alpha - \beta) &= \cos(\alpha)\cos(-\beta) - \sin(\alpha)\sin(-\beta)\\
+&= \cos(\alpha)\cos(\beta) + \sin(\alpha)\sin(\beta)
+\end{align*}
+을 얻는다. 
+
+  한편 $\sin(\alpha+\beta) =\cos\left(\frac{\pi}{2}-\left(\alpha+\beta \right) \right)$이므로 
+ \begin{align*}
+	\sin(\alpha+\beta) &=\cos\left(\frac{\pi}{2}-(\alpha+\beta)\right) \\
+	&=\cos\left(\left(\frac{\pi}{2}-\alpha \right) +(-\beta)\right)\\
+	&=\cos\left(\frac{\pi}{2}-\alpha\right) \cos(-\beta) - \sin \left(\frac{\pi}{2}-\alpha\right) \sin(-\beta) \\
+	&= \sin(\alpha) \cos(\beta) + \cos(\alpha)\sin(\beta)
+\end{align*}
+이고 위와 비슷한 방법으로 
+\[
+\sin\left(\alpha-\beta\right) =\sin(\alpha)\cos(\beta) - \cos(\alpha)\sin(\beta)
+\]
+임을 보일 수 있다.
+
+  마지막으로 탄젠트 함수의 덧셈정리에 대하여 알아보자.
+  
+\begin{align*}
+  	\tan\left(\alpha+\beta\right) &= \frac{\sin\left(\alpha+\beta\right)}{\cos(\alpha+\beta)}\\
+  	&=\frac{\sin(\alpha)\cos(\beta)+\cos(\alpha)\sin(\beta)}{\cos(\alpha)\cos(\beta)-\sin(\alpha)\sin(\beta)}
+\end{align*}
+이므로 마지막 식에서 분자, 분모를 $\cos(\alpha)\cos(\beta)$로 나누면
+\[
+\tan(\alpha+\beta) =\frac{\tan(\alpha)+\tan(\beta)}{1-\tan(\alpha)\tan(\beta)}
+\]
+이다. 
+  마지막으로 탄젠트 함수가 기함수임을 이용하면
+  \[
+  \tan\left(\alpha -\beta \right) =\frac{\tan(\alpha)-\tan(\beta)}{1+\tan(\alpha)\tan(\beta)}
+  \]
+임을 보일 수 있다.
+  이상을 정리하면 다음과 같다.
+  
+  \begin{theorem}[삼각함수의 덧셈 정리]\vspace{-2em}
+  \begin{align*}\vspace{-2em}
+	\cos(\alpha+\beta) &= \cos(\alpha)\cos(\beta) - \sin(\alpha)\sin(\beta)\\
+	\cos(\alpha-\beta) &= \cos(\alpha)\cos(\beta) + \sin(\alpha)\sin(\beta)\\
+	\sin(\alpha+\beta) &= \sin(\alpha)\cos(\beta) + \cos(\alpha)\sin(\beta)\\
+	\sin(\alpha-\beta) &= \sin(\alpha)\cos(\beta) - \cos(\alpha)\sin(\beta)\\
+	\tan(\alpha+\beta) &=\frac{\tan(\alpha)+\tan(\beta)}{1-\tan(\alpha)\tan(\beta)}\\
+	\tan(\alpha-\beta) &=\frac{\tan(\alpha)-\tan(\beta)}{1+\tan(\alpha)\tan(\beta)}
+  \end{align*}
+  \end{theorem}  
+
+위의 정리들은 다음과 같은 삼각함수의 기본성질들을 증명하는데 유용하게 활용될 수 있다.
+\[\sin(\pi/2 - \theta) = \sin(\pi/2)\cos(\theta) + \cos(\pi/2)\sin(\theta) =\cos(\theta)
+\] 또는
+\[\cos(\pi-x) = \cos(x)\cos(\pi) + \sin(x)\sin(\pi) =-\cos(x).
+\]
+
+\section{2, 3배각 공식과 반각공식}
+
+  앞 장에서 유도한 덧셈정리에서  $\alpha = \beta$라 하면 사인함수의 덧셈정리와 코사인 함수의 덧셈정리로부터 각각 다음과 같은 2배각 공식을 얻는다.
+	\begin{eqnarray*}
+		\sin(2\alpha) &=&  2\sin(\alpha)\cos(\alpha) \\
+		\cos(2\alpha) &=& \cos^2(\alpha) - \sin^2(\alpha)\\
+		\tan(2\alpha) &=& \frac{2 \tan(\alpha)}{1-\tan^{2}(\alpha)}
+	\end{eqnarray*}
+2배각 공식중에서 $\cos(2\alpha)$은 반각공식을 유도할 수 있어 특히 유용하다. 즉, $\cos^2(\alpha)$를 $1-\sin^2(\alpha)$로 바꾸거나 $\sin^2(\alpha)$을 $1-\cos^2(\alpha)$로 바꾸면 다음 식들을 얻는다.
+	\begin{eqnarray*}
+		\cos(2\alpha) &=& 1 - 2\sin^2(\alpha) \\
+		\cos(2\alpha) &=& 2\cos^2(\alpha) - 1
+	\end{eqnarray*}
+이 식들을 각각 $\sin^2(\alpha)$와 $\cos^2(\alpha)$에 대하여 정리하면 다음과 같은 중요한 식을 얻는다.
+	\begin{eqnarray*}
+		\sin^2(\alpha) &=& \frac{1}{2}(1 - \cos(2\alpha)) \\
+		\cos^2(\alpha) &=& \frac{1}{2}(1 + \cos(2\alpha))
+	\end{eqnarray*}
+ 이 두 식을 변변 나누면
+ \[
+ \tan^{2}(\alpha) =\frac{1-\cos(2\alpha)}{1+\cos(2\alpha)}
+ \]
+ 를 얻는다. 이 세 식에 $\alpha$대신에 $\frac{\theta}{2}$를 대입하면 반각공식을 얻는다.
+ \begin{theorem}[반각공식]\vspace{-2em}
+ 	\begin{align*}\vspace{-2em}
+ 	\cos^{2}\left(\frac{\theta}{2} \right) &= \frac{1+ \cos(\theta)}{2}\\
+ 	\sin^{2}\left(\frac{\theta}{2} \right) &= \frac{1- \cos(\theta)}{2}\\
+ 	\tan^{2}\left(\frac{\theta}{2} \right) &= \frac{1- \cos(\theta)}{1+ \cos(\theta)}
+ 	\end{align*}
+ \end{theorem}
+
+반각공식과 유사하게 $\sin(\theta)$와 $\cos(\theta)$를 $\tan\left(\frac{\theta}{2}\right)$로 나타내는 방법을 알아보자. 편의상 $\tan\left(\frac{\theta}{2}\right) =t$라 하자.
+\begin{align*}
+	\sin(\theta)  &= 2 \sin\left(\frac{\theta}{2}\right)\cos\left(\frac{\theta}{2}\right)\\
+				  &= \frac{2\sin\left(\frac{\theta}{2}\right)\cos\left(\frac{\theta}{2}\right)/\cos^{2}\left(\frac{\theta}{2}\right)}{1/\cos^{2}\left(\frac{\theta}{2}\right)}\\
+				  &= \frac{2 \tan\left(\frac{\theta}{2}\right)}{1+\tan^{2}\left(\frac{\theta}{2}\right)} = \frac{2t}{1+t^2}
+\end{align*}
+이고 $\cos^{2}(\theta)+\sin^{2}(\theta)=1$이므로 
+\[
+\cos(\theta) =\frac{1-t^2}{1+t^2}
+\]
+이다.
+\processifversion{nogeo}{
+다음 그림에서 점 $\textrm{P}(x, \, y)$를 $y=mx$에 대하여 대칭시킨 점을 $\textrm{Q}(x^{\prime}, \, y^{\prime})$라 하자.
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[domain=-2:2]
+			%      	\pgfmathsetmacro{\angle}{56}
+			
+			%			\draw[gray!30] (-3, -4) grid (3, 4); 
+			\draw[-stealth, very thick] (-3, 0) -- (3, 0) node[below]{$x$};
+			\draw[-stealth, very thick] (0, -4) -- ( 0, 4) node[left]{$y$};
+			\node[below left] (0,0) {$\textrm{O}$};
+			\draw[very thick, blue]  plot (\x, {2*\x}) node[blue, right]{$y=mx$};
+
+			\filldraw[black] (2,1) circle (0.07);
+			\filldraw[black] (-0.4,2.2) circle (0.07);
+			\draw[thick, red] (2,1) node[right]{P$(x,\,y)$} -- (-0.4, 2.2) node[left] {Q$(x^{\prime},\, y^{\prime})$};
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+이 때, 다음이 성립함은 어렵지 않게 보일 수 있다.
+\begin{equation*}
+\begin{pmatrix}
+	x^{\prime} \\
+	y^{\prime}
+\end{pmatrix}
+=\frac{1}{1+m^{2}}
+\begin{pmatrix}
+	1-m^{2} & 2m \\
+	2m		& m^{2}-1
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+	x \\ y
+\end{pmatrix}
+\end{equation*}
+이 사실을 다음과 같이 표현할 수 도 있다.
+
+$y = \left(\tan\left(\frac{\theta}{2}\right)\right) x$에 대한 대칭을 나타내는 행렬은
+\[
+\begin{pmatrix}
+	\cos(\theta) & \phantom{-}\sin(\theta) \\
+	\sin(\theta) & -\cos(\theta)
+\end{pmatrix}
+\]
+이다.
+}
+ 
+ 이제 3배각 공식에 대하여 알아보자. 3배각 공식은 2가지 형태가 있는데 덧셈정리로부터 유도되는 우리에게 친숙한 형태부터 유도하자. 코사인 함수의 덧셈정리와 사인함수, 코사인함수의 2배각 공식에 의해
+ \begin{align*}
+ 	\cos(3\theta) & = \cos(2\theta +\theta)\\
+ 	&= \cos(2\theta)\cos(\theta) - \sin(2\theta)\sin(\theta)\\
+ 	&= \left(2\cos^{2}(\theta)-1\right) \cos(\theta) - 2\cos(\theta)\sin^{2}(\theta)\\
+ 	&= 2\cos^{3}(\theta)- \cos(\theta) - 2 \cos(\theta)\left(1- \cos^{2}(\theta)\right)\\
+ 	&= 4 \cos^{3}(\theta) - 3\cos(\theta)
+ \end{align*}
+이고
+ \begin{align*}
+	\sin(3\theta) & = \sin(2\theta +\theta)\\
+	&= \sin(2\theta)\cos(\theta) + \cos(2\theta)\sin(\theta)\\
+	&= 2\sin(\theta) \cos^{2}(\theta) +  \left(1-2\sin^{2}(\theta)\right)\sin(\theta)\\
+	&= 2\sin(\theta)(1- \sin^{2}(\theta)) +  \sin(\theta)- 2\sin^{3}(\theta)\\
+	&= 3 \sin(\theta) - 4\sin^{3}(\theta)
+\end{align*}
+이다. 이 두 결과를 이용하면
+\begin{align*}
+\tan(3\theta) &= \frac{\sin(3\theta)}{\cos(3\theta)}\\
+			  &= \frac{3\sin(\theta)-4\sin^{3}(\theta)}{4 \cos^{3}(\theta)-3 \cos(\theta)}\\
+			  &= \frac{3\tan(\theta)(1+\tan^{2}(\theta))- 4 \tan^{3}(\theta)}{4 - 3(1+\tan^{2}(\theta))}\\
+			  &= \frac{3\tan(\theta)-\tan^{3}(\theta)}{1-3 \tan^{2}(\theta)}
+\end{align*}
+을 얻는다.
+ 
+ 이제 잘 알려지지 않은 3배각 공식에 대하여 알아보자. 재미있게도 우리가 앞서 유도했던 3배각 공식으로부터 시작한다. 먼저 사인함수의 3배각 공식에 대하여 알아보자.
+ \begin{align*}
+ 	\sin(3\theta) & = 3 \sin(\theta) - 4\sin^{3}(\theta) \\
+ 				  & = \sin(\theta)(3-4 \sin^{2}(\theta)) \\
+ 				  & = \sin(\theta)(3\sin^{2}(\theta)+ 3\cos^{2}(\theta)-4\sin^{2}(\theta))\\
+ 				  & = \sin(\theta)(3\cos^{2}(\theta)-\sin^{2}(\theta))\\
+ 				  & = 4\sin(\theta)\left(\frac{3}{4}\cos^{2}(\theta) -\frac{1}{4}\sin^{2}(\theta)\right)\\
+ 				  & = 4\sin(\theta)\left(\frac{\sqrt{3}}{2}\cos(\theta)-\frac{1}{2}\sin(\theta)\right)\left(\frac{\sqrt{3}}{2}\cos(\theta)+\frac{1}{2}\sin(\theta)\right)\\
+ 				  &= 4\sin(\theta)\left(\sin\left(\frac{\pi}{3}\right)\cos(\theta)- \cos\left(\frac{\pi}{3}\right)\sin(\theta)\right)\left(\sin\left(\frac{\pi}{3}\right)\cos(\theta)+ \cos\left(\frac{\pi}{3}\right)\sin(\theta)\right)\\
+ 				  & = 4 \sin(\theta)\sin \left(\frac{\pi}{3}-\theta\right)\sin \left(\frac{\pi}{3}+\theta\right)
+ \end{align*}
+이와 비슷한 방법으로 다음을 증명할 수 있다.
+\begin{equation}\label{eqn:mult3}
+\cos(3\theta) = 4 \cos(\theta)\cos \left(\frac{\pi}{3}-\theta\right)\cos \left(\frac{\pi}{3}+\theta\right)
+\end{equation}
+이 두 결과를 종합하면 탄젠트 3배각 공식을 얻는다. 즉,
+\begin{align*}
+	\tan(3\theta) &=\frac{\sin(3\theta)}{\cos(3\theta)} \\
+	&=\frac{4 \sin(\theta)\sin \left(\frac{\pi}{3}-\theta\right)\sin \left(\frac{\pi}{3}+\theta\right)}{ 4 \cos(\theta)\cos \left(\frac{\pi}{3}-\theta\right)\cos \left(\frac{\pi}{3}+\theta\right)} \\
+	& = \tan(\theta)\tan \left(\frac{\pi}{3}-\theta\right)\tan \left(\frac{\pi}{3}+\theta\right)
+\end{align*}
+이다. 따라서 
+\[
+\tan(3\theta) = \tan(\theta)\tan \left(\frac{\pi}{3}-\theta\right)\tan \left(\frac{\pi}{3}+\theta\right)
+\]
+이다.
+탄젠트 3배각 공식에서는 $4$가 곱해지지 않음에 유의하자. 이 3배각공식은 곱을 합으로 고치는 공식을 2번 적용해야 하는 문제인\phantom{(문재인 대통령 만세)}
+\[
+\sin(10^{\circ})\sin(50^{\circ})\sin(70^{\circ})
+\]
+의 값을 구하는 경우에 문제를 쉽게 해결할 수 있게 한다.    . 
+ 
+  이상을 정리하면 다음과 같다.
+  \begin{theorem}[3배각 공식]
+  	\vspace{-2em}
+  		\begin{align*}
+  	\cos(3\theta) &= 4 \cos^{3}(\theta) - 3\cos(\theta)\\
+  	\sin(3\theta) &= 3 \sin(\theta) - 4\sin^{3}(\theta)\\
+  	\tan(3\theta) &= \frac{3\tan(\theta)-\tan^{3}(\theta)}{1-3 \tan^{2}(\theta)}\\
+  	\cos(3\theta) &= 4 \cos(\theta)\cos \left(\frac{\pi}{3}-\theta\right)\cos \left(\frac{\pi}{3}+\theta\right)\\
+  	\sin(3\theta) &= 4 \sin(\theta)\sin \left(\frac{\pi}{3}-\theta\right)\sin \left(\frac{\pi}{3}+\theta\right)\\
+  	\tan(3\theta) &= \tan(\theta)\tan \left(\frac{\pi}{3}-\theta\right)\tan \left(\frac{\pi}{3}+\theta\right)
+  	  	  	\end{align*}
+  	\end{theorem}
+
+
+\processifversion{aftercal}{\subsection{Derivatives and Integrals}
+	\[
+	\begin{array}{rclrcl}
+		\frac{d}{dx}\sin(x) &=& \cos(x)\quad &\quad
+		\frac{d}{dx}\sec(x) &=& \sec(x)\tan(x)\\
+		\frac{d}{dx}\cos(x) &=& -\sin(x)\quad &\quad
+		\frac{d}{dx}\csc(x) &=& -\csc(x)\cot(x) \\
+		\frac{d}{dx}\tan(x) &=& \sec^2(x)\quad &\quad
+		\frac{d}{dx}\cot(x) &=& -\csc^2(x) \\
+		\\
+		\int\sin(x)\,dx &=& -\cos(x)+C\quad &\quad
+		\int\sec(x)\,dx &=& \ln|\sec(x)+\tan(x)|+C\\
+		\int\cos(x)\,dx &=& \sin(x)+C\quad &\quad
+		\int\csc(x)\,dx &=& -\ln|\csc(x)+\cot(x)|+C \\
+		\int\tan(x)\,dx &=& \ln|\sec(x)|+C\quad &\quad 
+		\int\cot(x)\,dx &=& -\ln|\csc(x)|+C
+	\end{array}
+	\]
+}
+\section{합, 차를 곱으로 곱을 합, 차로 고치는 공식}
+ 앞에서 우리는 삼각함수의 덧셈정리로부터 이들 정리의 특수한 형태로써 2배각 공식, 3배각 공식을 유도하였다. 이제 덧셈정리로부터 파생되는 공식들을 다루어 보자.  먼저 합 또는 차를 곱으로 고치는 공식을 유도하자.
+ \begin{align*}
+ 	\sin(\alpha) + \sin(\beta) & = \sin\left(\frac{\alpha+\beta}{2} + \frac{\alpha-\beta}{2} \right) +\sin\left(\frac{\alpha+\beta}{2} - \frac{\alpha-\beta}{2} \right) \\
+ 	&= \sin\left(\frac{\alpha+\beta}{2}\right)\cos\left(\frac{\alpha-\beta}{2}\right) +\Ccancel[blue]{ \cos\left(\frac{\alpha+\beta}{2}\right) \sin\left(\frac{\alpha-\beta}{2}\right)}\\
+ 	&\phantom{=} + \sin\left(\frac{\alpha+\beta}{2}\right)\cos\left(\frac{\alpha-\beta}{2}\right) - \Ccancel[blue]{\cos\left(\frac{\alpha+\beta}{2}\right) \sin\left(\frac{\alpha-\beta}{2}\right)}\\
+ 	&= 2 \sin\left(\frac{\alpha+\beta}{2}\right) \cos\left(\frac{\alpha-\beta}{2}\right)
+ \end{align*}
+위의 증명과정에서 사인함수가 기함수임을 이용하면
+ \[
+	\sin(\alpha) - \sin(\beta)  =  2 \cos\left(\frac{\alpha+\beta}{2}\right) \sin\left(\frac{\alpha-\beta}{2}\right)
+\] 
+임을 얼른 알 수 있다.
+
+$\cos(\theta) =\sin\left(\frac{\pi}{2}-\theta\right)$이므로 앞에서 증명한 공식에 $\alpha, \:\beta$ 대신에 각각 $\frac{\pi}{2}-\alpha$, $\frac{\pi}{2}-\beta$를 대입하여 다음이 성립함을 보일 수 있다.
+\begin{align*}
+	\cos(\alpha) +\cos(\beta) &= 2 \cos\left(\frac{\alpha+\beta}{2}\right) \cos\left(\frac{\alpha-\beta}{2}\right)\\
+	\cos(\alpha) -\cos(\beta) &= -2 \sin\left(\frac{\alpha+\beta}{2}\right) \sin\left(\frac{\alpha-\beta}{2}\right)\\
+\end{align*}
+이상을 정리하면 다음과 같다.
+
+\begin{theorem}[합 또는 차를 곱으로 고치는 공식]
+	\vspace{-2em}
+	\begin{align*}
+		\sin(\alpha) + \sin(\beta) & = 2 \sin\left(\frac{\alpha+\beta}{2}\right) \cos\left(\frac{\alpha-\beta}{2}\right)\\
+		\sin(\alpha) - \sin(\beta)  &=  2 \cos\left(\frac{\alpha+\beta}{2}\right) \sin\left(\frac{\alpha-\beta}{2}\right)\\
+		\cos(\alpha) +\cos(\beta) &= 2 \cos\left(\frac{\alpha+\beta}{2}\right) \cos\left(\frac{\alpha-\beta}{2}\right)\\
+		\cos(\alpha) -\cos(\beta) &= -2 \sin\left(\frac{\alpha+\beta}{2}\right) \sin\left(\frac{\alpha-\beta}{2}\right)
+	\end{align*}
+\end{theorem}
+이제 곱을 합 또는 차로 고치는 공식에 대하여 알아보자.
+\[
+\sin(\alpha) + \sin(\beta)  = 2 \sin\left(\frac{\alpha+\beta}{2}\right) \cos\left(\frac{\alpha-\beta}{2}\right)
+\]
+에서 $\frac{\alpha+\beta}{2}=A$, $\frac{\alpha-\beta}{2}=B$로 치환하면
+$\alpha=A+B$이고 $\beta = A-B$이므로
+\[
+\sin(A) \cos(B) = \frac{\sin(A+B)+\sin(A-B)}{2}
+\]
+이고 같은 방법으로 다음 식들을 유도할 수 있다.
+\begin{align*}
+	\cos(A)\sin(B) &=\frac{\sin(A+B)-\sin(A-B)}{2} \\
+	\cos(A)\cos(B) &=\frac{\cos(A+B)+\cos(A-B)}{2} \\
+	\sin(A)\sin(B) &=-\frac{\cos(A+B)-\cos(A-B)}{2} 
+\end{align*}
+ 지금 까지 논의한 합 또는 차를 곱으로 고치는 공식, 곱을 합 또는 차로 고치는 공식과 덧셈정리는 모두 비슷한 4개의 공식들로 이루어져 있다. 그러나 이들 4개의 공식들을 모두 암기할 필요는 없다. 왜냐하면 앞에서 이미 언급되었듯이 사인함수가 기함수, 코사인함수가 우함수임을 이용하거나
+ \[
+ \cos(\theta) =\sin\left(\frac{\pi}{2}-\theta\right), \quad \sin(\theta) =\cos\left(\frac{\pi}{2}-\theta\right)
+ \]
+ 등이 성립함을 이용하면 하나의 식으로 나머지 세 식이 모두 유도되기 때문이다.
+ 
+ 
+이상의 내용을 정리하면 다음과 같다.
+
+\begin{theorem}[곱을 합 또는 차로 고치는 공식]\vspace{-2em}
+ \begin{align*}
+ 	\sin(A)\cos(B) &=\frac{\sin(A+B)+\sin(A-B)}{2}\\
+ 	\cos(A)\sin(B) &=\frac{\sin(A+B)-\sin(A-B)}{2}\\
+ 	\cos(A)\cos(B) &=\frac{\cos(A+B)+\cos(A-B)}{2}\\
+ 	\sin(A)\sin(B) &=-\frac{\cos(A+B)-\cos(A-B)}{2} 
+ \end{align*}	
+\end{theorem}
+
+  \section{사인 정리}
+ 삼각형 \textrm{ABC}의 넓이는 $\frac{1}{2}ab\sin(\textrm{C})$이고 대칭성에 의해
+ \[
+ \frac{1}{2}ab\sin(\textrm{C})= \frac{1}{2}bc\sin(\textrm{A})=\frac{1}{2}ca\sin(\textrm{B})
+ \]
+ 이다. 이 식에서 양변을 $\frac{abc}{2}$로 나누면 다음의 식을 얻고
+ \[
+ \frac{\sin{\textrm{A}}}{a} =   \frac{\sin{\textrm{B}}}{b} =   \frac{\sin{\textrm{C}}}{c} 
+ \]
+ 이 식의 각 변의 역수를 취하면 다음의 사인 정리를 얻는다.
+  \[
+  \frac{a}{\sin{\textrm{A}}} =   \frac{b}{\sin{\textrm{B}}} =   \frac{c}{\sin{\textrm{C}}} 
+  \]
+  사인 정리로부터 변의 길이와 대응하는 각의 사인값 $\frac{a}{\sin(\textrm{A})}$의 비가 일정함을 알 수 있다. 즉 이 비들은 기하적으로 중요한 의미를 갖는다는 것을 파악할 수 가 있다. 다음 그림을 통해 이를 파악해 보자.  
+  \begin{figure}[H]
+  	\begin{center}
+  		
+  		\begin{tikzpicture}[scale=1.1]
+  			
+  			\draw[very thick] (0,0) circle[radius=2];
+  			\filldraw[black] (0,0) circle [radius=0.05cm] node[ right=0.2cm]{\textrm{O}};
+  			\filldraw[black] (80:2) circle [radius=0.05cm];
+  			\filldraw[black] (30:2) circle [radius=0.05cm]    node[ right]{\textrm{D}};
+  			\filldraw[black] (210:2) circle [radius=0.05cm]    node[ left]{\textrm{B}};
+  			\filldraw[black] (-30:2) circle [radius=0.05cm]    node[ right]{\textrm{C}};
+  			\filldraw[black] (270:1) circle [radius=0.05cm] node[below] {\textrm{M}};
+  		
+  			\draw[very thick] (210:2) -- (30:2);
+  			\draw[very thick] (210:2) -- (80:2);
+  			\draw[very thick] (210:2)  -- (-30:2);
+  			\draw[very thick] (80:2) -- (30:2);
+  			\draw[very thick] (0,0) -- (-30:2);
+  			\draw[very thick] (0,0) -- (270:2*cos{60});
+  			\node at (80:2.2) {\textrm{A}} ;
+  			\draw [very thick] (80:2) -- (-30:2);
+  		
+  		\end{tikzpicture}
+  	\end{center}
+  \end{figure}
+  삼각형 \textrm{ABC}의 외접원의 중심과 반지름의 길이를 각각 
+  \textrm{O}, $R$라 하자. 그러면 $\angle \textrm{BOC}=2\angle \textrm{CAB}$이다. \textrm{M}을 선분 \textrm{BC}의 중점이라 하자. 삼각형 \textrm{OBC}가  $\overline{\textrm{OB}}=\overline{\textrm{OC}}=R$인 이등변 삼각형이므로 $\textrm{OM}\perp \textrm{BC}$이고 $\angle \textrm{BOM} = \angle \textrm{COM} =\angle \textrm{CAB}$이다. 이제 삼각형 \textrm{BMO}에서 $\overline{\textrm{BM}} = \overline{\textrm{OB}}\sin{\textrm{A}}$이므로 
+  \[
+  \frac{a}{\sin(\textrm{A})} = \frac{2 \overline{\textrm{BM}}}{\sin(\textrm{A})} =2 \overline{\textrm{OB}} = 2R
+  \]
+  이다. 따라서 우리는 다음과 같은 확장된 사인정리를 얻는다.
+  \[
+  \frac{a}{\sin{\textrm{A}}} =   \frac{b}{\sin{\textrm{B}}} =   \frac{c}{\sin{\textrm{C}}} = 2R
+  \]
+  이다.
+  
+  따라서 우리는 다음의 사인 정리를 증명하였다.
+  
+  \begin{theorem}[(확장된) 사인 정리]\vspace{-2em}
+  	\begin{align*}
+   	\frac{a}{\sin{\textrm{A}}} =   \frac{b}{\sin{\textrm{B}}} =     \frac{c}{\sin{\textrm{C}}} = 2R
+   \end{align*}
+  \end{theorem}
+사인 정리는 삼각형의 두 변의 길이와 두 변에 끼인 변의 길이가 주어지거나 두 각의 크기와 두 각에 끼인 변의 길이가 주어지면 각각 두 각의 길이와 변의 길이, 두 변의 길이와 나머지 한 각의 크기를 구할 수 있음을 의미한다. 다음의 예제를 통해 이를 확인해 보자.
+
+  \begin{example}
+삼각형 \textrm{ABC}에서 다음을 보이시오.
+\begin{enumerate}[label=\arabic*)]
+	\item 삼각형 \textrm{ABC}의 넓이가 $10\sqrt{3}$이고 $\ovr{AB}=8$, $\ovr{AC}=5$이다. 이때, 가능한 $\angle \textrm{A}$의 값을 모두 구하시오.
+	\item $\overline{\textrm{AB}}=5\sqrt{2}$, $\overline{\textrm{BC}}=5 \sqrt{3}$이고 $\angle \textrm{C}=45^{\circ}$일때 가능한 $\angle A$의 값을 모두 구하시오.
+	\item $\overline{\textrm{AB}}=5\sqrt{2}$, $\overline{\textrm{BC}}=5$이고 $\angle \textrm{C}=45^{\circ}$ 일때 가능한 $\angle \textrm{A}$의 값을 모두 구하시오.
+	\item $\overline{\textrm{AB}}=5\sqrt{2}$, $\overline{\textrm{BC}}=10$이고 $\angle \textrm{C} =45^{\circ}$이다. 이 때 가능한 $\angle A$의 값을 모두 구하시오.
+\end{enumerate} 
+  	\begin{solution}
+  	\begin{enumerate}[label=\arabic*)]
+  		\item $b=\overline{\textrm{AC}}=5$, $c=\overline{\textrm{AB}}=8$이고 
+  	  	\[
+  	  	\frac{1}{2}bc \sin(\textrm{A})= \frac{1}{2}\cdot 5 \cdot 8\cdot \sin(\textrm{A})=20 \sin(\textrm{A}) =10\sqrt{3}
+  	  	\]
+  	  	이므로 $\sin(\textrm{A})=\frac{\sqrt{3}}{2}$이다. 따라서 $\angle \textrm{A}=60^{\circ}$이거나 $\angle \textrm{A}=120^{\circ}$이다.
+  	  	\item 사인정리에 의해 $\frac{\overline{\textrm{BC}}}{\sin(\textrm{A})}=\frac{\overline{\textrm{AB}}}{\sin(\textrm{C})}$이므로 $\sin(\textrm{A})=\frac{\sqrt{3}}{2}$이므로 $\textrm{A}=60^{\circ}\text{ 또는 }120^{\circ}$이다.
+  	  	\item 사인정리에 의해 $\frac{\overline{\textrm{BC}}}{\sin(\textrm{A})}=\frac{\overline{\textrm{AB}}}{\sin(\textrm{C})}$이므로 $\sin(\textrm{A})=\frac{1}{2}$이므로 $\textrm{A}=30^{\circ}$이다.
+  	  	\item 사인정리에 의해 $\sin(\textrm{A})=1$이고 따라서 $\angle \textrm{A}=90^{\circ}$이다.
+  	\end{enumerate}
+  	\end{solution}
+\end{example}
+  \vskip 1em
+  
+\begin{problem}[AMC12 2001]
+	삼각형 \textrm{ABC}에서 $\angle\textrm{ABC}=45^{\circ}$이다. 선분 \textrm{BC} 위의 점 \textrm{D}가 $2\overline{\textrm{BD}}=\overline{\textrm{CD}}$를 만족시키고 $\angle \textrm{DAB}=15^{\circ}$이다. 이 때 $\angle \textrm{ACB}$의 값을 구하시오.
+\processifversion{psol}{\begin{psolution}
+	다음 그림은 주어진 조건에 맞도록 삼각형을 작도한 것이다.
+ \begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=0.6]
+			
+			\draw[very thick] (-3,0) node[left] {\textrm{B}} -- (4,0) node[right] {\textrm{A}};
+			\draw[very thick] (4,0) -- (2, 5) node[right]{\textrm{C}} ;
+			\draw[very thick] (-3,0) -- ( 2, 5) ;
+			\draw[very thick] (4, 0) -- (-4/3, 5/3) node[left] {\textrm{D}};
+			
+			\filldraw[black] (2, 5) circle [radius=0.15cm]; 
+			\filldraw[black] (4, 0) circle [radius=0.15cm]; 
+			\filldraw[black] (-3, 0) circle [radius=0.15cm]; 
+			\filldraw[black] (-4/3, 5/3) circle [radius=0.15cm]; 
+			
+					
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+$\alpha=\angle \textrm{CAD}$라 하자. 분명히
+\[
+\angle \textrm{CDA} = \angle \textrm{CBA} +\angle\textrm{DAB}=60^{\circ}
+\]
+이다. 사인정리에 의해
+\[
+\frac{\overline{\textrm{CD}}}{\sin(\alpha)} = \frac{\overline{\textrm{CA}}}{\sin(60^{\circ})} \text{ 이고 } \frac{\overline{\textrm{BC}}}{\sin(\alpha+15^{\circ})}=\frac{\overline{\textrm{CA}}}{\sin(45^{\circ})}
+\]
+이다. 첫 번째 식을 두 번째 식으로 나누면 
+\[
+\frac{\overline{\text{CD}} \sin(\alpha+15^{\circ})}{\overline{\textrm{BC}}\sin(\alpha)} =\frac{\sin(45^{\circ})}{\sin(60^{\circ})}
+\]
+을 얻고 $\frac{\ovr{CD}}{\ovr{BC}}=\frac{2}{3}=\left(\frac{\sin(45^{\circ})}{\sin(60^{\circ})}\right)^2$이므로 다음이 성립한다.
+\[
+\left(\frac{\sin(45^{\circ})}{\sin(60^{\circ})}\right)^{2} = \frac{\sin(\alpha)}{\sin(\alpha+15^{\circ})} \cdot \frac{\sin(45^{\circ})}{\sin(60^{\circ})}
+\]
+이다. 따라서 $\alpha = 45^{\circ}$이므로 $\angle\textrm{ABC}=45^{\circ}$이고 $\angle \textrm{CAB}=60^{\circ}$,  $\angle \textrm{ACB}=75^{\circ}$이다.
+\end{psolution}}%
+\end{problem}
+\vspace{1.5em}
+
+\section{코사인 정리}
+  이제 코사인 정리에 대하여 알아보자.
+  \begin{figure}[H]
+  	\begin{center}
+  		\begin{tikzpicture}[scale=1.2, line join=bevel]
+  		     % compare line join=bevel and round
+  			\draw[line join=bevel, line width=0.7mm] (0, 0) node[left]{\textrm{B}} -- (5, 0) node[right]{\textrm{C}} -- (4, 3) node[right]{\textrm{A}} -- cycle;
+  		    \draw[line width=0.7mm] (4, 3) -- (4, 0) node[below]{\textrm{H}};
+  		    
+  		    \draw[line join=round, line width=0.7mm, line cap=round] (7, 0) node[left]{\textrm{B}} -- (11, 0) node[below]{\textrm{C}} -- (12, 3) node[right] {\textrm{A}} -- cycle;
+  		    \draw [line width=0.7mm] (12, 3) -- (12,0) node[below]{\textrm{H}};
+  		    \draw[line width=0.7mm] (11,0) -- (12, 0);
+  		\end{tikzpicture}
+  	\end{center}
+  \end{figure}
+  위의 첫 번째 그림에서 $a=\ovr{BH} +\ovr{HC}$이다. 그런데 $\ovr{BH} = c \cos(\textrm{B})$이고 $\ovr{HC} = b \cos(\textrm{C})$이다. 두 번째 그림에서는 $a=\ovr{BH} -\ovr{CH}$이다. 그런데 $\ovr{BH} = c \cos(\textrm{B})$이고 $\ovr{CH} = b \cos(\pi-\textrm{C})=- b \cos(\textrm{C})$이므로 다음이 성립한다.
+  \[
+  a = c \cos{\textrm{B}} + b \cos{\textrm{C}}
+  \]
+      마찬가지 방법으로 다음을 증명할 수 있다.
+  \begin{align*}
+  	b & = c \cos(\textrm{A}) + a \cos(\textrm{C})\\
+  	c & = a \cos(\textrm{B}) + b \cos(\textrm{A})  	
+  \end{align*}
+이 세 식을 코사인 제 1법칙이라고 한다.
+
+한편 그림에서 $\ovr{BH}= c \cos(\textrm{B})$이고 $\ovr{AH}=c \sin(\textrm{B})$이다. 따라서 $\ovr{CH}=\vert a- c \cos(\textrm{B})\vert$이다. 그러면 삼각형 \textrm{AHC}에서 다음이 성립한다.
+\begin{align*}
+	b^{2} &= \ovr{CA}^{2} = \ovr{AH}^{2} + \ovr{CH}^{2} \\
+		  &= c^{2} \sin^{2}(\textrm{B}) +(a-c \cos(\textrm{B}))^{2}\\
+		  &= c^{2} \sin^{2}(\textrm{B}) + a^{2} + c^{2} \cos^{2}(\textrm{B})  - 2ca \cos(\textrm{B})\\
+		  &= c^{2} + a^{2} - 2 ca \cos(\textrm{B})
+\end{align*}
+마찬가지 방법으로 다음을 증명할 수 있다.
+\begin{align*}
+	a^{2}&= b^{2} + c^{2} - 2 bc \cos(\textrm{A}) \\
+	c^{2}&= a^{2} + b^{2} - 2 ab \cos(\textrm{C})	
+\end{align*}
+이 세 식을 코사인 제 2법칙이라고 한다.
+
+이상을 정리하면 다음과 같다.
+\begin{theorem}[코사인 정리]\vspace{-1em}
+\[
+	\begin{array}{cclccl}
+	a &=& c \cos{\textrm{B}} + b \cos{\textrm{C}}\quad & \qquad a^{2}&=& b^{2} + c^{2} - 2 bc \cos(\textrm{A}) \\
+	b &=& c \cos(\textrm{A}) + a \cos(\textrm{C}) \quad & \qquad 	b^{2}&=& c^{2} + a^{2} - 2 ca \cos(\textrm{B}) \\
+	c&=& a \cos(\textrm{B}) + b \cos(\textrm{A})\quad & \qquad 	c^{2}&=& a^{2} + b^{2} - 2 ab \cos(\textrm{C})
+	\end{array}
+\]
+\end{theorem}
+
+\section{탄젠트 정리}
+이제 탄젠트 정리에 대하여 탐구해 보자. $R$이 삼각형 \textrm{ABC}의 외접원의 반지름일 때, 사인 정리에 의해 다음이 성립한다.
+\[
+a = 2R \sinrm{A},\: b = 2R \sinrm{B}, \: c=2R \sinrm{C}
+\]
+따라서 다음이 성립한다.
+\begin{align*}
+	\frac{a-b}{a+b} & = \frac{\Ccancel[red]{2R} \sinrm{A}-\Ccancel[red]{2R} \sinrm{B}}{\Ccancel[red]{2R} \sinrm{A}+\Ccancel[red]{2R} \sinrm{B}}=\frac{\sinrm{A}-\sinrm{B}}{\sinrm{A}+\sinrm{B}}\\
+	&=\frac{\Ccancel[red]{2} \cos\left(\frac{\textrm{A+B}}{2}\right) \sin\left(\frac{\textrm{A}-\textrm{B}}{2}\right)}{\Ccancel[red]{2} \sin\left(\frac{\textrm{A+B}}{2}\right) \cos\left(\frac{\textrm{A}-\textrm{B}}{2}\right)} = \frac{\tan\left(\frac{\textrm{A}-\textrm{B}}{2}\right)}{\tan\left(\frac{\textrm{A+B}}{2}\right)}
+\end{align*}
+비슷한 방법으로 다음을 증명할 수 있다.
+\[
+	\frac{b-c}{b+c}=\frac{\tan\left(\frac{\textrm{B-C}}{2}\right)}{\tan\left(\frac{\textrm{B+C}}{2}\right)},\qquad \frac{c-a}{c+a}=\frac{\tan\left(\frac{\textrm{C-A}}{2}\right)}{\tan\left(\frac{\textrm{C+A}}{2}\right)}
+\]
+한편 다음의 공식도 매우 유용하다.
+\begin{align*}
+	\frac{\sinrm{A}+\sinrm{B}}{\cosrm{A}+\cosrm{B}} &= \frac{\Ccancel[red]{2}\sin\left(\frac{\textrm{A+B}}{2}\right) \Ccancel[blue]{\cos \left(\frac{\textrm{A}-\textrm{B}}{2}\right)}}{\Ccancel[red]{2}\cos\left(\frac{\textrm{A+B}}{2}\right) \Ccancel[blue]{\cos \left(\frac{\textrm{A}-\textrm{B}}{2}\right)}}\\
+	&= \tan\left(\frac{\textrm{A+B}}{2}\right)
+\end{align*}
+ 이 식에서 \textrm{B} 대신 $-\textrm{B}$를 대입하고 코사인 함수가 우함수, 사인함수가 기함수임을 이용하면 다음을 얻는다.
+ \[
+ \frac{\sinrm{A}-\sinrm{B}}{\cosrm{A}+\cosrm{B}} = \tan\left(\frac{\textrm{A}-\textrm{B}}{2}\right)
+ \]
+ 위의 공식은 합을 곱으로 고치는 공식과 같은 지식을 사용하지 않고 기울기 개념만으로도 유도할 수 있다. 먼저 다음 그림을 살펴보자.
+ \begin{figure}[H]
+ 	\begin{center}
+ 		\begin{tikzpicture}[scale=0.6]
+ 			\pgfmathsetmacro{\angle}{56}
+ 			\pgfmathsetmacro{\ang}{30}
+ 			\pgfmathsetmacro{\angg}{(180+\angle+\ang)/2}
+ 			
+ 			%좌표축과 원 그리고 점 A 표시
+ 			\draw[-stealth, very thick] (-8, 0) -- (8, 0) node[below]{$x$};
+ 			\draw[-stealth, very thick] (0, -8) -- ( 0, 8) node[left]{$y$};
+ 			\draw[thick] (0,0) circle[radius=6];
+ 			\draw[thick] (0,0) -- (6, 0) node[below=0.25cm, right=-0.1cm] {\textrm{A}};
+ 			% 주요 점에 채워진 원으로 점표시
+ 			\filldraw[black] (\angle:6) circle[radius=0.1];
+ 			\filldraw[black] (\ang:6) circle[radius=0.1];
+ 			\filldraw[black] (180+\ang:6) circle[radius=0.1];	
+ 			\filldraw[black] (\angg:6) node[left]{\textrm{R}} circle[radius=0.1];
+ 			\filldraw[black] (0,0) circle[radius=0.1];
+ 			\filldraw[black] (6,0) circle[radius=0.1];
+ 			
+ 			%각 알파 표시
+ 			\filldraw[draw=green, fill=green!30] (1.3, 0) arc[radius=1.3, start angle=0, end angle=\ang] node[below=0.3cm, right=0.8pt]{$\alpha$}--(0,0) --cycle;
+ 			%각 베타 표시
+ 			\filldraw[draw=red, fill=red!30] (1,0) arc[radius=1, start angle=0, end angle=\angle] node[below=0.1cm, right=0.8pt]{$\beta$}--(0,0) --cycle;
+ 			%점 P'표시
+ 			\draw [thick] (0,0) -- (180+\ang:6) node[below=0.1cm, right]{$\textrm{P}^{\prime}(-\cos(\alpha), -\sin(\alpha))$};
+ 			%점 Q표시
+ 			\draw[thick] (0,0) -- (\angle:6) node[right]{Q$(\cos(\beta), \sin(\beta))$};
+ 			%점 P표시
+ 			\draw[thick] (0,0) -- (\ang:6) node[right]{P$(\cos(\alpha), \sin(\alpha))$} ;
+            % 직선과 직선의 함수 		
+ 			\draw[very thick, blue, domain=-6:0] plot (\x, {tan{\angg}*\x}) ;
+ 			\node[blue] at (-5.2, 7.3){\Large$y=\tan\left(\frac{\pi+\alpha+\beta}{2}\right) x$};
+ 			%선분 QP' 표시
+ 			\draw[very thick, red] (180+\ang:6) -- (\angle:6) ;
+ 			\node[below=0.3cm,right] at (0,0) {\textrm{O}};
+ 		\end{tikzpicture}
+ 	\end{center}
+ \end{figure}
+ 그림에서 $\angle\textrm{AOP}=\alpha$, $\angle\textrm{AOQ}=\beta$이고 $\angle \textrm{AOP}^{\prime}= \pi + \alpha$이다. 따라서 $\angle \textrm{QOP}^{\prime}= \pi +\alpha -\beta$이고 $\angle \textrm{QOR}=\frac{\pi+\alpha-\beta}{2}$이다. 따라서 
+ \[
+ \angle \textrm{AOR} =\angle \textrm{QOR} +\angle\textrm{AOQ}= \frac{\pi+\alpha-\beta}{2} +\beta =\frac{\pi+\alpha+\beta}{2}
+ \]
+ 이다. 직선 \textrm{OR}과 직선 $\textrm{QP}^{\prime}$은 수직이고 직선  \textrm{OR}의 기울기는
+\[
+\tan\left(\frac{\pi+\alpha+\beta}{2}\right) =\tan\left(\frac{\pi}{2}+\frac{\alpha+\beta}{2}\right) = - \cot\left(\frac{\alpha+\beta}{2}\right)
+\] 
+이다. 따라서 직선 $\textrm{QP}^{\prime}$의 기울기는 $\tan\left(\frac{\alpha+\beta}{2}\right)$이다. 한편 두 점 $\left(\cos(\beta),\: \sin(\beta)\right)$, $\left(-\cos(\alpha),\: -\sin(\alpha)\right)$을 지나는 직선의 기울기는
+\[
+\frac{\sin(\beta)+\sin(\alpha)}{\cos(\beta)+\cos(\alpha)}
+\]
+이므로
+\begin{equation}\label{eqn:halftan}
+\frac{\sin(\beta)+\sin(\alpha)}{\cos(\beta)+\cos(\alpha)}=\tan\left(\frac{\alpha+\beta}{2}\right)
+\end{equation}
+이다.
+\vspace{1em}
+\section{코탄젠트 정리}
+삼각형 \textrm{ABC}의 내접원의 반지름을 $r$, 내접원이 변 \textrm{BC}, \textrm{CA}, \textrm{AB}에 접하는 접점을 각각 \textrm{P}, \textrm{Q}, \textrm{R}라 하자. 
+
+$x=\ovr{BP}$, $y=\ovr{CQ}$, $z=\ovr{AR}$라 하면
+\[
+a=x+y, \quad b=y+z, \quad c=z+x
+\]
+이고 세 식을 모두 더하면
+\[
+a+b+c = 2(x+y+z)
+\]
+이다. 삼각형 \textrm{ABC}의 반둘레를 $s$라 하자. 그러면 $s=x+y+z$이고
+\[
+x=s-b, \quad y=s-c, \quad z=s-a
+\]
+이다. 그러면, $\cot\left(\frac{\textrm{A}}{2}\right) = \frac{z}{r}=\frac{s-a}{r}$이므로 $(s-a)=r \cot\left(\frac{\textrm{A}}{2}\right)$이다. 마찬가지 방법으로
+\begin{align*}
+	(s-b) &=r \cot\left(\frac{\textrm{B}}{2}\right) \\
+	(s-c) &=r \cot\left(\frac{\textrm{C}}{2}\right)
+\end{align*}
+이다. 이 세 식을 이용하여 다음의 코탄젠트 정리를 얻는다.
+\[
+\frac{s-a}{\cot\left(\frac{\textrm{A}}{2}\right)} = \frac{s-b}{\cot\left(\frac{\textrm{B}}{2}\right)} = \frac{s-c}{\cot\left(\frac{\textrm{C}}{2}\right)} =r
+\]
+ 위의 사실을 이용하면 다음을 얻을 수 있다.
+ \begin{align*}
+ 	\cot\left(\frac{\textrm{A}}{2}\right) \cdot \cot\left(\frac{\textrm{B}}{2}\right) \cdot \cot\left(\frac{\textrm{C}}{2}\right) &= \frac{(s-a)(s-b)(s-c)}{r^{3}} \\
+ 	&=\frac{s(s-a)(s-b)(s-c)}{r^{3}s} \\
+ 	&=\frac{r^{2}s^{2}}{r^{3}s} =\frac{s}{r}= \frac{3s-2s}{r} \\
+ 	&=\frac{s-a}{r} +\frac{s-b}{r} +\frac{s-c}{r}\\
+ 	&=\cot\left(\frac{\textrm{A}}{2}\right)+\cot\left(\frac{\textrm{B}}{2}\right)+\cot\left(\frac{\textrm{C}}{2}\right)
+ \end{align*}
+이 식의 양변에 $\tan\left(\frac{\textrm{A}}{2}\right)\tan\left(\frac{\textrm{B}}{2}\right)\tan\left(\frac{\textrm{C}}{2}\right)$를 곱하면 다음 식이 유도된다.
+\begin{equation}\label{eqn:halftan}
+1= \tan\left(\frac{\textrm{A}}{2}\right) \tan\left(\frac{\textrm{B}}{2}\right)+\tan\left(\frac{\textrm{B}}{2}\right) \tan\left(\frac{\textrm{C}}{2}\right)+\tan\left(\frac{\textrm{C}}{2}\right) \tan\left(\frac{\textrm{A}}{2}\right)
+\end{equation}
+
+한편 삼각형 \textrm{ABC}에서 비슷하게 다음이 성립함을 알 수 있다.
+\begin{align*}
+	\tanrm{B+C} &=\frac{\tanrm{B}+\tanrm{C}}{1-\tanrm{B}\tanrm{C}} \\
+	&=\tan(\pi-A) =-\tanrm{A}
+\end{align*}
+이다. 따라서
+\[
+-\tanrm{A} + \tanrm{A} \tanrm{B} \tanrm{C} = \tanrm{B} +\tanrm{C}
+\]
+이므로 다음이 성립한다.
+\[
+ \tanrm{A} \tanrm{B} \tanrm{C} = \tanrm{A}+ \tanrm{B} +\tanrm{C}
+\]
+이상을 정리하면 다음을 얻는다.
+\begin{theorem}[코탄젠트 정리]\vspace{-2em}
+	\begin{align*}
+		\cot\left(\frac{\textrm{A}}{2}\right) \cdot \cot\left(\frac{\textrm{B}}{2}\right) \cdot \cot\left(\frac{\textrm{C}}{2}\right)&= \cot\left(\frac{\textrm{A}}{2}\right)+\cot\left(\frac{\textrm{B}}{2}\right)+\cot\left(\frac{\textrm{C}}{2}\right)\\
+		 \tanrm{A} \tanrm{B} \tanrm{C} &= \tanrm{A}+ \tanrm{B} +\tanrm{C}
+	\end{align*}
+\end{theorem}
+\vspace{-2em}
+\section{복소수의 극형식과 삼각함수}
+복소수 $z=a+bi$를 지금까지 배운 삼각함수의 지식을 활용하여 복소수의 절댓값과 삼각함수로 나타낼 수 있는 방법을 생각하자.
+\begin{align*}
+	z & = a+b i \\
+	  & = \sqrt{a^{2} +b^{2}} \left(\frac{a}{\sqrt{a^{2}+b^{2}}} +\frac{b}{\sqrt{a^{2}+b^{2}}} i \right)
+\end{align*}
+ 이 때, $-1\leq \frac{a}{\sqrt{a^{2}+b^{2}}},\: \frac{b}{\sqrt{a^{2}+b^{2}}} \leq 1$이고 $\frac{a}{\sqrt{a^{2}+b^{2}}}$와 $\frac{b}{\sqrt{a^{2}+b^{2}}}$의 제곱의 합이 $1$이므로 이들을 사인함수와 코사인 함수로 나타낼 수 있다. 복소수를 평면위의 한 점으로 보면 이 평면을 {\color{red}복소평면}이라 한다. 따라서 사인함수와 코사인함수의 정의로부터
+ \[
+ \cos(\theta) = \frac{a}{\sqrt{a^{2}+b^{2}}}, \quad \sin(\theta) = \frac{b}{\sqrt{a^{2}+b^{2}}}
+ \]
+ 라고 정의하는 것이 자연스럽다. $r=\sqrt{a^{2} +b^{2}}$이라 하면
+ \[
+ z=a+bi = r\left( \cos(\theta)+ i \sin(\theta)\right), \quad \tan(\theta) =\frac{b}{a}\left(a \neq 0\right)
+ \]
+ 이다. 이것을 복소수의 {\color{red}극형식}이라 하고 $r=\sqrt{a^{2}+b^{2}}=\vert z \vert$를 복소수 $z$의 {\color{red}절댓값}, $\theta$를 복소수 $z$의 {\color{red}편각}이라 하고 기호로 $\arg(z)$라고 나타낸다. 일반적으로 편각은 일반각으로 나타낸다.
+ 
+ 두 복소수 $z_{1} = r_{1}\left(\cos(\theta_{1}) + i \sin(\theta_{1})\right)$,  $z_{2} = r_{2}\left(\cos(\theta_{2}) + i \sin(\theta_{2})\right)$에 대하여 두 복소수의 곱 $z_{1}z_{2}$을 극형식으로 나타내어 보자. 삼각함수의 덧셈정리에 의해 다음이 성립한다.
+ \begin{align*}
+ 	z_{1}z_{2} &=r_{1}r_{2} \left(\cos(\theta_{1}) + i \sin(\theta_{1})\right) \left(\cos(\theta_{2}) + i \sin(\theta_{2})\right)\\
+ 	&=r_{1}r_{2}\left[\left(\cos(\theta_{1})\cos(\theta_{2}) - \sin(\theta_{1})\sin(\theta_{2})\right)+ i \left(\sin(\theta_{1})\cos(\theta_{2}) + \cos(\theta_{1}) \sin(\theta_{2})\right)\right]\\
+ 	&=r_{1}r_{2}\cos(\theta_{1}+\theta_{2}) + i \sin(\theta_{1}+\theta_{2})
+ \end{align*}
+ 따라서 두 복소수 $z_{1}, \: z_{2}$의 곱 $z_{1}z_{2}$에 대하여 다음이 성립한다.
+ \begin{theorem}[복소수 곱의 성질]\vspace{-2em}
+ \begin{align*}
+	\vert z_{1} z_{2} \vert &= \vert z_{1} \vert \vert z_{2}\vert \\
+	\arg(z_{1}z_{2}) &= \arg(z_{1}) +\arg(z_{2})
+\end{align*}
+\end{theorem}
+이제 나누기에 대하여 알아보자. $z_{2}\neq 0$일 때,
+\begin{align*}
+	\frac{z_{1}}{z_{2}} &= \frac{r_{1}\left(\cos(\theta_{1}) + i \sin(\theta_{1})\right)}{r_{2}\left(\cos(\theta_{2})+ i \sin(\theta_{2})\right)} \\
+	&= \frac{r_{1}}{r_{2}}\frac{\left(\cos(\theta_{1}) + i \sin(\theta_{1})\right)\left(\cos(\theta_{2})- i \sin(\theta_{2})\right)}{\cos^{2}(\theta_{2}) + \sin^{2}(\theta_{2})}\\
+	&=\frac{r_{1}}{r_{2}} \left[\left(\cos(\theta_{1})\cos(\theta_{2})+ \sin(\theta_{1} )\sin(\theta_{2}) \right) + i \left(\sin(\theta_{1})\cos(\theta_{2}) - \cos(\theta_{1})\sin(\theta_{2})\right)\right]\\
+	&= \frac{r_{1}}{r_{2}} \left(\cos(\theta_{1}-\theta_{2}) + i \sin(\theta_{1}-\theta)\right)
+\end{align*}
+이다. 따라서 두 복소수  $z_{1}, \: z_{2}$의 몫 $\frac{z_{1}}{z_{2}}$에 대하여 다음이 성립한다.
+\begin{theorem}[복소수 몫의 성질]\vspace{-2em}
+\begin{align*}
+	\left| \frac{z_{1}}{ z_{2}} \right| &= \frac{\vert z_{1} \vert}{ \vert z_{2}\vert} \\
+	\arg\left(\frac{z_{1}}{z_{2}}\right) &= \arg(z_{1}) -\arg(z_{2})
+\end{align*}
+\end{theorem}
+ 복소수의 곱셈과 나눗셈이 각각 편각이 더해지거나 빼지므로 복소수의 극형식을 이용하면 평면 위의 한 점을 원점을 중심으로 회전한 점의 좌표를 구할 수 있다.
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=0.85]
+			\pgfmathsetmacro{\angle}{136} % math mode에서 작동함.
+			\pgfmathsetmacro{\ang}{55}
+			
+			\draw[-stealth, very thick] (-3, 0) -- (4, 0) node[below]{$x$};
+			\draw[-stealth, very thick] (0, -2) -- ( 0, 5) node[left]{$y$};
+			\draw[dashed, thick] (4 *cos{\ang}, 4*sin{\ang}) arc[radius=4, start angle=\ang, end angle=\angle] --(0,0) --cycle;
+			
+			
+			\filldraw[draw=red, fill=red!15] (cos{\ang}, sin{\ang}) arc[radius=1, start angle=\ang, end angle=\angle] node[below=-0.4cm, right=0.23cm]{$\theta$}--(0,0) --cycle;
+			\filldraw[black] (4 *cos{\ang}, 4*sin{\ang}) circle[radius=0.08cm];
+			\filldraw[black] (4 *cos{\angle}, 4*sin{\angle}) circle[radius=0.08cm];
+			\filldraw[black] (0,0) circle[radius=0.08cm] node[below=0.2cm, right]{O};
+			
+			
+			\draw[thick] (0,0) -- (\angle:4) node[left]{Q$(a^{\prime},\;b^{\prime})$};
+			\draw[thick] (0,0) -- (\ang:4)node[right]{P$(a,\;b)$} ;
+			
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+즉, 그림과 같이 점 $\textrm{P}(a,\;b)$를 원점을 중심으로 $\theta$만큼 회전시킨 점의 좌표를 $\textrm{Q}(a^{\prime},\;b^{\prime})$이라 하자. 점 \textrm{P, Q}를 복소평면 위의 한 점이라 생각하면 점 \textrm{P, Q}에 대응하는 복소수는 각각 $a+bi, a^{\prime} + b^{\prime} i$이고 두 복소수의 절댓값은 같다. 그러나 점 \textrm{Q}는 점 \textrm{P}를 원점을 중심으로 $\theta$만큼 회전시킨 점 이므로 $a^{\prime} + b^{\prime} i$의 편각은 $a+bi$의 편각에 $\theta$를 더한 것과 같다. 따라서
+\begin{equation*}
+	a^{\prime} + b^{\prime}i = (a+bi)(\cos(\theta)+ i \sin(\theta))
+\end{equation*}
+이고 이것을 정리하면 다음과 같다.
+\begin{align*}
+	a^{\prime} &= a \cos(\theta) - b \sin(\theta)\\
+	b^{\prime} &= a \sin(\theta) + b \cos(\theta)
+\end{align*}
+
+이제 드 무아브르의 정리에 대하여 알아보자. 복소수 $z= r (\cos(\theta) + i \sin(\theta))$에 대하여 $z^{n} = r^{n} (\cos(n\theta) + i \sin(n\theta))$이 성립함을 수학적 귀납법을 이용하여 증명할 수 있다. 먼저 $n=1$인 경우는 자명하다. 이제 $n=k$일 때 성립한다고 가정하자. 즉, 
+$z^{k} = r^{k}\left(\cos(k\theta) + i \sin(k\theta)\right)$이다. 이제
+$n=k+1$일 때 성립함을 보이자.
+\begin{align*}
+	z^{k+1} &= z^{k} z \\
+	&= r^{k}\left(\cos(\theta)+i \sin(\theta)\right)^{k} r\left(\cos(\theta) + i \sin(\theta)\right)\\
+	&= r^{k+1} \left(\cos(k\theta) + i \sin(k \theta)\right)\left(\cos(\theta)+ i \sin(\theta)\right)\\
+	&= r^{k+1} \left(\cos((k+1)\theta) + i \sin((k+1)\theta)\right)
+\end{align*}
+이므로 드 무아브르의 정리가 성립한다. 이상을 정리하면 다음과 같다.
+
+\begin{theorem}[드 무아브르 정리]
+	$z=r(\cos(\theta) + i \sin(\theta))$이면 $z^{n} =r^{n}(\cos(n\theta)+ i\sin(n\theta))$이다.
+\end{theorem}
+\vspace{1em}
+ 드 무아브르의 정리를 이용하면 다음과 같은 문제들을 쉽게 해결 할 수 있다. 먼저 다음의 예제를 살펴 보자.
+ 
+ \begin{example}
+ 	다음을 증명하시오.
+ 	\begin{equation*}
+ 		\left(\frac{1+\sin(\theta)+i \cos(\theta)}{1+\sin(\theta)-i \cos(\theta)} \right)^{n} = \cos\left(\frac{n\pi}{2}-n\theta\right)+ i\sin\left(\frac{n\pi}{2}-n\theta\right)
+ 	\end{equation*}
+ \begin{solution} 먼저 $n$제곱할 식을 극형식으로 고쳐보자. 즉,
+ \begin{align*}
+ 	\frac{1+\sin(\theta)+i \cos(\theta)}{1+\sin(\theta)-i \cos(\theta)}  &= \frac{1+\cos\left(\frac{\pi}{2}-\theta\right)+i \sin\left(\frac{\pi}{2}-\theta\right)}{1+\cos\left(\frac{\pi}{2}-\theta\right)-i \sin\left(\frac{\pi}{2}-\theta\right)}\\
+ 	&= \frac{2\cos^{2}\left(\frac{\pi}{4}-\frac{\theta}{2}\right) + 2i \sin\left(\frac{\pi}{4}-\frac{\theta}{2}\right) \cos\left(\frac{\pi}{4}-\frac{\theta}{2}\right)}{2 \cos^{2}\left(\frac{\pi}{4}-\frac{\theta}{2}\right) - 2i \sin\left(\frac{\pi}{4}-\frac{\theta}{2}\right) \cos\left(\frac{\pi}{4}-\frac{\theta}{2}\right)}\\
+ 	&=\frac{\cos\left(\frac{\pi}{4}-\frac{\theta}{2}\right) + i \sin\left(\frac{\pi}{4}-\frac{\theta}{2}\right) }{\cos\left(\frac{\pi}{4}-\frac{\theta}{2}\right) - i \sin\left(\frac{\pi}{4}-\frac{\theta}{2}\right)}\\
+ 	&=\cos\left(\frac{\pi}{2}-\theta\right) + i \sin\left(\frac{\pi}{2}-\theta\right)
+ \end{align*}
+이므로 드 무아브르의 정리에 의해 문제가 증명되었다.
+\end{solution}
+ \end{example}
+\vspace{2em}
+\section{단위근}
+ 드 무아브르의 정리는 복소수의 곱셈과 나눗셈을 쉽게 할 수 있게 할 뿐 아니라 $z^n = a$(단, $a$는 복소수)와 같은 방정식의 해를 구할 수 있게 해 준다. 예를 들어 $z^{3}=1$의 해를 드 무아브르의 정리를 이용하여 구해 보자. $z=r \left(\cos(\theta) + i \sin(\theta)\right)$라 하고 방정식에 대입하고 드 무아브르의 정리를 적용하면
+ \begin{equation*}
+ 	r^{3}\left(\cos(\theta) +i\sin(\theta)\right) =1
+ \end{equation*}
+이다. 한편 $1$을 극형식으로 고치면 $1=\cos(0) +i \sin(0)$이고 따라서 $r=1$이고 $\theta=0$이므로 $z=1$이다. 그런데 뭔가 이상하지 않은가? 주어진 방정식은 $3$차 방정식이고 따라서 세 개의 근을 갖는다. 이것은 $1$을 극형식으로 고칠 때, 편각을 일반각으로 표현하지 않았기 때문이다. $1$의 극형식을 일반각으로 표현하면
+\begin{equation*}
+	1= \cos(2k \pi) + i \sin(2k \pi)
+\end{equation*}
+라 하면 $r=1$이고 $3\theta =2k\pi$(단, $k$는 정수)이고 따라서 $\theta=\frac{2k\pi}{3}\left(k \in \mathbb{Z}\right)$이고
+\begin{equation*}
+	z_{k} = \left(\cos\left(\frac{2k\pi}{3}\right) + i \sin\left(\frac{2k\pi}{3}\right)\right)
+\end{equation*}
+에서 $k$에 $0$부터 순차적으로 대입하면 사인함수와 코사인함수의 주기가 $2\pi$이므로 $z_{m} =z_{m+2}$이고 따라서 구하는 해는 다음의 세 복소수이고
+\begin{align*}
+   	z_{0} &=\cos(0) + i \sin(0) =1 \\
+	 z_{1} &=\cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)= \frac{-1+\sqrt{3}i}{2} \\
+	 z_{2} &=\cos\left(\frac{4\pi}{3}\right) + i \sin\left(\frac{4\pi}{3}\right)= \frac{-1-\sqrt{3}i}{2}
+\end{align*}
+이 세 근을 연결하면 단위원에 내접하는 한 정삼각형이 된다.
+\begin{figure}[H]
+	\begin{center}
+	\begin{tikzpicture}[scale=0.8]
+		\pgfmathsetmacro{\angle}{120}
+		\pgfmathsetmacro{\len}{3}
+		
+	
+		\draw[-latex, ultra thick] (-\len-0.7, 0) -- (\len+0.7, 0) node[below]{\large $x$};
+		\draw[-latex, ultra thick] (0, -\len-0.7) -- ( 0, \len+0.7) node[left]{\large $y$};
+		\node[anchor=north east](0,0) {\large \textrm{O}};
+		\draw[very thick] (0,0) circle (\len);
+		
+		\foreach \i in {0, \angle, 2*\angle}{
+			\filldraw[draw=red, fill=red!50] (\i:\len) circle (2pt);		
+		}
+		\draw[very thick] (0:\len) node[anchor=south west] {\large $1$} -- (\angle:\len) node[anchor=south]{\large $\omega$} -- (2*\angle:\len) node[anchor=north]{\large $\omega^{2}$} -- cycle;
+	\end{tikzpicture}
+    \end{center}
+\end{figure}
+\vspace{1em}
+\begin{problem}
+	$z^{6}-1=0$을 만족시키는 $z$를 모두 구하고 이를 복소평면에 나타내시오.
+	\processifversion{psol}{
+		\begin{psolution}
+			$z=r \left(\cos(\theta) + i \sin(\theta)\right)$라 하면  $z^{6}=r^{6} \left(\cos(6\theta) + i \sin(6\theta)\right)$이고 $1$을 극형식으로 나타내면 
+			\begin{equation*}
+				1= \cos(2k \pi) + i \sin(2k \pi)
+			\end{equation*}
+			이다. 따라서 $r=1$이고 $6\theta =2k\pi$(단, $k$는 정수)에서  $\theta=\frac{2k\pi}{6}\left(k \in \mathbb{Z}\right)$이고
+			\begin{equation*}
+				z_{k} = \left(\cos\left(\frac{k\pi}{3}\right) + i \sin\left(\frac{k\pi}{3}\right)\right)
+			\end{equation*}
+			이므로 구하는 $6$개의 해는
+			\begin{align*}
+				&\cos\left(0\right) + i \sin\left(0\right), & \quad  \cos\left(\frac{\pi}{3}\right) &+ i \sin\left(\frac{\pi}{3}\right), &\quad  \cos\left(\frac{2\pi}{3}\right) &+ i \sin\left(\frac{2\pi}{3}\right) \\
+				&\cos\left(\pi\right) + i \sin\left(\pi\right), &\quad  \cos\left(\frac{4\pi}{3}\right) &+ i \sin\left(\frac{4\pi}{3}\right),&\quad  \cos\left(\frac{5\pi}{3}\right) &+ i \sin\left(\frac{5\pi}{3}\right)
+			\end{align*}
+이고 이를 복소평면에 나타내면 다음과 같이 단위원에 내접하는 정육각형을 이룬다.
+\begin{figure}[H]
+	\begin{center}
+	\begin{tikzpicture}[scale=0.8, line join=bevel]
+		\pgfmathsetmacro{\angle}{60}
+		\pgfmathsetmacro{\len}{3}
+		
+		
+		\draw[-latex, ultra thick] (-\len-0.7, 0) -- (\len+0.7, 0) node[below]{\large $x$};
+		\draw[-latex, ultra thick] (0, -\len-0.7) -- ( 0, \len+0.7) node[left]{\large $y$};
+		\node[anchor=north east](0,0) {\large \textrm{O}};
+		\draw[very thick] (0,0) circle (\len);
+		
+		\foreach \i in {0, \angle, 2*\angle, 3*\angle, 4*\angle, 5*\angle}{
+			\filldraw[draw=red, fill=red!50] (\i:\len) circle (2pt);		
+		}
+		\draw[very thick] (0:\len) node[anchor=south west] {\large $1=z_{0}$} -- (\angle:\len) node[anchor=west]{\large $z_{1}$} -- (2*\angle:\len) node[anchor=east]{\large $z_{2}$} -- (3*\angle:\len) node[anchor=south east]{\large $z_3$} --(4*\angle:\len) node[anchor=north east]{\large $z_4$} --(5*\angle:\len) node[anchor=north west]{\large $z_5$} --cycle;
+	\end{tikzpicture}
+\end{center}
+\end{figure}
+		\end{psolution}
+	}
+\end{problem}
+\vspace{1em}
+일반적으로 $z^{n} =1$의 모든 해는 다음과 같이 구할 수 있다. $z$를 극형식으로 나타내고 드 무아브르의 정리를 이용하면
+\begin{equation*}
+	z^n = r^n \left(\cos\left(n\theta\right) + i \sin\left(n\theta \right)\right)
+\end{equation*}
+이고 따라서 $r=1$, $z=\left(\cos(\theta) + i \sin(\theta)\right)=1$이므로 $n\theta=2k \pi$, 즉 $\frac{2k\pi}{2}$(단, $k \in \mathbb{Z}$)이다. 이제
+\begin{equation*}
+	z_{k} =\cos\left(\frac{2k\pi}{n}\right) + i \sin\left(\frac{2k\pi}{n}\right)(\text{단, }k\in \mathbb{Z})
+\end{equation*}
+라 하자. 여기서 $z_{k}, z_{k^{\prime}}$에 대하여 $k^{\prime}-k$가 $n$의 배수이면 사인 함수와 코사인 함수가 모두 주기가 $2\pi$인 주기함수이므로 $z_{k}=z_{k^{\prime}}$이고 역으로, $z_{k}=z_{k^{\prime}}$이라 가정하면, 즉
+\begin{equation*}
+\cos\left(\frac{2k^{\prime}\pi}{n}\right) + i \sin\left(\frac{2k^{\prime}\pi}{n}\right)=\cos\left(\frac{2k\pi}{n}\right) + i \sin\left(\frac{2k\pi}{n}\right)
+\end{equation*}
+이면 $\frac{2k^{\prime}\pi}{n}= \frac{2k\pi}{n}$는 $2\pi$의 배수가 되므로 $k^{\prime}-k$는 $n$의 배수가 된다. 이 사실들을 종합하면,
+\begin{equation*}
+	\cos\left(\frac{2k\pi}{n}\right) + i \sin\left(\frac{2k\pi}{n}\right) (\text{단, }k=1,\:2, \: \cdots,\: n-1)
+\end{equation*}
+은 방정식 $z^{n}=1$의 서로 다른 $n$개의 근이 됨을 알 수 있다. 이 근을 방정식 $ z^{n}=1$의 {\color{red}$n$차 단위근}이라 한다.
+\begin{theorem}[단위근]
+	양의 정수 $n$에 대하여 $n$개의 서로 다른 $n$차 단위근은
+	\begin{equation*}
+		\cos\left(\frac{2k\pi}{n}\right) + i \sin\left(\frac{2k\pi}{n}\right)(\text{단, }k=1,\:2, \: \cdots,\: n-1)
+	\end{equation*}
+이다.
+\end{theorem}
+$n$차 단위근들을 살펴보면 $k$가 $1$씩 증가할 때마다 편각이 $\frac{2\pi}{n}$씩 증가하므로 $n$차 단위근 전체는 단위원에 내접하는 정 $n$각형의 꼭짓점이 됨을 알 수 있다. 이 정 $n$각형의 무게중심은 항상 원점이므로 다음이 성립함을 알 수 있다.
+\begin{theorem}[단위원에 내접하는 정 $n$각형의 꼭짓점의 성질]
+	\begin{equation*}
+		\sum_{k=1}^{n} \cos\left(\frac{2k\pi}{n}\right)=0,\qquad 	\sum_{k=1}^{n} \sin\left(\frac{2k\pi}{n}\right)=0
+	\end{equation*}
+\end{theorem}
+
+한편 $z^{n} =a+bi$형태의 방정식의 근을 구하는 것은 $1$대신 $a+bi$를 극형식으로 나타내는 것만 제외하면 $z^{n}=1$의 근을 구하는 것과 완전히 같다. 이를 예제를 통해 확인해 보자.
+\vspace{1em}
+\begin{example}
+	$z^{3}= -2 +2i$의 근을 구하시오.
+	\begin{solution}
+	$-2+2i=\sqrt{8}\left(\cos\left(\frac{3\pi}{4}\right)+i \sin\left(\frac{3\pi}{4}\right)\right)$이므로 $z =r(\cos(\theta)+i\sin(\theta))$라 하면
+	\begin{equation*}
+		r^{3}(\cos(3\theta)+i \sin(3\theta)) =\sqrt{8}\left(\cos\left(\frac{3\pi}{4}\right)+i \sin\left(\frac{3\pi}{4}\right)\right)
+	\end{equation*}
+이고 따라서 $r=\sqrt[6]{8}=\sqrt{2}$, $\theta =\frac{\frac{3\pi}{4}+2k\pi}{3}$(단, $k=1, 2, 3$)이므로
+\begin{align*}
+	z_{0} &= \sqrt{2} \left(\cos\left(\frac{\pi}{4}\right)+i \sin\left(\frac{\pi}{4}\right)\right),\\
+		z_{1}&= \sqrt{2} \left(\cos\left(\frac{11\pi}{12}\right)+i \sin\left(\frac{11\pi}{12}\right)\right), \\
+		 z_{2} &= \sqrt{2} \left(\cos\left(\frac{19\pi}{12}\right)+i \sin\left(\frac{19\pi}{12}\right)\right)
+\end{align*}
+는 주어진 방정식의 세 근이다. 이 세근은 원점을 중심으로 하고 반지름의 길이가 $\sqrt{2}$인 원에 내접하는 정삼각형의 꼭짓점이 된다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+
+\begin{problem}
+	$z^{3}=1+i$의 근을 구하고 이를 복소평면에 나타내시오.
+\processifversion{psol}{
+\begin{psolution}
+		$1+i=\sqrt{2}\left(\cos\left(\frac{\pi}{4}\right)+i \sin\left(\frac{\pi}{4}\right)\right)$이므로 $z =r(\cos(\theta)+i\sin(\theta))$라 하면
+	\begin{equation*}
+		r^{3}(\cos(3\theta)+i \sin(3\theta)) =\sqrt{2}\left(\cos\left(\frac{\pi}{4}\right)+i \sin\left(\frac{\pi}{4}\right)\right)
+	\end{equation*}
+	이고 따라서 $r=\sqrt[6]{2}$, $\theta =\frac{\frac{\pi}{4}+2k\pi}{3}$(단, $k=1, 2, 3$)이므로
+	\begin{align*}
+		z_{0} &= \sqrt[6]{2} \left(\cos\left(\frac{\pi}{12}\right)+i \sin\left(\frac{\pi}{12}\right)\right),\\
+		z_{1}&= \sqrt[6]{2} \left(\cos\left(\frac{9\pi}{12}\right)+i \sin\left(\frac{9\pi}{12}\right)\right), \\
+		z_{2} &= \sqrt[6]{2} \left(\cos\left(\frac{17\pi}{12}\right)+i \sin\left(\frac{17\pi}{12}\right)\right)
+	\end{align*}
+	는 주어진 방정식의 세 근이다. 이 세근은 원점을 중심으로 하고 반지름의 길이가 $\sqrt[6]{2}$인 원에 내접하는 정삼각형의 꼭짓점이 되고 이를 복소평면에 나타내면 다음과 같다. 
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.8, line join=bevel]
+				\pgfmathsetmacro{\angle}{120}
+				\pgfmathsetmacro{\aangle}{15}
+				\pgfmathsetmacro{\len}{3}
+				
+				
+				\draw[-latex, ultra thick] (-\len-0.7, 0) -- (\len+0.7, 0) node[below]{\large $x$};
+				\draw[-latex, ultra thick] (0, -\len-0.7) -- ( 0, \len+0.7) node[left]{\large $y$};
+				\node[anchor=north east](0,0) {\large \textrm{O}};
+				\draw[very thick] (0,0) circle (\len);
+				
+				\foreach \i in {0, \angle, 2*\angle}{
+					\filldraw[draw=red, fill=red!50] (\i+\aangle:\len) circle (2pt);		
+				}
+				\draw[very thick] (\aangle:\len) node[anchor=south west] {\large $z_{0}$} -- (\aangle+\angle:\len) node[anchor=south]{\large $z_{1}$} -- (2*\angle +\aangle:\len) node[anchor=north]{\large $z_{2}$} -- cycle;
+				\node [anchor=south west]at (\len, 0) {$\sqrt[6]{2}$};
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+ $z^{3}=1$에서 세 단위근 중에서 편각이 $0$이 아닌 것 중에서 편각의 크기가 가장 작은 것을 $\omega=\cos\left(\frac{2\pi}{3}\right) + i \sin\left(\frac{2\pi}{3}\right)$라 하자. 그러면 드 무아브르의 정리에 의해 다음과 같이 $\omega^{2}$, $\omega^{3}$이 계산된다.
+ \begin{align*}
+ 	\omega^{2} &= \left(\cos\left(\frac{2\pi}{2}\right)+ i \sin\left(\frac{2\pi}{2}\right)\right)^{2} = \cos\left(\frac{4\pi}{2}\right)+ i \sin\left(\frac{4\pi}{2}\right) \\
+ 	\omega^{3} &= \left(\cos\left(\frac{2\pi}{2}\right)+ i \sin\left(\frac{2\pi}{2}\right)\right)^{3} = \cos\left(2\pi\right)+ i \sin\left(2\pi\right) =1
+ \end{align*}
+따라서 모든 $1$의 세제곱근은 $\omega$의 거듭제곱으로 나타낼 수 있음을 알 수 있다. 이와 유사하게 $n$차 단위근 중 편각이 $0$이 아닌 것 중에서 편각의 크기가 가장 작은 것을 $\omega=\cos\left(\frac{2\pi}{n}\right) + i \sin\left(\frac{2\pi}{n}\right)$라 하면 모든 $n$차 단위근은
+\begin{equation*}
+	\omega, \; \omega^{2},\; \cdots, \;\omega^{n-1}, \; \omega^{n}=1
+\end{equation*}
+이고 이것들은 모두 편각이 다르므로 다 다른 복소수이다. 따라서
+\begin{align*}
+	z^{n}-1 &= (z-1)\left( z^{n-1} +z^{n-2} + \; \cdots \; + z+1\right) \\
+	&= \left(z-1\right)\left(z-\omega\right)\left(z-\omega^{2}\right) \cdots \left(z-\omega^{n-1}\right)
+\end{align*}%
+이다. 이 사실을 이용하면 다음의 문제들을 쉽게 해결할 수 있다.
+\vspace{1em}
+\begin{problem}
+	$\alpha = \cos\left(\frac{4\pi}{7}\right) + i \sin\left(\frac{4\pi}{7}\right)$일 때,
+	\begin{equation*}
+		(2+\alpha)(2+\alpha^{2})(2+\alpha^{3})  \: \cdots \:  (2+\alpha^{6})
+	\end{equation*}
+의 값을 구하시오.
+\processifversion{psol}{
+\begin{psolution}
+ $\alpha$는 $z^{7}-1=0$의 근이고 $\alpha \neq 1$이므로 $\alpha$는 
+ \begin{equation*}
+ 	z^6 + z^5 + \; \cdots \; +z+1=0
+ \end{equation*}
+의 근이다. 또한 $\alpha$는  $z^{7}-1=0$의 원시근이므로 
+\begin{equation}\label{eqn:alpha}
+	z^6 + z^5 + \; \cdots \; z+1=\left(z-\alpha \right)\left(z-\alpha^2 \right) \cdots \left(z-\alpha^6 \right)
+\end{equation}
+이다. 이제 식 (\ref{eqn:alpha})에 $-2$를 대입하면 
+\begin{equation*}
+	(2+\alpha)(2+\alpha^{2})(2+\alpha^{3})  \: \cdots \:  (2+\alpha^{6}) = 2^6 - 2^5 + 2^4 - 2^3 +2^2 -2 +1
+\end{equation*}
+임을 알 수 있다.
+\end{psolution}
+}
+\end{problem}
+
+\begin{problem}
+	단위원에 내접하는 정 $n$각형의 한 꼭짓점에서 나머지 꼭짓점들과의 거리들의 곱을 구하시오.
+\processifversion{psol}{
+\begin{psolution}
+	단위원에 내접하는 정 $n$각형의 한 꼭짓점에서 나머지 꼭짓점들 사이의 거리는 $z^{n}=1$의 한 해와 나머지 해들 사이의 거리의 곱과 같다. 따라서 일반성을 잃지 않고 $n$차 단위근 중 $1$과 나머지 단위근들과의 거리의 곱을 구해도 된다. 그런데 
+	\begin{equation}\label{eqn:roots}
+		\left( z^{n-1} +z^{n-2} + \; \cdots \; + z+1\right) = \left(z-\omega\right)\left(z-\omega^{2}\right) \cdots \left(z-\omega^{n-1}\right)
+	\end{equation}
+이다. 이제 식 (\ref{eqn:roots})의 양변에 $1$을 대입하면
+\begin{equation}\label{eqn:dist}
+	n = \left(1-\omega\right)\left(1-\omega^{2}\right) \cdots \left(1-\omega^{n-1}\right)
+\end{equation}
+이다. 식 (\ref{eqn:dist})의 양변에 절댓값을 취하면 $\left|n\right|=n$이고
+\begin{align*}
+	n &=\left| \left(1-\omega\right) \left(1-\omega^{2}\right) \cdots \left(1-\omega^{n-1}\right) \right| \\
+	& = \left|1-\omega\right|\left|1-\omega^{2}\right| \cdots \left|1-\omega^{n-1}\right|
+\end{align*}
+이므로 구하는 거리들의 곱은 $n$임을 알 수 있다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{definition}[원시 단위근]
+	$z^{n}=1$이고 $z^{k}\neq 1$(단, $k=1, \;2,\; \cdots, \; n-1$)인 복소수를 {\color{red}원시 $n$차 단위근}이라 한다.
+\end{definition}
+예를 들어 허수단위 $i$는 $1$이 아니고 $i^{2}=-1$, $i^{3}=-i$, $i^{4}=1$이므로 허수단위 $i$는 원시 $4$차 단위근이다.
+
+모든 $n$차 단위근이 모두 원시 단위근이 되는 것은 아니다. 예를 들어 원시 $6$차 단위근 중에서 $\cos\left(\frac{2\pi}{3}\right)+i \sin\left(\frac{2\pi}{3}\right)$는 세제곱하면 $1$이 되므로 원시 $6$차 단위근이 아니다. 그렇다면 모든 원시 $n$차 단위근을 어떻게 찾을 수 있을 까? 다음을 살펴보자.
+
+$n$차 단위근 $\omega=\cos\left(\frac{2\pi ki}{n}\right)+ i \sin\left(\frac{2\pi ki}{n}\right)$에 대하여 $(n,\:k)=1$
+이라 하자. 양의 정수 $p$에 대하여 
+\begin{equation*}
+\omega^{p} = 1 \Leftrightarrow \cos\left(\frac{2\pi kp i}{n}\right)+ i \sin\left(\frac{2\pi kp i}{n}\right) =1 \Leftrightarrow \frac{kp}{n} \in \mathbb{Z}
+\end{equation*}
+이다. $(k, \:n)=1$이므로 $p$는 $n$의 배수이다. 따라서
+\[
+\omega^{j} \neq 1 \: (\text{단, }j=1, \;2, \;\cdots, \:n-1), \: \omega^{n} =1
+\]
+이므로 $\omega$는 원시 $n$차 단위근이다.
+
+한편 $(k, \: n)\neq 1$이면 $n=dt$, $k=du$(단, $t,\:u$는 서로소인 자연수)이므로 $\frac{k}{n} =\frac{u}{t}$이다. 
+\begin{equation*}
+\omega=\cos\left(\frac{2\pi ki}{n}\right)+ i \sin\left(\frac{2\pi ki}{n}\right) = \cos\left(\frac{2\pi ui}{t}\right)+ i \sin\left(\frac{2\pi ui}{t}\right)
+\end{equation*}
+이므로 
+\begin{equation*}
+\omega^{t} =\cos\left(\frac{2\pi ui}{t}\right)+ i \sin\left(\frac{2\pi ui}{t}\right)^{t} = \cos\left(2\pi ui\right) + i \sin\left(2\pi ui\right)=1
+\end{equation*}
+이다. $n=dt$이고 $d>1$이므로 $0<t<n$이고 $\omega^{t}=1$이다. 따라서 $\omega$는 원시 단위근이 될 수 없다.
+\vspace{1em}
+\begin{theorem}[원시 $n$차 단위근 정리]
+	$(n,\:k)=1$일 때, $\omega=\cos\left(\frac{2\pi ki}{n}\right)+ i \sin\left(\frac{2\pi ki}{n}\right)$는 원시 $n$차 단위근이다.
+	
+	 또 $\omega=\cos\left(\frac{2\pi ki}{n}\right)+ i \sin\left(\frac{2\pi ki}{n}\right)$이 원시 $n$차 단위근이면 $(n,\:k)=1$이다.
+\end{theorem}
+
+\vspace{1em}
+
+
+  이제 삼각함수의 복잡한 공식을 증명할 때 유용한 사실을 소개한다.
+  
+  $z=\cos \theta + i \sin\theta$라 하면
+  \begin{align*}
+  	\frac{1}{z} &=\frac{1}{\cos \theta + i \sin\theta} \\
+  	&= \cos \theta - i \sin\theta \\
+  	&=\cos(-\theta) + i \sin(-\theta)
+  \end{align*}
+이다. 따라서 드 무아브르의 정리에 의해 $\frac{1}{z^{n}} =\cos(-n\theta) + i \sin(-n\theta)$이다. 한편 $z=\cos n\theta + i \sin n\theta$이므로 두 식을 연립하여
+\begin{equation*}
+	\cos(n\theta) =\frac{1}{2}\left(z^{n} +\frac{1}{z^{n}}\right), \quad \sin(n\theta) =\frac{1}{2i} \left(z^{n} -\frac{1}{z^{n}}\right)
+\end{equation*}
+이다. 많은 문제들이 이 사실을 이용하면 쉽게 증명된다. 예를 들어 보자.
+
+\begin{example}
+$a, \:b, \:c \in \mathbb{R}$이고
+\begin{equation*}
+	\cos(a) + \cos(b) +\cos(c) =\sin(a)+\sin(b)+\sin(c) =0
+\end{equation*}
+이면
+\begin{equation*}
+	\cos(2a)+\cos(2b)+\cos(2c) = \sin(2a)+\sin(2b)+\sin(2c) =0
+\end{equation*}
+이 성립함을 보이시오.
+\begin{solution}
+	$x=\cos(a)+i\sin(a)$, $y=\cos(b)+i\sin(b)$, $z=\cos(c)+i\sin(c)$라 하면 주어진 조건에 의해 $x+y+z=0$이고
+	\begin{align*}
+		\frac{1}{x} + \frac{1}{y} +\frac{1}{z}&=\left(\cos(a)-i \sin(a)\right) +\left(\cos(b)-i \sin(b)\right) +\left(\cos(c)-i \sin(c)\right) \\
+		&=0
+	\end{align*}
+\end{solution}
+이므로 $\frac{xy+yz+zx}{xyz}=0$이고 따라서 $xy+yz+zx=0$이다. 즉,
+$$
+x^{2} +y^{2} +z^{2} = (x+y^z)^{2} - 2(xy+yz+zx) =0
+$$
+이고 
+$$
+x^{2} +y^{2} +z^{2} =(\cos(2a)+\cos(2b)+\cos(2c)) + i (\sin(2a)+\sin(2b)+\sin(2c)) =0
+$$
+이므로 $\cos(2a)+\cos(2b)+\cos(2c) = \sin(2a)+\sin(2b)+\sin(2c) =0$이다.
+\end{example}
+다음 문제들은 앞에서 설명한 것을 응용하여 해결할 수 있는 문제들이다.
+
+\begin{problem}
+	$\cos\left(\frac{\pi}{7}\right)+\cos\left(\frac{3\pi}{7}\right)+\cos\left(\frac{5\pi}{7}\right)=\frac{1}{2}$임을 보이시오.
+	\processifversion{psol}{
+\begin{psolution}
+	$z=\cos\left(\frac{\pi}{7}\right)+ i \sin\left(\frac{\pi}{7}\right)$라 하면 $z^{7} =-1$이고
+	\begin{align*}
+		&\cos\left(\frac{\pi}{7}\right)+\cos\left(\frac{3\pi}{7}\right)+\cos\left(\frac{5\pi}{7}\right) \\
+		&= \frac{1}{2}\left(z +\frac{1}{z}\right)+\frac{1}{2}\left(z^{3} +\frac{1}{z^{3}}\right) + \frac{1}{2}\left(z^{5} +\frac{1}{z^{5}}\right) \\
+		&= \frac{1}{2} \left(\frac{z^{6}+z^{4}+z^{8}+z^{2}+z^{10}+1}{z^{5}}\right)\\
+		&=\frac{z^{10}+z^{8}+z^{6}+z^{4}+z^{2}+1}{2z^{5}}
+	\end{align*}
+이다. 그런데 $z^{10}=-z^{3}$, $z^{8} = -z$이고 $z^{7}+1=0$이므로
+\begin{align*}
+	z^{10}+z^{8}+z^{6}+z^{4}+z^{2}+1 &=z^{6} - z^{5} +z^{4} - z^{3} + z^{2} - z +1 + z^{5}\\
+	&= \frac{1-(-z)^7}{1-(-z)} +z^{5} \\
+	&= \frac{1+z^7}{1+z} =z^{5}
+\end{align*}
+이므로 문제가 증명되었다.
+\end{psolution}	
+}
+\end{problem}
+\begin{problem}
+	다음을 하나의 항으로 간단히 나타내시오
+	\begin{equation*}
+		\sin(a)+\sin(2a) +\: \cdots \: + \sin(na)
+	\end{equation*}
+\processifversion{psol}{
+	\begin{psolution}
+$S_{n}=\sin(a)+\sin(2a) +\: \cdots \: + \sin(na)$라 하고 $C_{n}=\cos(a)+\cos(2a) +\: \cdots \: + \cos(na)$라 하자. 이제 $z=\cos(a)+i \sin(a)$라 하면
+\begin{align*}
+	C_{n} + i S_{n} &= z+z^{2} + \; \cdots \; + z^{n} \\
+	&=z \times \frac{z^{n}-1}{z-1}
+\end{align*}
+이다. 드 무아브르의 정리와 반각공식에 의해
+\begin{align*}
+	\frac{z^{n}-1}{z-1} &= \frac{\cos(na)+i \sin(na) -1}{\cos(a)+i \sin(a)-1} \\
+	&= \frac{-2 \sin^{2}\left(\frac{na}{2}\right)+ 2i \sin\left(\frac{na}{2}\right)\cos\left(\frac{na}{2}\right)}{-2 \sin^{2}\left(\frac{a}{2}\right)+ 2i \sin\left(\frac{a}{2}\right)\cos\left(\frac{a}{2}\right)}\\
+	&=\frac{\sin\left(\frac{na}{2}\right)}{\sin\left(\frac{a}{2}\right)}\left(\frac{\cos\left(\frac{na}{2}\right)+i \sin\left(\frac{na}{2}\right)}{\cos\left(\frac{a}{2}\right)+i \sin\left(\frac{a}{2}\right)}\right) \\
+	&= \frac{\sin\left(\frac{na}{2}\right)}{\sin\left(\frac{a}{2}\right)}\left(\cos\left(\frac{(n-1)a}{2}\right) + i \sin\left(\frac{(n-1)a}{2}\right)\right)
+\end{align*}
+이다. 따라서 
+\begin{align*}
+	S_{n} &= \frac{\sin\left(\frac{na}{2}\right)}{\sin\left(\frac{a}{2}\right)}\left( \sin\left(\frac{(n-1)a}{2}\right) \cos(a) +\cos\left(\frac{(n-1)a}{2}\right) \sin(a) \right) \\
+	&= \frac{\sin\left(\frac{na}{2}\right)}{\sin\left(\frac{a}{2}\right)} \sin\left(\frac{(n-1)a}{2} +a\right) = \frac{\sin\left(\frac{na}{2}\right)}{\sin\left(\frac{a}{2}\right)} \sin\left(\frac{(n+1)a}{2}\right)
+\end{align*}
+이고 비슷한 계산을 통해
+	\begin{equation*}
+	\cos(a)+\cos(2a) +\: \cdots \: + \cos(na) = \frac{\sin\left(\frac{na}{2}\right)}{\sin\left(\frac{a}{2}\right)} \cos\left(\frac{(n+1)a}{2}\right)
+\end{equation*}
+임을 알 수 있다.
+\end{psolution}
+}
+\end{problem}
+
+\begin{problem}
+$a, \:b, \:c \in \mathbb{R}$이고
+\begin{equation*}
+	\cos(a) + \cos(b) +\cos(c) =\sin(a)+\sin(b)+\sin(c) =0
+\end{equation*}
+이면
+\begin{align*}
+	\cos(3a)+\cos(3b)+\cos(3c) &=3\cos(a+b+c)\\
+	 \sin(3a)+\sin(3b)+\sin(3c) &=3\sin(a+b+c) 
+\end{align*}
+이 성립함을 보이시오.	
+\processifversion{psol}{
+\begin{psolution}
+	$x=\cos(a)+i \sin(a)$, $y=\cos(b)+i \sin(b)$, $z=\cos(c)+i\sin(c)$라 하면 주어진 조건에 의해 $x+y+z=0$이고 따라서 
+	\begin{equation*}
+		x^{3}+y^{3}+z^{3} - 3 x y z =0
+	\end{equation*}
+이다. 즉 드 무아브르의 정리에 의해
+\begin{equation*}
+	\cos(3a) + i \sin(3a) + \cos(3b) + i \sin(3b) +\cos(3c) + i \sin(3c) = 3 \cos(a+b+c) + 3 i \sin(a+b+c)
+\end{equation*}
+이므로 문제가 증명되었다.
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	다음 식이 성립함을 보이시오.
+	\begin{equation}\label{eqn:frac}
+		\frac{1}{\cos(6^{\circ})}+	\frac{1}{\sin(24^{\circ})}+	\frac{1}{\sin(48^{\circ})} =	\frac{1}{\sin(12^{\circ})}
+	\end{equation}
+\processifversion{psol}{
+\begin{psolution}
+	$z= \cos\left(6^{\circ}\right)+ i \sin \left(6^{\circ}\right)$라 하면 $z^{15}=\cos\left(90^{\circ}\right)+ i \sin\left(90^{\circ}\right)  =i$이다. 한편, $\cos\left(6^{\circ}\right)\frac{z^2 +1}{2z}$, $\sin\left(12^{\circ}\right)\frac{z^4 -1}{2iz^{2}}$, $\sin\left(24^{\circ}\right)\frac{z^8 -1}{2iz^{4}}$, $\sin\left(48^{\circ}\right)\frac{z^16 -1}{2iz^{8}}$이므로 
+	식 (\ref{eqn:frac})은 다음 식과 동치이다.
+	\begin{align*}
+	 \phantom{\Leftrightarrow}&	\frac{2z}{z^{2}+1} -\frac{2iz^{2}}{z^{4}-1} +\frac{2iz^{4}}{z^{8}-1} +\frac{2iz^{8}}{z^{16}-1} =0 \\
+	 \Leftrightarrow & z^{16} -1 - iz(z^{14}+1) =0
+	\end{align*}
+이다. 그런데 $z^{16}=z^{15}\cdot z =iz$이므로 문제가 증명되었다.
+\end{psolution}
+}
+\end{problem}
+\chapter{\Huge 삼각함수의 응용}
+삼각함수는 여러 분야에서 활용이 되지만 여기에서는 삼각함수와 관련된 공식, 삼각형과 관련이 있는 기하 문제의 해결과 삼각치환에 의한 대수 문제의 해결에 초점을 둘 것이다. 먼저 삼각함수와 관련되는 공식, 삼각형과 관련된 기하 문제와 관련된 문제들을 탐구하자.
+
+\section{삼각함수 관련 공식들}
+여기서는 삼각형과 관련된 다양한 문제들을 해결해 본다.
+
+\begin{example}
+	$x$는 실수이고 $\sec(x)-\tan(x)=2$일 때, $\sec(x)+\tan(x)$의 값을 구하시오.
+	\begin{solution}
+		$\sec^{2}(x) = \tan^{2}(x)+1$에서 
+		\[
+		(\sec(x)-\tan(x))(\sec(x)+\tan(x)) =1
+		\]
+		이므로 $\sec(x) +\tan(x) =\frac{1}{2}$이다.
+	\end{solution}
+\end{example}
+
+\begin{problem}
+	$0^{\circ}<\theta < 45^{\circ}$일 때 다음 네 실수의 크기를 순서대로 구하시오.
+ \[
+ \begin{array}{cclccl}
+ 	t_{1} &=& (\tan(\theta))^{\tan(\theta)},\quad & \qquad t_{2}&=& (\tan(\theta))^{\cot(\theta)}, \\
+ 	t_{3} &=& (\cot(\theta))^{\tan(\theta)}, \quad & \qquad 	t_{4} &=& (\cot(\theta))^{\cot(\theta)} 
+ \end{array}
+ \]
+\processifversion{psol}{
+	\begin{psolution}
+$a>1$이면 $y=a^{x}$은 증가함수이고, $0^{\circ}<\theta < 45^{\circ}$이면 $\cot(\theta) > 1 > \tan(\theta) > 0$이므로 $t_{3} < t_{4}$이다. 한편 $<1$이면 $y=a^{x}$은 감소함수이므로 $t_{1} > t_{2}$이다. $\cot(\theta) > 1 > \tan(\theta) > 0$이므로 $t_{1}<1<t_{3}$이다. 따라서 크기 순서는 다음과 같다. $t_{2} < t_{1} < t_{3} < t_{4}$.
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	다음을 계산하시오.
+	\begin{enumerate}[label=\arabic*)]
+		\item $\sin \frac{\pi}{12}$, $\cos \frac{\pi}{12}$, $\tan \frac{\pi}{12}$
+		\item $\cos^{4}\frac{\pi}{24} - \sin^{4}\frac{\pi}{24}$
+		\item $\cos 36^{\circ} -\cos 72^{\circ}$
+	\end{enumerate}
+\processifversion{psol}{
+\begin{psolution}
+\begin{enumerate}[label=\arabic*)]
+	\item 먼저 $\cos\left(\frac{\pi}{12}\right)$는
+	\begin{align*}
+		\cos\left(\frac{\pi}{3} -\frac{\pi}{4}\right) &= \cos\left(\frac{\pi}{3}\right)\cos\left(\frac{\pi}{4}\right) +\sin\left(\frac{\pi}{3}\right) \sin\left(\frac{\pi}{4}\right) \\
+		&= \frac{1}{2} \cdot \frac{\sqrt{2}}{2} + \frac{\sqrt{3}}{2}\cdot\frac{\sqrt{2}}{2} =\frac{\sqrt{2}+\sqrt{6}}{4}
+	\end{align*}
+이고 비슷한 방법으로 $\sin\left(\frac{\pi}{12}\right)=\frac{\sqrt{6}-\sqrt{2}}{4}$이고 $\tan\left(\frac{\pi}{12}\right)=2-\sqrt{3}$임을 보일 수 있다.
+	\item 코사인 $2$배각 공식에 의해
+	\begin{align*}
+		\cos^{4}\left(\frac{\pi}{24}\right) -\sin^{4}\left(\frac{\pi}{24}\right) &= \left(\cos^{2}\left(\frac{\pi}{24}\right) +\sin^{2}\left(\frac{\pi}{24}\right)\right)\left(\cos^{2}\left(\frac{\pi}{24}\right) -\sin^{2}\left(\frac{\pi}{24}\right)\right) \\
+		&= 1\cdot \cos\left(\frac{\pi}{12}\right) =\frac{\sqrt{2}+\sqrt{6}}{4}
+	\end{align*}
+	\item 먼저 다음이 성립한다.
+	 \begin{align*}
+	 	\cos(36^{\circ}) -\cos(72^{\circ}) &= \frac{2\left(\cos(36^{\circ})-\cos(72^{\circ})\right)\left(\cos(36^{\circ})+\cos(72^{\circ})\right)}{2 \left(\cos(36^{\circ})+\cos(72^{\circ})\right)} \\
+	 	&= \frac{2\cos^{2}(36^{\circ})- 2\cos^{2}(72^{\circ})}{2 \left(\cos(36^{\circ})+\cos(72^{\circ})\right)}
+	 \end{align*}
+ 이제 위의 식은 $2$배각 공식에 의해 다음과 같이 계산할 수 있다.
+ 	\begin{align*}
+ 		\cos(36^{\circ}) -\cos(72^{\circ}) &=\frac{\cos(72^{\circ})+1 -\cos(144^{\circ})-1}{2 \left(\cos(36^{\circ})+\cos(72^{\circ})\right)}\\
+ 		&= \frac{\cos(72^{\circ})+\cos(36^{\circ})}{2 \left(\cos(36^{\circ})+\cos(72^{\circ})\right)} =\frac{1}{2}
+ 	\end{align*}
+\end{enumerate}	
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	삼각형 \textrm{ABC}에서 다음 등식이 성립함을 보이시오.
+	\[
+	\sinrm{A} +\sinrm{B} +\sinrm{C} = 4 \cos\left(\frac{\textrm{A}}{2}\right) \cos\left(\frac{\textrm{B}}{2}\right) \cos\left(\frac{\textrm{C}}{2}\right)
+	\]
+	\processifversion{psol}{
+\begin{psolution}
+	먼저 $\textrm{A}+\textrm{B}+\textrm{C}=\pi$이므로 
+	\begin{align*}
+      \sinrm{A} + \sinrm{B}+\sinrm{C} &= \sinrm{A}+\sinrm{B} +\sin(\pi-(\textrm{A}+\textrm{B})) \\
+      &= \underbrace{\sinrm{A}+\sinrm{B}}_{\text{식 }(a)} + \underbrace{\sin(\textrm{A}+\textrm{B})}_{\text{식 }(b)}	
+	\end{align*}
+이다. 식 $(a)$에 합을 곱으로 고치는 공식을, 식 $(b)$에 사인함수의 $2$배각 공식을 적용하면
+\begin{small}
+\begin{align*}
+	\sinrm{A}+\sinrm{B}+ \sin(\textrm{A}+\textrm{B}) &= 2\sin\left(\frac{\textrm{A}+\textrm{B}}{2}\right)\cos\left(\frac{\textrm{A}-\textrm{B}}{2}\right) + 2\sin\left(\frac{\textrm{A}+\textrm{B}}{2}\right)\cos\left(\frac{\textrm{A}+\textrm{B}}{2}\right) \\
+	&= 2\sin\left(\frac{\textrm{A}+\textrm{B}}{2}\right)\underbrace{\left(\cos\left(\frac{\textrm{A}+\textrm{B}}{2}\right)+ \cos\left(\frac{\textrm{A}-\textrm{B}}{2}\right)\right)}_{\text{식 }(c)}
+\end{align*}
+\end{small}
+이다. 이제 식 $(c)$에 합을 곱으로 고치는 공식을 적용하고 $\frac{\textrm{A}+\textrm{B}}{2} =\frac{\pi}{2} -\frac{\textrm{C}}{2}$이므로
+\begin{small}
+\begin{align*}
+	2\sin\left(\frac{\textrm{A}+\textrm{B}}{2}\right)\left(\cos\left(\frac{\textrm{A}+\textrm{B}}{2}\right)+ \cos\left(\frac{\textrm{A}-\textrm{B}}{2}\right)\right) &= 2\sin\left(\frac{\pi}{2}-\frac{\textrm{A}+\textrm{B}}{2}\right) \left(2\cos\left(\frac{\textrm{A}}{2}\right)\cos\left(\frac{\textrm{B}}{2}\right)\right) \\
+	&= 4 \cos\left(\frac{\textrm{A}}{2}\right)\cos\left(\frac{\textrm{B}}{2}\right)\cos\left(\frac{\textrm{C}}{2}\right)
+\end{align*}
+\end{small}
+\end{psolution}	
+}
+\end{problem}	
+\begin{problem}\label{prob:sindouble}
+	삼각형 \textrm{ABC}에서 다음 등식이 성립함을 보이시오.
+	\[
+	\sinrm{2A} + \sinrm{2B}+ \sinrm{2C} = 4\sinrm{A}\sinrm{B}\sinrm{C}
+	\]
+\processifversion{psol}{
+\begin{psolution}$2$배각 공식과 합 또는 차를 곱으로 고치는 공식에 의해 다음이 성립한다.
+	\begin{align*}
+			&\phantom{=2}\sinrm{2A} + \sinrm{2B}+ \sinrm{2C} = 4\sinrm{A}\sinrm{B}\sinrm{C} \\
+			&= 2\sinrm{A+B}\cosrm{A-B} + 2\sinrm{C}\cosrm{C}\\
+			&= 2\sinrm{C}\cosrm{A-B} + 2\sinrm{C}\cosrm{C}\\
+			&= 2\sinrm{C}\left(\cosrm{A-B} -\cosrm{A+B}\right) \\
+			&= 2 \sinrm{C}\cdot 2 \sinrm{A}\sinrm{B} \\
+			&= 4 \sinrm{A}\sinrm{B}\sinrm{C}
+	\end{align*}
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	삼각형 \textrm{ABC}에서 세 각 \textrm{A, B, C}가 다음 관계를 만족시킬 때, 각 \textrm{A}의 크기를 구하시오.
+	\[
+	\sinrm{A-B} \sinrm{A+B} = \sin^{2}(C)
+	\]
+\processifversion{psol}{
+\begin{psolution}
+	$\sinrm{A+B}=\sinrm{C}\neq 0$이므로 $\sinrm{A-B}=\sinrm{C}$이다. 따라서 $\textrm{A}-\textrm{B}=\textrm{C}$이다. 따라서 $\textrm{A}=\frac{\pi}{2}$이다.
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	이차방정식 $8x^{2} +7 x+k=0$의 두 근이 $\sin(\theta), \, \cos(\theta)$일 때, 상수 $k$의 값을 구하여라.
+	
+	\processifversion{psol}{
+\begin{psolution}
+	$2$차 방정식의 근과 계수와의 관계에 의하여 $\sin(\theta)+\cos(\theta)=-\frac{7}{8}$이고 $\frac{k}{8} =\sin(\theta)\cos(\theta)$이므로 $k= 8 \sin(\theta)\cos(\theta)$이다. 이제
+	\begin{align*}
+		\frac{49}{64} &= \cos^{2}(\theta) + \sin^{2}(\theta) + 2 \sin(\theta)\cos(\theta)\\
+		&= 1+ 2 \sin(\theta)\cos(\theta)
+	\end{align*}
+에서 $2 \sin(\theta)\cos(\theta)=-\frac{15}{64}$이다. 따라서 $\boxed{k=-\frac{15}{16}}$이다.
+\end{psolution}	
+}
+\end{problem}
+
+\begin{problem}
+	삼각형 \textrm{ABC}에서 $\frac{\sinrm{A}+\sinrm{B}}{\cosrm{A}+\cosrm{B}} = 2 \cos \left(\frac{\textrm{C}}{2}\right)$가 성립할 때, 각 $\textrm{C}$의 크기를 구하여라.
+	\processifversion{psol}{
+\begin{psolution}
+	주어진 문제에 공식 (\ref{eqn:halftan})을 적용하면
+	\begin{align*}
+		\frac{\sinrm{A}+\sinrm{B}}{\cosrm{A}+\cosrm{B}} &= \tan\left(\frac{\textrm{A}+\textrm{B}}{2}\right)  \\
+		&= \tan\left(\frac{\pi}{2}-\frac{\textrm{C}}{2}\right) =\cot\left(\frac{\textrm{C}}{2}\right)
+	\end{align*}
+이다. $\cot\left(\frac{\textrm{C}}{2}\right)=2 \cos \left(\frac{\textrm{C}}{2}\right)$에서 $\cos \left(\frac{\textrm{C}}{2}\right)\neq 0$이므로 $\sin\left(\frac{\textrm{C}}{2}\right) =\frac{1}{2}$이다. 따라서 $\frac{\textrm{C}}{2}=\frac{\pi}{6}$이고 $\textrm{C}=\frac{\pi}{3}$이다.
+\end{psolution}	
+
+}
+\end{problem}	
+\begin{problem}
+	두 실수 $\alpha, \:\beta$에 대하여 $\sin(\alpha)+\sin(\beta)=1$, $\cos(\alpha)+\cos(\beta)=\frac{1}{2}$일 때, $\cos(\alpha-\beta)$의 값을 구하시오.
+	\processifversion{psol}{
+\begin{psolution}
+	$\cos\left( \alpha -\beta\right) =\cos(\alpha)\cos(\beta) +\sin(\alpha)\sin(\beta)$이므로 주어진 두 식을 제곱하여 더하면
+	\begin{align*}
+		1+\frac{1}{4} & = \sin^{2}(\alpha) + 2 \sin(\alpha)\sin(\beta) + \sin^{2}(\beta) + \cos^{2}(\alpha) + 2 \cos(\alpha)\cos(\beta) + \cos^{2}(\beta)\\
+		&= 2 + 2\cos(\alpha)\cos(\beta)+2 \sin(\alpha)\sin(\beta)\\
+		&= 2 + 2 \cos(\alpha-\beta)
+	\end{align*}
+이다. 따라서 $\cos(\alpha-\beta)=-\frac{3}{8}$이다.
+\end{psolution}	
+}
+\end{problem}	
+
+\begin{problem}
+	삼각함수 $f(x)= \sin x\left(-\frac{\pi}{2}< x< \frac{\pi}{2}\right)$의 역함수 $f^{-1}(x)$에 대하여
+	\[
+	f^{-1}\left(\frac{1}{3}\right) + f^{-1}\left(\frac{1}{2}\right) = f^{-1} (k)
+	\]
+	를 만족시키는 상수 $k$가 존재한다고 한다. 이 때, 상수 $k$의 값을 구하시오.
+	\processifversion{psol}{
+\begin{psolution}
+	$\alpha=f^{-1}\left(\frac{1}{3}\right)$, $\beta = f^{-1}\left(\frac{1}{2}\right)$라 하면 역함수의 정의로부터 $\sin(\alpha) =\frac{1}{3}$, $\sin(\beta) =\frac{1}{2}$이다. 또한 $k=\sin(\alpha+\beta)$이다. 주어진 구간에서 코사인 함수는 항상 양의 값을 가지므로
+	\begin{equation*}
+		\cos(\alpha)=\sqrt{1-\sin^{2}(\alpha)} =\sqrt{1-\frac{1}{9}} =\frac{2\sqrt{2}}{3}
+	\end{equation*}이고 비슷한 방법으로 $\cos(\beta) =\frac{\sqrt{3}}{2}$를 얻는다. 따라서
+\begin{align*}
+	k  = \sin(\alpha + \beta) & = \sin(\alpha)\cos(\beta) +\cos(\alpha)\sin(\beta) \\& = \frac{1}{3} \cdot \frac{\sqrt{3}}{2} + \frac{2\sqrt{2}}{3} \cdot \frac{1}{2} \\
+	&= \frac{\sqrt{3}+2\sqrt{2}}{6}
+\end{align*}
+이다.
+\end{psolution}	
+
+}
+\end{problem}
+
+\begin{problem}
+	점 $(1, \; -3)$에서 곡선 $y=x^{2}$에 그은 두 접선이 이루는 예각의 크기를 $\theta$라고 할 때, $\tan(\theta)$의 값을 구하시오.
+	\processifversion{psol}{
+\begin{psolution}
+	점 $(1, \; -3)$에서 곡선 $y=x^{2}$에 그은 접선의 기울기를 $m$이라 하면 이 직선의 방정식은 $y=m(x-1) -3$이다. 이 직선의 방정식과 $y =x^2$을 연립하여 얻은 $2$차 방정식의 판별식은 $0$이다. 즉,
+	\begin{equation*}
+		x^2 = m(x-1) -3
+	\end{equation*}
+에서 판별식이 $0$임을 이용하면 $m^2 -4m -12=0$을 얻고 따라서 $m=6$ 또는 $m=-2$이다. 즉 두 접선이 $x$축의 양의 뱡향과 이루는 각의 크기를 각각 $\alpha,\; \beta$라고 하면 $\tan(\alpha)=6$, $\tan(\beta)=-2$이다. 이제 두 직선이 이루는 각의 크기를 $\theta$라고 하면 $\tan(\theta) =\left|\tan\left(\alpha-\beta\right)\right|$이다. 따라서
+\begin{align*}
+	\tan(\theta) &=\left|\tan\left(\alpha-\beta\right)\right| \\
+	&=\left|\frac{\tan(\alpha)-\tan(\beta)}{1+\tan(\alpha)\tan(\beta)}\right| \\
+	& = \left| \frac{6-(-2)}{1+6\cdot(-2)}\right| = \frac{8}{11}
+\end{align*}
+이다.
+\end{psolution}	
+}
+\end{problem}
+
+\begin{problem}
+	삼각형 \textrm{ABC}에서 다음 등식이 항상 성립함을 보이시오.
+	\[
+	\cosrm{A} +\cosrm{B} +\cosrm{C} = 1+ 4 \sin\left(\frac{\textrm{A}}{2}\right) \sin\left(\frac{\textrm{B}}{2}\right) \sin\left(\frac{\textrm{C}}{2}\right)
+	\]
+	\processifversion{psol}{
+\begin{psolution}
+	코사인 $2$배각 공식과 합 또는 차를 곱으로 고치는 공식에 의해 다음이 성립한다.
+	\begin{align*}
+		&\cosrm{A}+\cosrm{B}\cosrm{C} \\
+		&=\left(\cosrm{A}+\cosrm{B}\right) -\cosrm{C}\\
+		&=2\cos\left(\frac{\textrm{A}+\textrm{B}}{2}\right)\cos\left(\frac{\textrm{A}-\textrm{B}}{2}\right) - 2\left(2\cos^{2}\left(\frac{\textrm{A}+\textrm{B}}{2}\right)-1\right)\\
+		&= 1+ 2\cos\left(\frac{\textrm{A}+\textrm{B}}{2}\right) \left( \cos\left(\frac{\textrm{A}-\textrm{B}}{2}\right)- \cos\left(\frac{\textrm{A}+\textrm{B}}{2}\right)\right)\\
+		&= 1 + 2\sin\left(\frac{\textrm{C}}{2}\right)\cdot \left( 2\sin\left(\frac{\textrm{A}}{2}\right)\sin\left(\frac{\textrm{B}}{2}\right)\right)\\
+		&=1 + 4 \sin\left(\frac{\textrm{A}}{2}\right)\sin\left(\frac{\textrm{B}}{2}\right)\sin\left(\frac{\textrm{C}}{2}\right)
+	\end{align*}
+\end{psolution}	
+}
+\end{problem}
+
+\begin{problem}\label{prob:halftan}
+	삼각형 \textrm{ABC}에서 다음이 성립함을 보이시오.
+	\begin{enumerate}[label=\arabic*)]
+		\item $\tan\left(\frac{\textrm{A}}{2}\right)\tan\left(\frac{\textrm{B}}{2}\right)+ \tan\left(\frac{\textrm{B}}{2}\right)\tan\left(\frac{\textrm{C}}{2}\right)+\tan\left(\frac{\textrm{C}}{2}\right)\tan\left(\frac{\textrm{A}}{2}\right) =1$
+		\item $\tan\left(\frac{\textrm{A}}{2}\right)\tan\left(\frac{\textrm{B}}{2}\right)\tan\left(\frac{\textrm{C}}{2}\right)\leq \frac{\sqrt{3}}{9}$
+	\end{enumerate}
+\processifversion{psol}{
+\begin{psolution}
+		\begin{enumerate}[label=\arabic*)]
+			\item 문제 \ref{prob:halftan}-1)은 코탄젠트 법칙에서 이미 증명하였다. 식 (\ref{eqn:halftan})을 참고.
+			\item 문제 \ref{prob:halftan}-1)에 산술-기하 부등식을 적용하면 금방 얻을 수 있다.
+		\end{enumerate}
+\end{psolution}
+
+}
+\end{problem}
+
+\begin{example}\label{exam:sineeq}
+	삼각형 \textrm{ABC}에서 다음이 성립함을 보이시오.
+	\[
+	\sin\left(\frac{\textrm{A}}{2}\right) \leq \frac{a}{b+c}
+	\]
+	\begin{solution}
+		사인 정리에 의해 다음이 성립한다.
+		\[
+		\frac{a}{b+c} = \frac{\sinrm{A}}{\sinrm{B}+\sinrm{C}}
+		\]
+		이 식에 2배각 공식과 합을 곱으로 고치는 공식을 적용하면
+		\[
+		\frac{a}{b+c} = \frac{\sinrm{A}}{\sinrm{B}+\sinrm{C}}=\frac{2\sin\left(\frac{\textrm{A}}{2}\right) \cos\left(\frac{\textrm{A}}{2}\right)}{2\sin\left(\frac{\textrm{B+C}}{2}\right)\cos\left(\frac{\textrm{B-C}}{2}\right)} = \frac{\sin\left(\frac{\textrm{A}}{2}\right)}{\cos\left(\frac{\textrm{B-C}}{2}\right)}
+		\]
+		이다. 그런데 $0\leq \vert \textrm{B} - \textrm{C} \vert<180^{\circ}$이므로 $0<\cos\left(\frac{\textrm{B-C}}{2}\right) \leq 1$이다. 따라서
+		\[
+		\frac{a}{b+c} = \frac{\sinrm{A}}{\sinrm{B}+\sinrm{C}}=\frac{2\sin\left(\frac{\textrm{A}}{2}\right) \cos\left(\frac{\textrm{A}}{2}\right)}{2\sin\left(\frac{\textrm{B+C}}{2}\right)\cos\left(\frac{\textrm{B-C}}{2}\right)} = \frac{\sin\left(\frac{\textrm{A}}{2}\right)}{\cos\left(\frac{\textrm{B-C}}{2}\right)} \geq \sin\left(\frac{\textrm{A}}{2}\right)
+		\]
+		이다.
+	\end{solution}	
+\end{example}
+\begin{problem}
+	삼각형 \textrm{ABC}에서 다음 부등식을 증명하시오.
+	\begin{equation*}
+		\sin\left(\frac{\textrm{A}}{2}\right)\sin\left(\frac{\textrm{B}}{2}\right)\sin\left(\frac{\textrm{C}}{2}\right) \leq \frac{1}{8}
+	\end{equation*}
+\processifversion{psol}{	
+	\begin{psolution}
+		예제 \ref{exam:sineeq}에 의해 다음이 성립한다.
+	\begin{equation*}
+			\sin\left(\frac{\textrm{A}}{2}\right) \leq \frac{a}{b+c},\quad 	\sin\left(\frac{\textrm{B}}{2}\right) \leq \frac{b}{c+a},\quad 	\sin\left(\frac{\textrm{C}}{2}\right) \leq \frac{c}{a+b}
+	\end{equation*}
+이 식들을 변변 곱하면 
+	\begin{equation*}
+	\sin\left(\frac{\textrm{A}}{2}\right)\sin\left(\frac{\textrm{B}}{2}\right)\sin\left(\frac{\textrm{C}}{2}\right) \leq \frac{a}{b+c} \cdot \frac{b}{c+a} \cdot \frac{c}{a+b}
+\end{equation*}
+을 얻는다. 그런데 산술-기하 부등식에 의해 $a+b\leq 2\sqrt{ab}$, $b+c\leq 2\sqrt{bc}$, $c+a\leq 2\sqrt{ca}$이다. 따라서 
+\begin{equation*}
+	\frac{a}{b+c} \cdot \frac{b}{c+a} \cdot \frac{c}{a+b} \leq \frac{a}{2\sqrt{bc}} \cdot \frac{b}{2\sqrt{ca}} \cdot \frac{c}{2\sqrt{ab}} =\frac{1}{8}
+\end{equation*}
+이므로 주어진 부등식이 증명되었다.
+	\end{psolution}
+	
+}
+\end{problem}
+\begin{example}
+	다음을 증명하시오.
+	\begin{equation*}
+		\cos\left(20^{\circ}\right)\cos\left(40^{\circ}\right)\cos\left(80^{\circ}\right)=\frac{1}{8}
+	\end{equation*}
+\begin{solution}
+ 코사인 3배각 공식인 식 (\ref{eqn:mult3})에 의해
+ \begin{equation*}
+ 		\cos\left(20^{\circ}\right)\cos\left(40^{\circ}\right)\cos\left(80^{\circ}\right)=\frac{1}{4} \cdot \cos\left(3\cdot 20^{\circ}\right) =\frac{1}{4}=\frac{1}{8}
+ \end{equation*}
+이다.
+\end{solution}
+\end{example}
+\begin{problem}
+	다음 식의 값을 구하시오.
+	\begin{equation*}
+		\cos\left(6^{\circ}\right)\cos\left(42^{\circ}\right)\cos\left(66^{\circ}\right)\cos\left(78^{\circ}\right)
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	코사인 3배각 공식인 식 (\ref{eqn:mult3})을 두 번 활용하고 Wishfull Thinking을 사용하여 다음과 같이 계산할 수 있다.
+	\begin{align*}
+			\cos\left(6^{\circ}\right)\cos\left(42^{\circ}\right)\cos\left(66^{\circ}\right)\cos\left(78^{\circ}\right)& = \cos\left(6^{\circ}\right) \frac{\cos\left(54^{\circ}\right)}{\cos\left(54^{\circ}\right)}\cos\left(66^{\circ}\right)\cos\left(78^{\circ}\right)\cos\left(42^{\circ}\right) \\
+			&=\cos\left(6^{\circ}\right) \cos\left(54^{\circ}\right)\cos\left(66^{\circ}\right)\cos\left(78^{\circ}\right)\cos\left(42^{\circ}\right) \frac{1}{\cos\left(54^{\circ}\right)}\\
+			&= \frac{1}{4}\cos\left(18^{\circ}\right)\cos\left(42^{\circ}\right)\cos\left(78^{\circ}\right)\frac{1}{\cos\left(54^{\circ}\right)} \\
+			&= \frac{1}{4}\left(\frac{1}{4}\right) \cos\left(54^{\circ}\right)\frac{1}{\cos\left(54^{\circ}\right)} \\
+			&=\frac{1}{16}
+	\end{align*}
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	다음 삼각함수의 값을 구하시오.
+	\begin{enumerate}[label=\arabic*)]
+		\item $\cos(55^{\circ}) + \cos(65^{\circ}) + \cos(175^{\circ})$
+		\item $\sin(10^{\circ}) + \sin(50^{\circ}) - \sin(70^{\circ})$
+	\end{enumerate}
+\processifversion{psol}{
+	\begin{psolution}
+	\begin{enumerate}[label=\arabic*)]
+	\item $\cos(65^{\circ})=\cos(295^{\circ})$이므로
+	\begin{equation*}
+		\cos(55^{\circ}) + \cos(65^{\circ}) + \cos(175^{\circ})=\cos(55^{\circ}) + \cos(175^{\circ})+ \cos(295^{\circ}) 
+	\end{equation*}
+이다. 따라서 단위원에 내접하는 정 $n$각형의 꼭짓점 정리에 의해 주어진 식의 값은 $0$이다.
+	\item 비슷하게 $\sin(50^{\circ})=\sin(130^{\circ})$이고 $-\sin(70^{\circ})=\sin(295^{\circ})$이므로 같은 정리에 의해 주어진 식의 값은 $0$이다.
+	\end{enumerate}		
+	\end{psolution}
+}
+\end{problem}
+
+
+\begin{problem}
+	$\cos(36^{\circ})$의 값을 구하시오.
+	\processifversion{psol}
+	{
+\begin{psolution}
+	$\cos\left(72^{\circ}\right)=\sin\left(180^{\circ}-108^{\circ}\right)$=$\sin\left(108^{\circ}\right)$이고 
+	$\sin\left(36^{\circ}\right)=\sin\left(90^{\circ}-54^{\circ}\right)=\cos\left(54^{\circ}\right)$이다. 이제 
+	$18^{\circ}=\theta$라고 하면,  $90^{\circ}=5\theta=3\theta+2\theta$이므로
+	$\sin(2\theta)=\sin\left(90^{\circ}-3\theta\right)=\cos(3\theta)$이고 $2\sin(\theta)\cos(\theta)=4\cos{^3}(\theta)-3\cos(\theta)$이다. 따라서 
+	$2\sin(\theta)\cos(\theta)-4\cos{^3}(\theta)+3\cos(\theta)=0$이다. 그런데 $\cos\left(18^{\circ}\right)\neq0$이므로
+	$2\sin(\theta)-4\cos{^2}(\theta)+3=0$이다. 따라서
+	$2\sin(\theta)-4\cos{^2}(\theta)+3=0$이고 
+	$2\sin(\theta)-4\left(1-\sin{^2}(\theta)\right)+3=0$에서 $4\sin{^2}(\theta)+2\sin(\theta)-1=0$이고 $\sin\left(18^{\circ}\right)>0$이므로
+	$\sin\left(18^{\circ}\right)={\sqrt{5}-1\over4}$이다. 그런데
+	$\cos(2\theta)=1-2\sin{^2}(\theta)$이므로 
+	$\cos\left(36^{\circ}\right)=1-2\sin{^2}\left(18^{\circ}\right)={1+\sqrt{5}\over 4}$
+\end{psolution}	
+}	
+\end{problem}
+
+\begin{problem}
+	함수
+	\[
+	f(x) =-(\sin x + \cos x)^{2} - \sin x - \cos x +3
+	\]
+	의 최댓값과 최솟값을 구하시오.
+\processifversion{psol}{
+	\begin{psolution}
+		$t=\sin{x}+\cos{x}$라 하면 $-\sqrt{2}\leq t \leq\sqrt{2}$이고 주어진 식은
+	\begin{align*}
+	f(x)&=-t^2-t+3\\
+		&=-(t+\frac{1}{2})^2+\frac{13}{4}
+	\end{align*}
+로 치환된다. 따라서 $t=-\frac{1}{2}$일때 최댓값 $\frac{13}{4}$을 갖고	$t=\sqrt{2}$일때 최솟값 $1-\sqrt{2}$을 갖는다.
+	\end{psolution}   
+}
+\end{problem}
+
+\begin{problem}
+	$\alpha$가 제2사분면의 각이고 $\sin \alpha =\frac{4}{5}$일 때, $\sin \frac{\alpha}{2}$, $\cos \frac{\alpha}{2}$, $\tan \frac{\alpha}{2}$의 값을 모두 구하시오.
+	\processifversion{psol}{
+\begin{psolution}
+	$1-\sin^{2}(\alpha)=\cos^{2}(\alpha)$이므로 	$1-\frac{16}{25}=\frac{9}{25}=\cos^{2}(\alpha)$이고 $\alpha$가 제 2사분면의 각이므로
+	$\cos(\alpha)=-\frac{3}{5}$이고 반각공식에 의해 $\cos(\alpha)=2\cos(\theta)^{2}\frac{\alpha}{2}-1$이므로 
+	$\cos^{2}\left(\frac{\alpha}{2}\right)=\frac{1}{5}$이다. 따라서 
+	$\cos\left(\frac{\alpha}{2}\right)=\frac{1}{\sqrt{5}}$이고 $\sin\left(\frac{\alpha}{2}\right)=\frac{2}{\sqrt{5}}$이므로 $\tan\left(\frac{\alpha}{2}\right)=2$이다.
+
+\end{psolution}	
+}
+\end{problem}
+
+\begin{problem}
+	원점 \textrm{O}를 지나고 기울기가 $\tan \theta$인 직선 $l$이 있다. $x$축 위의 점 $\textrm{A}(2\sqrt{3}, \: 0)$와 $y$축 위의 점 $\textrm{B}(0, \:2)$에서 직선 $l$에 내린 수선의 발을 각각 \textrm{C, D}라고 하자. 원점에서 두 점 사이의 거리의 합 $\ovr{OC} +\ovr{OD}$의 최댓값과 그 때의 $\theta$의 값을 구하시오.$\left(\text{단, }0< \theta < \frac{\pi}{2}\right)$
+\processifversion{psol}
+{
+	\begin{psolution}
+		그림의 $\triangle \textrm{OCA}$에서
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.9]
+				\pgfmathsetmacro{\angle}{48}
+				\draw[-stealth, ultra thick] (-1, 0) -- (4.3, 0) node[right]{\large $x$};
+				\draw[-stealth, ultra thick] (0, -1) -- (0, 4) node[left]{\large $y$};
+				\node[below right] (0,0) {\small $\textrm{O}$};
+				\draw[very thick, blue, domain=-0.5:3]  plot (\x, {tan(\angle)*\x}) node[blue, right]{\small $y=(\tan(\theta))x$};
+				
+				%	\filldraw[black] (2,1) circle (0.07);
+				%	\filldraw[black] (-0.4,2.2) circle (0.07);
+				
+				\draw[dashed, ultra thick] ({2*sqrt(3)}, 0) node[below]{\small \text{A}$(2\sqrt{3},\,0)$} --++ (\angle+90:{2* tan(\angle)*sqrt(3) / sqrt(1+(tan(\angle))^2)}) node[anchor=south east]{\small \text{C}};
+				
+				\draw[dashed, ultra thick] (0, 2) node[left]{\small \text{B}$(0,\,2)$} --++ (\angle-90:{2 / sqrt(1+(tan(\angle))^2)}) node[anchor=north west]{\small \text{D}};
+		
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+\vspace{-1em}
+\begin{equation*}
+	\overline{\text{OC}}=\overline{\text{OA}}\cos{\theta}=2\sqrt{3}\cos{\theta}
+\end{equation*}
+이고 마찬가지로 $\triangle \text{OBD에서}$
+\begin{equation*}
+	 \overline{\text{OD}}=\overline{\text{OB}}\sin{\theta}=2\sin{\theta}
+\end{equation*}
+이다. 따라서
+\begin{align*}
+	\overline{\text{OC}}+\overline{\text{OD}} =& 2\sqrt{3}\cos{\theta}+2\sin{\theta}\\
+	=& 4\left(\frac{\sqrt{3}}{2}\cos(\theta) +\frac{1}{2}\sin(\theta)\right)\\
+	=& 4\sin\left({\theta + \frac{\pi}{3}}\right)
+\end{align*}
+\begin{equation*}
+		\therefore (\overline{\text{OC}}+\overline{\text{OD}}\text{의 최댓값}) = 4,\; \theta = \frac{\pi}{6}
+\end{equation*}
+\end{psolution}
+}
+\end{problem}
+
+\begin{problem}
+	구간 $0 \leq x \leq 2 \pi$에서 삼각방정식 $4\left(\sin^{2} \frac{x}{2} + \cos x\right) -1=0$의 두 실근을 $\alpha, \: \beta(\alpha<\beta)$라고 할 때, $\tan(\alpha-\beta)$의 값을 구하시오.
+	\processifversion{psol}{
+\begin{psolution}
+	$\sin^{2}\left(\frac{x}{2}\right)=\frac{1-\cos(x)}{2}$이므로 주어진 식은 
+	\begin{equation*}
+		4\left( \frac{1-\cos(x)}{2}+\cos(x)\right)-1=0
+	\end{equation*}
+으로 변형되고 이로부터 $\cos(x) =-\frac{1}{2}$를 얻는다. 따라서 $\alpha=\frac{2\pi}{3}$, $\beta=\frac{4\pi}{3}$이다. 이제 $\tan(\alpha-\beta)=-\tan\left(\frac{2\pi}{3}\right)=\sqrt{3}$이다.
+\end{psolution}	
+}
+\end{problem}
+
+\begin{problem}
+	등식
+	\[
+	(\cos 2\theta + \cos 4\theta + \cos 6\theta + \:\cdots \: + \cos 200\theta ) \sin \theta = \cos a\theta \sin b\theta
+	\]
+	가 성립할 때, 두 상수 $a,\:b$의 값을 구하시오.
+	\processifversion{psol}{
+\begin{psolution}
+	곱을 합 또는 차를 고치는 공식
+\begin{equation*}
+	\displaystyle \cos(A)\sin(B)=\frac{1}{2}\{\sin( A+B) -\sin( A-B)\}
+\end{equation*}
+을 이용하여 식을 변형하면 망원합의 형태의 식으로 나타낼 수 있다. 즉
+	\begin{align*}
+			&\phantom{=}\sin(\theta) \cos(2k\theta) + \sin\theta \cos\left(( 2k+2) \theta\right) \\
+			&=\frac{1}{2}\{\sin\left(( 2k+1) \theta\right) -\sin\left(( 2k-1) \theta\right) + \sin\left(( 2k+3) \theta\right) -\sin\left(( 2k+1) \theta\right) \}\\
+			&=\frac{1}{2}\{\sin\left(( 2k+3) \theta\right) -\sin\left(( 2k-1) \theta\right) \}\\
+			&=\cos\left(( 2k+1) \theta\right) \sin(2\theta) 
+	\end{align*}
+이므로 망원합에 의해 
+	\begin{align*}
+			&\phantom{=}(\cos 2\theta + \cos 4\theta + \cos 6\theta + \:\cdots \: + \cos 200\theta ) \sin \theta \\
+			&=\cos(2\theta)\sin(\theta) + \cos(4\theta) \sin(\theta) +\; \cdots \; +\cos(200\theta) \sin(\theta) \\
+			&=\frac{1}{2}\{\sin(3\theta) + \sin(5\theta) +\; \cdots  \;+ \sin(201\theta) \} -\frac{1}{2}\{\sin(\theta) + \sin(3\theta) + \; \cdots  \;+ \sin(199\theta) \}
+	\end{align*}
+이고 따라서
+	\begin{equation*}
+		\frac{1}{2}\{\sin(201\theta) -\sin(\theta )\} =\cos(101\theta) \sin(100\theta)
+	\end{equation*}
+이다. 그런데 코사인 함수는 우함수이므로 우변과 $a=\pm 101$이고 $b=100$이다.
+\end{psolution}	
+}
+\end{problem}
+
+\begin{example}\label{exam:angle}
+	임의의 각 $\alpha,\;\beta,\;\gamma$에 대하여 다음이 항상 성립한다.
+	\begin{align*}
+		\sin \alpha + \sin \beta &+ \sin \gamma - \sin(\alpha + \beta+ \gamma) \\
+		&= 4 \sin \frac{\alpha+\beta}{2} \sin \frac{\beta+\gamma}{2} \sin \frac{\gamma+\alpha}{2}
+	\end{align*}
+	\begin{solution}
+		삼각함수의 합 또는 차를 곱으로 고치는 공식을 사용하면
+		\begin{align*}
+			& \phantom{=}\left[\sin \alpha + \sin \beta \right] + \left[\sin \gamma - \sin (\alpha +\beta + \gamma)\right] \\
+			&= 2 \sin \frac{\alpha+\beta}{2} \cos \frac{\alpha-\beta}{2} - 2 \sin \frac{\alpha+\beta}{2} \cos \frac{\alpha+\beta + 2\gamma}{2} \\
+			&= 2 \sin \frac{\alpha+\beta}{2}\left[\cos \frac{\alpha-\beta}{2} -\cos \frac{\alpha+\beta+2\gamma}{2}\right] \\
+			&= 4 \sin \frac{\alpha+\beta}{2} \sin \frac{\beta+\gamma}{2} \sin \frac{\gamma+\alpha}{2}
+		\end{align*}
+	\end{solution}
+\end{example}
+\vspace{1em}
+예제 \ref{exam:angle}은(는) 삼각형의 세 내각에 대한 등식을 증명하는 데 매우 유용하다. 
+\vspace{1em}
+\begin{problem}
+	$\alpha,\;\beta,\;\gamma$가 삼각형 \textrm{ABC}의 세 내각일 때 다음이 성립함을 보이시오.
+	\begin{enumerate}[label=\arabic*)]
+		% 		\item $\sin \alpha +\sin\beta +\sin \gamma = 4 \cos \frac{\alpha}{2}\cos \frac{\beta}{2}\cos \frac{\gamma}{2}$
+		% 		\item $\sin 2\alpha +\sin 2\beta +\sin 2\gamma = 4 \sin \alpha \sin \beta \sin \gamma$
+		\item $\sin 4\alpha +\sin 4\beta +\sin 4\gamma = -4 \sin 2\alpha \sin 2\beta \sin 2\gamma$
+		% 		\item $\cos \alpha +\cos \beta + \cos \gamma -1 =  4 \sin \frac{\alpha}{2}\sin \frac{\beta}{2}\sin \frac{\gamma}{2}$
+		% 		\item $\cos 2\alpha +\cos 2\beta +\cos 2\gamma +1 = - 4 \cos \alpha \cos \beta \cos \gamma$
+		\item  $\cos 4\alpha +\cos 4\beta +\cos 4\gamma +1 = 4 \cos 2\alpha \cos 2\beta \cos 2\gamma$
+	\end{enumerate}
+\processifversion{psol}{
+\begin{psolution}
+	\begin{enumerate}[label=\arabic*)]
+		\item 예제 \ref{exam:angle}에 $\alpha$, $\beta$, $\gamma$에 각각 $4\alpha$, $4\beta$, $4\gamma$를 대입하고 $\alpha+\beta+\gamma=\pi$임을 이용하면 증명이 된다.
+		\item 예제 \ref{exam:angle}에 $\alpha$, $\beta$, $\gamma$에 각각 $\frac{\pi}{2}-4\alpha$, $\frac{\pi}{2}-4\beta$, $\frac{\pi}{2}-4\gamma$를 대입하고 $\alpha+\beta+\gamma=\pi$임을 이용하면 증명이 된다.
+	\end{enumerate}
+\end{psolution}
+}
+\end{problem}
+
+\begin{problem}
+	다음을 간단히 하시오.
+	\[
+	\frac{(\cos(\theta)+ i\sin(\theta))(\cos(2\theta)+i\sin(2\theta))}{\sin(3\theta) - i \cos(3\theta)}
+	\]
+\processifversion{psol}{
+	\begin{psolution}
+		$z=\cos(\theta)+i\sin(\theta)$라 하면
+		\begin{align*}
+			\frac{(\cos(\theta) + i\sin(\theta))(\cos(2\theta) + i\sin(2\theta))}{\sin(3\theta) - i\cos(3\theta))} &= \frac{z{\cdot}z^2}{- i{\cdot}z^3}\\
+			&=\frac{z^3}{- i{\cdot}z^3}\\
+			&=- \frac{1}{i} =i
+		\end{align*}
+		이고 따라서 
+\begin{equation*}
+	\frac{(\cos(\theta) + i\sin(\theta))(\cos(2\theta) + i\sin(2\theta))}{\sin(3\theta) - i\cos(3\theta))} =i
+\end{equation*}
+이다.
+	\end{psolution}
+}	
+\end{problem}
+
+\begin{problem}
+	$0\leq r <1$일 때,
+	\[
+	1+ 2\left(r \cos(\theta) + r^{2} \cos(2\theta) + \: 
+	\cdots \: + r^{n}\cos(n \theta) + \: \cdots\right) = \frac{1-r^{2}}{1-2r \cos(\theta)+r^{2}}
+	\]
+	임을 보이시오.
+\processifversion{psol}{
+\begin{psolution}
+	$z=\cos(\theta)+i\sin(\theta)$라 하면
+	$z^n=r^n(\cos(n\theta)+i\sin(n\theta))$이므로 
+	\begin{equation*}
+		1+2(z+z^2+\;\cdots \;+z^n +\;\cdots)
+	\end{equation*}
+의 실수부분은 문제의 좌변과 같고, 
+\begin{equation*}
+z+z^2+\;\cdots \;+z^n +\;\cdots)
+\end{equation*}
+는 초항이 $z$이고, 공비가$z$인 무한등비급수 이므로 $\frac{z}{1-z}$이다. 이상을 정리하면
+\begin{align*}
+			1+2(z+z^2+\;\cdots \;+z^n +\;\cdots)&= 1+2\cdot\frac{z}{1-z}\\
+			&=1+\frac{2z}{1-z}=\frac{1+z}{1-z}\\
+			&=\frac{1+r\cos(\theta)+ri\sin(\theta)}{1-r\cos(\theta)-ri\sin(\theta)}\\
+			&=\frac{(1+r\cos(\theta)+ri\sin(\theta))(1-r\cos(\theta)+ri\sin(\theta))}{(1-r\cos(\theta))^2-(ri\sin(\theta))^2}\\
+			&=\frac{1+2ri\sin(\theta)-r^2\sin^2(\theta)-r^2\cos^2(\theta)}{1-2r\cos(\theta)+r^2\cos^2(\theta)+r^2\sin^2(\theta)}
+\end{align*}
+이고 마지막 식의 실수부분은 
+$\frac{1-r^2}{1-2r\cos(\theta)+r^2}$이므로 주어진 등식이 증명된다.
+	
+\end{psolution}
+}
+\end{problem}
+
+
+\begin{problem}
+	$0<\theta<2\pi$일 때, 다음 등식을 증명하시오.
+	\[
+	1+\cos(\theta) +\cos(2\theta) + \:\cdots \: + \cos(n\theta) =\frac{1}{2} +\frac{\sin\left(n+\frac{1}{2}\right)\theta}{2\sin\left(\frac{\theta}{2}\right)}
+	\]
+		\processifversion{psol}{
+		\begin{psolution}
+			$z=\cos(\theta)+i\sin(\theta)$라 하면 $\cos(\theta)=\frac{z^{1}+z^{-1}}{2}$이고 일반적으로
+			$\cos(n\theta)=\frac{z^{n}+z^{-n}}{2}$이다. 따라서 다음이 성립한다.
+			\begin{align*}
+				&1+\cos(\theta)+\cos(2\theta)+\cdots+\cos(n\theta)\\
+				&=\frac{z^{0}+z^{0}}{2}+\frac{z^{1}+z^{-1}}{2}+\frac{z^{2}+z^{-2}}{2}+\cdots+\frac{z^{n}+z^{-n}}{2}
+			\end{align*}
+		한편 주어진 등식의 우변은 다음과 같이 표현할 수 있다.
+		\begin{align*}
+			\frac{1}{2}+ \frac{\sin((n+\frac{1}{2})\theta)}{2\sin\left(\frac{\theta}{2}\right)}&=\frac{1}{2}+\frac{\frac{z^{n+\frac{1}{2}}-z^{-n-\frac{1}{2}}}{2i}}{2\times \frac{z^{\frac{1}{2}}-z^{-\frac{1}{2}}}{2i}}\\
+		&=\frac{1}{2}+\frac{1}{2}\left(\frac{z^{n+1}-z^{-n}}{z-1}\right)
+		\end{align*}
+	그런데 주어진 등식의 변형된 좌변이 첫째항이 $1$이고 공비가 각각 $z$, $z^{-1}$인 두 등비수열의 제 $n+1$항까지의 합들의 합의 $\frac{1}{2}$이므로 등식이 성립한다.
+		\end{psolution}
+}
+\end{problem}
+
+\begin{example}
+	다음 삼각방정식을 푸시오.
+	\[
+	\cos(x) + \cos(2x) - \cos(3x) =1
+	\]
+	\begin{solution}
+		$z=\cos(x) +i\sin(x)$라 하면 다음이 성립한다.
+		\[
+		\cos(x) =\frac{z^{2}+1}{2z},\quad \cos(2x) =\frac{z^{4}+1}{2z^{2}}, \quad \cos(3x) =\frac{z^{6}+1}{2z^{3}}
+		\]
+		따라서 주어진 식은
+		\[
+		\frac{z^{2}+1}{2z}+\frac{z^{4}+1}{2z^{2}} - \frac{z^{6}+1}{2z^{3}} =1
+		\]
+		이고 변형하면
+		\begin{align*}
+			\phantom{\Leftrightarrow}&z^{4} +z^{2} +z^{5} +z -z^{6}-1 - 2z^{3} =0 \\
+			\Leftrightarrow & (z^{6} - z^{5}-z^{4}+z^{3}) +(z^{3}-z^{2}-z+1)=0 \\
+			\Leftrightarrow & (z^{3}+1)(z^{3}-z^{2}-z+1) =0 \\
+			\Leftrightarrow & (z^{3}+1)(z-1)^{2}(z+1)=0
+		\end{align*}
+		이다. 즉, $z=1, -1$ 또는 $z^{3}=-1$이므로 $x=2k \pi$, $x=\pi + 2k \pi$ 또는 $x=\frac{\pi+2k \pi}{3}$.
+	\end{solution}
+	
+\end{example}
+\begin{problem}\label{prob:realpt}
+	$z=\cos(\theta) + i \sin(\theta)$라 할 때, $\textrm{Re}\left[\frac{1}{1-z}\right] =\frac{1}{2}$임을 보이시오.
+	\processifversion{psol}{
+\begin{psolution}
+	$\frac{1}{1-z}$의 실수부분을 구하는 것이므로
+	\begin{align*}
+		\frac{1}{1-z} &= \frac{1}{1-\cos(\theta)-i \sin(\theta)}\\
+		&=\frac{1}{2\sin^{2}\left(\frac{\theta}{2}\right) - 2i \sin\left(\frac{\theta}{2}\right)\cos\left(\frac{\theta}{2}\right)}\\
+		&= \frac{1}{\sin\left(\frac{\theta}{2}\right)}\cdot \frac{1}{\sin\left(\frac{\theta}{2}\right)- i \cos\left(\frac{\theta}{2}\right)} \\
+		&=\frac{1}{\sin\left(\frac{\theta}{2}\right)}\left(\sin\left(\frac{\theta}{2}\right)+ i \cos\left(\frac{\theta}{2}\right)\right) \\
+		&=\frac{1}{2} +\frac{1}{2}i \cot\left(\frac{\theta}{2}\right)
+	\end{align*}
+이고 따라서 $\textrm{Re}\left[\frac{1}{1-z}\right] =\frac{1}{2}$이다.
+\end{psolution}	
+}
+\end{problem}
+
+\begin{problem}
+	다음이 성립함을 보이시오.
+	\[
+	\cos \left(\frac{\pi}{11}\right) + \cos \left(\frac{3\pi}{11}\right) + \cos \left(\frac{5\pi}{11}\right) +\: \cdots \: + \cos \left(\frac{9\pi}{11}\right) =\frac{1}{2}
+	\]
+	\processifversion{psol}{\begin{psolution}
+			$z=\cos\left(\frac{\pi}{11}\right) + i \sin\left(\frac{\pi}{11}\right)$라 하면
+			\[
+			z+ z^{3} +z^{5} + z^{7} +z^{9} =\frac{z^{11}-z}{z^{2}-1} =\frac{-1-z}{z^{2}-1} =\frac{1}{1-z}
+			\]
+			이므로 바로 앞의 문제 (\ref{prob:realpt})에 의해 주어진 문제가 증명된다.
+	\end{psolution}}
+\end{problem}
+\begin{problem}\label{prob:five}
+	삼각형 \textrm{ABC}에서 다음이 성립함을 보이시오. 단, $S$는 삼각형의 넓이, $R$, $r$은 각각 삼각형의 외접원의 반지름과 내접원의 반지름을 나타낸다.
+	\begin{enumerate}[label=\arabic*)]
+		\item $4R =\frac{abc}{S}$
+		\item $2R^{2} \sinrm{A} \sinrm{B}\sinrm{C} = S$
+		\item $2R \sinrm{A}\sinrm{B}\sinrm{C}=r(\sinrm{A}+\sinrm{B}+\sinrm{C})$
+		\item $r=4R \sin\left(\frac{\textrm{A}}{2}\right)\sin\left(\frac{\textrm{B}}{2}\right)\sin\left(\frac{\textrm{C}}{2}\right)$
+		\item $a \cosrm{A}+b\cosrm{B}+c\cosrm{C} = \frac{abc}{2R^{2}}$
+	\end{enumerate}
+\processifversion{psol}{
+\begin{psolution}
+	\begin{enumerate}[label=\arabic*)]
+		\item 사인정리에 의해 다음이 성립한다.
+		\begin{equation*}
+			R =\frac{a}{2 \sinrm{A}} = \frac{abc}{2bc\sinrm{A}}=\frac{abc}{4S}
+		\end{equation*}
+		\item 같은 정리에 의해 다음이 성립한다.
+		\begin{align*}
+			2R^{2} \sinrm{A} \sinrm{B}\sinrm{C} &=\frac{1}{2}\left(2R \sinrm{A}\right)\left(2R \sinrm{B}\right)\left(\sinrm{C}\right)\\
+			&=\frac{1}{2}ab \sinrm{C} = S
+		\end{align*}
+	\item 삼각형의 넓이 공식들에 의해 다음이 성립한다.
+	\begin{equation*}
+		2S = bc \sinrm{A} = (a+b+c)r.
+	\end{equation*}
+	이 식에 사인정리를 적용하면 다음이 성립한다.
+	\begin{align*}
+		4R^{2} \sinrm{A}\sinrm{B}\sinrm{C} &= bc \sinrm{A} = r(a+b+c)\\
+		&= 2rR \left(\sinrm{A}+\sinrm{B}+\sinrm{C}\right)
+	\end{align*}
+이고 이 식의 양변을 $2R^{2}$으로 나누면 주어진 식이 증명된다.
+	\item 코사인 제2법칙에 의해
+	\begin{equation*}
+		\cosrm{A} =\frac{b^{2}+c^{2}-a^{2}}{2bc}
+	\end{equation*}
+이므로 반각공식에 의해
+	\begin{align*}
+		\sin\left(\frac{\textrm{A}}{2}\right) &= \frac{1-\cosrm{A}}{2} = \frac{1}{2} -\frac{b^{2}+c^{2}-a^{2}}{2bc} = \frac{a^{2}-\left(b^{2}+c^{2}-2bc\right)}{4bc} \\
+		&= \frac{a^{2}-(b-c)^{2}}{4bc} =\frac{(a-b+c)(a+b-c)}{4bc} \\
+		&= \frac{(2s-2b)(2s-2c)}{4bc} =\frac{(s-b)(s-c)}{bc}
+	\end{align*}
+이고 이 때, $2s=a+b+c$이다. 따라서 다음이 성립한다.
+	\begin{equation*}
+		\sin\left(\frac{\textrm{A}}{2}\right) = \sqrt{\frac{(s-b)(s-c)}{bc}}
+	\end{equation*}
+마찬가지 방법으로 $\sin\left(\frac{\textrm{B}}{2}\right)$, $\sin\left(\frac{\textrm{C}}{2}\right)$를 계산할 수 있고 헤론 공식에 의해
+	\begin{align*}
+		\sin\left(\frac{\textrm{A}}{2}\right)	\sin\left(\frac{\textrm{B}}{2}\right)	\sin\left(\frac{\textrm{C}}{2}\right) &= \frac{(s-a)(s-b)(s-c)}{abc} \\
+		&= \frac{s(s-a)(s-b)(s-c)}{sabc} =\frac{S^{2}}{sabc}
+	\end{align*}
+이다. 따라서
+\begin{equation*}
+		\sin\left(\frac{\textrm{A}}{2}\right)	\sin\left(\frac{\textrm{B}}{2}\right)	\sin\left(\frac{\textrm{C}}{2}\right) =\frac{S}{s}\cdot \frac{S}{abc} =r \cdot\frac{1}{4R}
+\end{equation*}
+이므로 문제가 증명되었다.
+	\item 사인정리에 의해 $a \cosrm{A}=2R \sinrm{A}\cosrm{A}=R \sinrm{2A}$이고 마찬가지 이유로 $b \cosrm{B}=R \sinrm{2B}$, $c\cosrm{C}=R \sinrm{2C}$이다. 1)과 2)에 의해 
+	\begin{equation*}
+		4R \sinrm{A}\sinrm{B}\sinrm{C} =\frac{abc}{2R^{2}}
+	\end{equation*}
+이 성립하고 주어진 문제는
+\begin{equation*}
+	\sinrm{2A}+\sinrm{2B}+\sinrm{2C} = 4 \sinrm{A}\sinrm{B}\sinrm{C}
+\end{equation*}
+를 보이는 문제로 귀착된다. 그런데 이것은 문제 (\ref{prob:sindouble})이다.
+	\end{enumerate}
+\end{psolution}
+}
+\end{problem}
+\begin{problem}
+	삼각형 \textrm{ABC}에서 다음이 성립함을 보이시오. 단, $s$는 삼각형의 반둘레, 즉 $s=\frac{a+b+c}{2}$이고 $R$은 외접원의 반지름이다.
+	\[
+	s = 4R \cos\left(\frac{\textrm{A}}{2}\right)\cos\left(\frac{\textrm{B}}{2}\right)\cos\left(\frac{\textrm{C}}{2}\right)
+	\]
+\processifversion{psol}{
+$rs=S$이므로 $s=\frac{S}{r}$이고 문제 (\ref{prob:five})의 $1),\; 2),\; 4)$와 $2$배각 공식에 의해 다음이 성립한다.
+\begin{equation*}
+	s =\frac{R \sinrm{A}\sinrm{B}\sinrm{C}}{2 \sin\left(\frac{\textrm{A}}{2}\right) \sin\left(\frac{\textrm{B}}{2}\right) \sin\left(\frac{\textrm{C}}{2}\right)} =4R \cos\left(\frac{\textrm{A}}{2}\right)\cos\left(\frac{\textrm{B}}{2}\right)\cos\left(\frac{\textrm{C}}{2}\right)
+\end{equation*}
+}
+\end{problem}
+\vspace{1em}
+다음의 문제 \ref{prob:gauss}는 Gaussian Pairing을 이용하는 문제이다. Gaussian Pairing은 가우스의 유년시절 $1$부터 $100$까지의 자연수의 합을 구하라는 문제가 제시되었을 때, $1$부터 $100$까지의 자연수의 합과 역으로 $100$부터 $1$까지의 자연수의 합을 쓰고 구하는 값의 $2$배가 $101$이 $100$개가 되도록 하여 문제를 해결한 전략에 이름을 부여한 것이다. Gaussian Pairing은 합이 일정하게 하는 방법과 곱이 일정하게 하는 방법의 두 가지가 있다. 문제 \ref{prob:gauss}는 곱이 일정하게 하여 문제를 해결하는 경우이다.
+\begin{problem}\label{prob:gauss}
+	다음을 만족시키는 수 $n$을 구하시오.
+	\begin{equation*}
+	\left(1+\tan(1^{\circ})\right)\left(1+\tan(2^{\circ})\right)\: \cdots \: \left(1+\tan(45^{\circ})\right) =2^{n}
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+각의 합이 $\frac{\pi}{4}$인 것끼리 짝지어 곱해보는 것이 자연스럽다. 그런데
+\begin{align*}
+	\phantom{=}& \left(1+\tan(\theta)\right)\left(1+\tan\left(\frac{\pi}{4}-\theta\right)\right) \\
+	&= \left(1+\tan(\theta)\right)\left(1+\frac{\tan\left(\frac{\pi}{4}\right)-\tan(\theta)}{1+\tan\left(\frac{\pi}{4}\right)\tan(\theta)}\right) \\
+	&= \left(1+\tan(\theta)\right) \left(1+\frac{\left(1-\tan(\theta)\right)}{\left(1+\tan(\theta)\right)}\right)\\
+	&=\left(1+\tan(\theta)\right) + \left(1-\tan(\theta)\right) =2
+\end{align*}
+이고 $1+\tan\left(45^{\circ}\right)=2$이므로 $\boxed{n=23}$임을 알 수 있다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}
+	다음을 만족시키는 예각 $\alpha$를 구하시오.
+	\begin{equation*}
+		\sqrt{15- 12\cos(\alpha)} +\sqrt{7-4\sqrt{3}\sin(\alpha)} =4
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+ $\ovr{AC}=\sqrt{12}$, $\ovr{CD}=\sqrt{3}$, $\ovr{BC}=2$라고 하고  두 삼각형 \textrm{ADC}와 삼각형 \textrm{DBC}에 각각 코사인 제2법칙을 적용하면, 
+ \begin{align*}
+ 	\ovr{AD} &=\sqrt{15-12\cos(\alpha)},\\ 
+ 	\ovr{BD} &=\sqrt{7-4\sqrt{3}\cos(90^{\circ}-\alpha)}\\ &=\sqrt{7-4\sqrt{3}\sin(\alpha)}
+ \end{align*}
+ 이다. 따라서 삼각형 \textrm{ABC}에서 $\angle \textrm{C}$가 직각이면 피타고라스 정리에서 $\ovr{AB}=4$이고 $\ovr{AD}+\ovr{DB}=4$이므로 다음과 같은 그림을 얻을 수 있다.
+		\begin{figure}[H]
+			\begin{center}
+				\begin{tikzpicture}[scale=2]
+			
+				\draw[very thick, line join=bevel] (0,0) node [left]{\textrm{A}}-- (0:4) node[right]{\textrm{B}}-- (30:{sqrt(12)}) node[above]{\textrm{C}} -- cycle;
+				
+				\draw[very thick, line join=round] (30:{sqrt(12)}) -- (2.5,0);
+				
+				\centerarc[green, thick](30:{sqrt(12)})(210:254:0.4)
+				
+				\centerarc[red, thick](30:{sqrt(12)})(254:300:0.5)
+				
+				\node at (26:3) { $\alpha$};
+				
+				\node[below] at (2.5, 0) {\textrm{D}};
+				
+				\node at (20:3.3) {\tiny $90^{\circ}-\alpha$};
+				\end{tikzpicture}
+			\end{center}	
+		\end{figure}
+이제 삼각형 \textrm{ABC}의 넓이를 두 가지 방법으로 구하면
+\begin{align*}
+	\frac{1}{2}\cdot 2 \cdot \sqrt{12} &= \frac{1}{2}\cdot\sqrt{12}\cdot\sqrt{3} \sin(\alpha) +\frac{1}{2}\cdot 2 \cdot \sqrt{3}\sin(90^{\circ}-\alpha)\\
+	&= 3 \sin(\alpha) + \sqrt{3} \cos(\alpha)
+\end{align*}
+이다. 이 식의 양변을 $2\sqrt{3}$으로 나누면,
+\begin{align*}
+	1&=\frac{\sqrt{3}}{2} \sin(\alpha) + \frac{1}{2}\cos(\alpha) \\
+	&= \cos\left(\frac{\pi}{3}\right) \cos(\alpha) + \sin\left(\frac{\pi}{3}\right) \sin(\alpha) \\
+	&=\cos\left(\frac{\pi}{3}-\alpha\right)
+\end{align*}
+이므로 $\frac{\pi}{3}-\alpha=0$이고 따라서 $\alpha=\frac{\pi}{3}$이다.
+\end{psolution}
+}
+\end{problem}
+
+\vspace{1em}
+\begin{problem}
+	방정식 $\sin(x)=\frac{x}{2021}$의 해의 갯수를 구하시오.
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	함수 $f(x)=\cos(\sqrt{x})$는 주기함수가 아님을 증명하시오.
+	\processifversion{psol}{
+\begin{psolution}
+주기가 존재하지 않음을 보이는 문제이므로 귀류법을 이용하여 증명한다. 주어진 함수의 주기가 $p(>0)$라고 가정하자. 그러면 모든 음이 아닌 실수 $x$에 대하여 
+\begin{equation}\label{eqn:periodic}
+	\cos\left(\sqrt{x}\right)=\cos\left(\sqrt{x+p} \right)
+\end{equation}
+이다. 식 (\ref{eqn:periodic})은 $x=0$일 때도 성립하므로
+\begin{equation*}
+	1=\cos(0) =\cos\left(\sqrt{p}\right)
+\end{equation*}
+이므로 어떤 자연수 $n$에 대하여 $\sqrt{p} =2n\pi$이다. 또 식 (\ref{eqn:periodic})에 $x=p$를 대입하면
+\begin{equation*}
+	1=\cos(p) =\cos\left(2p\right)
+\end{equation*}
+이다. 따라서 어떤 자연수 $m$에 대하여 $\sqrt{2p} =2m\pi$이다. 즉, $2m\pi =2\sqrt{2}n\pi$이고 $\frac{m}{n} =\sqrt{2}$이므로 모순이다.
+\end{psolution}	
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	$0<\alpha<\beta<\frac{\pi}{2}$일 때,
+	\begin{equation*}
+		\frac{\cot(\beta)}{\cot(\alpha)} < \frac{\cos(\beta)}{\cos(\alpha)} < \frac{\beta}{\alpha}
+	\end{equation*}
+	가 성립함을 보이시오.
+\processifversion{psol}{
+	\begin{psolution}
+		주어진 부등식의 첫 번째 부분은
+		\begin{equation*}
+			\frac{\cot(\beta)}{\cot(\alpha)} < \frac{\cos(\beta)}{\cos(\alpha)}\Leftrightarrow  \frac{\cot(\beta)}{\cos(\beta)}<\frac{\cot(\alpha)}{\cos(\alpha)} \Leftrightarrow \sin(\alpha)<\sin(\beta)
+		\end{equation*}
+	이고 사인함수가 구간 $\left[0, \;\frac{\pi}{2}\right]$에서 증가함수이고 $0<\alpha<\beta<\frac{\pi}{2}$이므로 성립한다. 부등식의 두 번째 부분을 변형하면
+	\begin{equation*}
+		\frac{\cos(\beta)}{\cos(\alpha)} < \frac{\beta}{\alpha} \Leftrightarrow \frac{\cos(\beta)}{\beta} < \frac{\cos(\alpha)}{\alpha}
+	\end{equation*}
+		이다. 그런데 이 부등식의 양 변은 모두 원점 \textrm{O}와 점 $(x, \;\cos(x))$을 잇는 선분의 기울기이다. 
+\begin{figure}[H]
+	\begin{center}
+		\begin{tikzpicture}[scale=1.5]
+			\pgfmathsetmacro{\ang}{60}
+			\pgfmathsetmacro{\angg}{30}
+			
+			\draw[-latex, ultra thick] ({-pi/2-0.2}, 0) -- ({pi+0.2}, 0) node[below] {$x$} ;
+			
+			\draw[-latex, ultra thick] (0, -1) -- (0, 1.4) node[above] {$y=\cos(x)$} ;
+			\node[below left] at (0,0) {\textrm{O}};
+			
+			\draw[scale=1, domain=-1.57:0, smooth, variable=\x, blue, very thick, dashed] plot (\x, {cos(\x r)});
+			
+			\draw[scale=1, domain=0:1.57, smooth, variable=\x, blue, ultra thick] plot (\x, {cos(\x r)});
+			
+			\draw[scale=1, domain={pi/2}:{pi}, smooth, variable=\x, blue, ultra thick, dashed] plot (\x, {cos(\x r)});
+			
+			\draw[thick, red] (0,0) -- (\ang:1.012) node[right]{$(\alpha,\; \cos(\alpha))$};
+			
+			\draw[thick, cyan] (0,0) -- (\angg:1.135) node[right]{$(\beta,\; \cos(\beta))$};
+			
+		\end{tikzpicture}
+	\end{center}
+\end{figure}
+이제 위의 그림으로부터 부등식이 성립함을 금방 알 수 있다.	
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음이 성립함을 보이시오.
+	\begin{equation*}
+		1-\cot(23^{\circ}) =\frac{2}{1-\cot(22^{\circ})}
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+  먼저 이 문제는 일반화하여 다음이 성립함을 보이자.
+ 	\begin{equation*}
+ 	1-\cot(\theta) =\frac{2}{1-\cot\left(\frac{\pi}{4}-\theta\right)}
+ \end{equation*} 
+그런데 $\tan\left(\frac{\pi}{4}-\theta\right)=\frac{1-\tan(\theta)}{1+\tan(\theta)}$이므로
+\begin{align*}
+	\phantom{=}&(1-\cot(\theta))\left(1-\cot\left(\frac{\pi}{4}-\theta\right) \right) \\
+	&= 1-\cot(\theta) - \cot\left(\frac{\pi}{4}-\theta\right) + \cot(\theta) \cot\left(\frac{\pi}{4}-\theta\right) \\
+	&= 1-\left(\frac{1}{\tan(\theta)}+\frac{1+\tan(\theta)}{1-\tan(\theta)} \right) +\frac{1}{\tan(\theta)}\cdot  \frac{1+\tan(\theta)}{1-\tan(\theta)}\\
+	&=1- \frac{1-\tan(\theta) + \tan(\theta)+\tan^{2}(\theta)}{\tan(\theta)(1-\tan(\theta))} + \frac{1+\tan(\theta)}{\tan(\theta)(1-\tan(\theta))}\\
+	&= 1-\left(\frac{-\tan(\theta)(1-\tan(\theta))}{\tan(\theta)(1-\tan(\theta))}\right) = 2
+\end{align*}
+이므로 문제가 증명되었다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음이 성립함을 보이시오.
+	\begin{equation*}
+		\left(4 \cos^{2}(9^{\circ})-3\right)	\left(4 \cos^{2}(27^{\circ})-3\right) =\tan(9^{\circ})
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	주어진 식을 분석하면 코사인 3배각 공식의 계수와 관계가 있음을 알 수 있다. 즉 $\cos\left(3\theta\right)=4\cos^{3}(\theta)-3\cos(\theta)$에서 양 변을 $\cos(\theta)$로 나누면 
+	\begin{equation*}
+		4 \cos^{2}(\theta) - 3 =\frac{\cos\left(3\theta\right)}{\cos(\theta)}
+	\end{equation*}
+이다. 따라서 
+\begin{align*}
+	\left(4 \cos^{2}\left(9^{\circ}\right)-3\right)	\left(4 \cos^{2}(27^{\circ})-3\right) &= \frac{\cos\left(27^{\circ}\right)}{\cos\left(9^{\circ}\right)} \cdot \frac{\cos\left(81^{\circ}\right)}{\cos\left(27^{\circ}\right)}\\
+	&= \frac{\cos\left(81^{\circ}\right)}{\cos\left(9^{\circ}\right)} = \frac{\sin\left(9^{\circ}\right)}{\cos\left(9^{\circ}\right)} =\tan\left(9^{\circ}\right)
+\end{align*}
+이므로 문제가 증명되었다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	$\frac{1+\tan(\theta)}{1-\tan(\theta)}=2021$일 때 $\sec(2\theta)+\tan(2\theta)$의 값을 구하시오.
+\processifversion{psol}{
+\begin{psolution}
+	\begin{align*}
+		\sec(2\theta)+\tan(2\theta) &= \frac{1}{\cos\left(2\theta\right)} +\frac{\sin\left(2\theta\right)}{\cos\left(2\theta\right)}\\
+		&= \frac{1+\sin\left(2\theta\right) }{\cos\left(2\theta\right)} \\
+	`   & = \frac{\sin\left(2\theta\right)+\sin\left(90^{\circ}\right)}{\cos\left(2\theta\right)+\cos\left(90^{\circ}\right)}\\
+	& =\tan\left(45^{\circ}+\theta\right)\\
+	&=\frac{\tan\left(45^{\circ}\right)+\tan(\theta)}{1-\tan\left(45^{\circ}\right)\tan(\theta)}\\
+	&= \frac{1+\tan(\theta)}{1-\tan(\theta)} =2021
+	\end{align*}
+이다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{example}\label{exam:telescoping}
+	다음을 증명하시오.
+	\begin{equation*}
+		\tan(x)\tan(2x) +\tan(2x)\tan(3x) + \;\cdots \; + \tan((n-1)x) \tan(nx) =\frac{\tan(nx)}{\tan(x)} -n
+	\end{equation*}
+\begin{solution}
+	탄젠트 함수의 덧셈 정리에 의해 다음이 성립한다.
+	\begin{equation*}
+		\tan\left((k+1)x - kx \right) =\frac{\tan((k+1)x)-\tan(kx)}{1+\tan(kx)\tan((k+1)x)} =\tan(x)
+	\end{equation*}
+이다. 따라서
+\begin{equation}\label{eqn:tangent}
+	1+\tan(kx) \tan((k+1)x) =\frac{1}{\tan(x)} \left(\tan((k+1)x) -\tan(kx)\right)
+\end{equation}
+이다. 이제 식 (\ref{eqn:tangent})에 $k$대신 $1$부터 $n-1$까지 수를 대입하여 더하면
+\begin{align*}
+	\phantom{=}&(n-1)+\tan(x)\tan(2x) +\tan(2x)\tan(3x) + \;\cdots \; + \tan((n-1)x) \tan(nx)\\
+	=&\frac{1}{\tan(x)}\left(\tan(nx)-\tan(x)\right)\\
+	=&\frac{\tan(nx)}{\tan(x)} -1 
+\end{align*}
+이 성립하므로 주어진 문제가 증명되었다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	임의의 자연수 $n$에 대하여 $x\neq \frac{m \pi}{2^{k}}$일 때, 다음을 증명하시오.
+	\begin{equation*}
+		\frac{1}{\sin(2x)} + \frac{1}{\sin(4x)} + \; \cdots \; + \frac{1}{\sin\left(2^{n}x\right)} =\cot(x) -\cot\left(2^{n}x\right)
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	이 문제의 우변을 관찰하면 예제 \ref{exam:telescoping}와 같이 망원합(telecoping sum)을 이용하여 계산할 수 있음을 추론할 수 있다. 실제로
+	\begin{align*}
+		\frac{1}{\sin(2\theta)} &= \frac{2\cos^{2}(\theta)}{2\sin(\theta)\cos(\theta)} -\frac{2\cos^{2}(\theta)}{2\sin(\theta)\cos(\theta)}  +\frac{1}{2\sin(\theta)\cos(\theta)}\\
+		&= \frac{\cos(\theta)}{\sin(\theta)} -\frac{2\cos^{2}(\theta)-1}{2\sin(\theta)\cos(\theta)}\\
+		&=  \frac{\cos(\theta)}{\sin(\theta)} - \frac{2\cos(2\theta)}{\sin(2\theta)}\\
+		&=\cot(\theta) -\cot(2\theta)
+	\end{align*}
+이므로 망원합에 의해 주어진 문제가 증명된다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음을 증명하시오.
+	\begin{equation*}
+		\tan(x) +2 \tan(2x) + 2^{2} \tan\left(2^{2}x\right) +\;\cdots\; +2^{n}\tan\left(2^{n}x\right) =\cot(x) -2^{n+1}\cot\left(2^{n+1}x\right)
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	이 문제 또한 예제 \ref{exam:telescoping}와 같이 망원합 형태의 문제임을 알 수 있다. 즉 다음이 성립함을 보이면 된다.
+	\begin{equation*}
+		2^{k-1}\tan\left(2^{k-1}x\right) = 2^{k-1} \cot\left(2^{k-1}x\right) - 2^{k} \cot\left(2^{k}x\right)
+	\end{equation*}
+따라서 일반적으로 $\tan(\theta)=\cot(\theta)-2\cot(2\theta)$가 성립함을 보이면 된다. 이제 탄젠트 $2$배각 공식에 의해 $\tan(2\theta)=\frac{2\tan(\theta)}{1-\tan^{2}(\theta)}$이고 따라서 $\frac{\tan(2\theta)}{2}=\frac{\tan(\theta)}{1-\tan^{2}(\theta)}$이다. 이제 양변에 역수를 취하면
+\begin{align*}
+2 \cot(2\theta) &= 	\frac{1-\tan^{2}(\theta)}{\tan(\theta)} \\
+&=\frac{1}{\tan(\theta)} - \tan(\theta) \\
+&=\cot(\theta) -\tan(\theta)
+\end{align*}
+이다 따라서 $\tan(\theta)=\cot(\theta)-\cot(2\theta)$가 성립하고 망원합을 이용하면 문제가 증명된다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	삼각형 \textrm{ABC}에서 $\angle \textrm{C} =\angle \textrm{A}+60^{\circ}$이다. $\ovr{BC}=1$, $\ovr{AC}=r$이고 $\ovr{AB}=r^{2}$이다. 이 때, $r< \sqrt{2}$임을 보이시오.(단, $r>1$이다.)
+\processifversion{psol}{
+\begin{psolution}
+	$\angle \textrm{A}=\theta$라 하고 주어진 조건대로 삼각형을 그리면 다음과 같다.
+	\begin{figure}[H]
+		\begin{center}
+		\begin{tikzpicture}
+			\pgfmathsetmacro{\angle}{20} 
+			
+			\begin{scope}
+				
+				\draw[line width=2pt] (0,0) --(0:6) ;
+				\draw[line width=1.5pt] (\angle+60:2) -- (0,0);
+				
+				
+				\coordinate (A) at (0:6);
+				\coordinate (B) at (\angle+60:2);
+				\coordinate (C) at (0,0);
+				
+				
+				\coordinate[label=below:\Large $r$](x) at ($ (A)!.5!(C) $);
+				\coordinate[label=above:\Large $r^2$] (y) at ($ (A)!.5!(B) $);
+				\coordinate[label=left:\Large $1$](z) at ($ (B)!.5!(C) $);
+				
+			\end{scope}		
+			% angle 60
+			\begin{scope}
+				
+				
+				\centerarc[green, thick](0,0)(0:\angle+60:0.5)
+				
+				\centerarc[red, thick](6,0)(180-\angle:180:0.8)
+				
+				\draw (20:0.9) node {$\theta+60^{\circ}$};
+				
+				\draw (2:5) node {$\theta$};
+				
+				\draw [line join=round,line width=2pt] (0,0) node[below] {\Large\textrm{C}} -- (A) node[right]{\Large\textrm{A}}--(B) node[anchor=south]{\large\textrm{B}} -- cycle;
+			\end{scope}	
+		\end{tikzpicture}
+	    \end{center}
+	\end{figure}
+$\angle \textrm{B}+\theta+\theta+\frac{\pi}{3}=\pi$이므로 $\angle\textrm{B}=\frac{2\pi}{3}-2\theta$이다. 이제 $\angle\textrm{B}$에 대하여 코사인 제2법칙을 적용하면
+\begin{equation*}
+	\cos\left(\frac{2\pi}{3}\right) =\frac{1+r^{4}-r^{2}}{2\cdot 1\cdot r^{2}}
+\end{equation*}
+이고 이로부터 다음 식을 얻는다.
+\begin{equation}\label{eqn:am}
+	r^{2}\left(1+2\cos\left(\frac{2\pi}{3}-2\theta\right)\right) = 1+r^{4}
+\end{equation}
+이제 식(\ref{eqn:am})의 좌변에 산술-기하 부등식을 적용하면 
+\begin{equation}\label{eqn:am1}
+	r^{2}\left(1+2\cos\left(\frac{2\pi}{3}-2\theta\right)\right) > 2r^{2}
+\end{equation}
+을 얻는다. 이 때 $r>1$이므로 등호가 성립할 수 없음에 유의하자. 이제 식 (\ref{eqn:am1})에서 양변의 $r^{2}$을 약분하고 정리하면 $\cos\left(\frac{2\pi}{3}-2\theta\right)>\frac{1}{2}$를 얻고 이 삼각부등식을 풀면 $\frac{2\pi}{3}-2\theta<\frac{\pi}{3}$이고 이로부터 $\theta>\frac{\pi}{6}$을 얻는다. 한편 $\theta +\left(\theta+\frac{\pi}{3}\right)<\pi$로부터 $\theta<\frac{\pi}{3}$임을 알 수 있다.
+이제 사인정리에 의해 
+\begin{equation*}
+	\frac{1}{\sin(\theta)} =\frac{r^{2}}{\sin\left(\frac{\pi}{3}\right)}
+\end{equation*}
+따라서 
+\begin{align*}
+	r^{2} &=\frac{\sin\left(\frac{\pi}{3}\right)}{\sin(\theta)}\\
+	&=\frac{\sin\left(\frac{\pi}{3}+\theta\right)\cos(\theta)+\cos\left(\frac{\pi}{3}+\theta\right)\sin(\theta)}{\sin(\theta)}\\
+	&=\frac{\sqrt{3}}{2} \cot(\theta) +\frac{1}{2}\\
+	&<\frac{\sqrt{3}}{2}\times \sqrt{3} +\frac{1}{2} = 2
+\end{align*}
+이므로 $r<\sqrt{2}$이다.
+\end{psolution}
+}
+\end{problem}
+
+\vspace{2em}
+\section{삼각치환에 의한 문제해결}
+최대, 최소 문제, 절대부등식의 증명 문제에서 삼각치환을 하면 쉽게 해결되는 문제들이 많이 존재한다. 이 절에서는 삼각치환에 의해 해결할 수 있는 문제들을 해결해 보자.
+
+먼저 삼각치환으로 해결할 수 있는 전형적인 최대, 최소문제를 하나 풀어보자.
+
+\vspace{1em}
+\begin{example}
+	$x, \;y$는 실수이고 $4x^{2} - 5 xy + 4 y^{2} = 5$를 만족시킨다. 이 때 $x^{2} + y^{2}$의 최댓값과 최솟값을 구하시오.
+	\begin{solution}
+		$r=x^{2}+y^{2}$이라 하자. 그러면 $x=\sqrt{r}\cos(\theta)$, $y=\sqrt{r}\sin(\theta)$를 만족시키는$\theta$가 존재한다. 그러면 주어진 조건은 다음과 같이 치환된다.
+		\begin{align*}
+			4r \cos^{2}(\theta) - 5r \sin(\theta)\cos(\theta) + 4r \sin^{2}(\theta) &=5 \\
+			4r\left(\cos^{2}(\theta)+\sin^{2}(\theta) \right) - 5r \sin(\theta)\cos(\theta) &=5 \\
+			4r - \frac{5}{2} r \sin(2\theta) &=5
+		\end{align*}
+이다. 따라서 $r=\frac{10}{8-5\sin(2\theta)}$이다. 이제 $\sin(2\theta)=1$일 때, 최댓값을 갖고 $\sin(2\theta)=-1$일 때, 최솟값을 가짐을 쉽게 알 수 있다.
+	\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	음이 아닌 실수 $x, \; y,\;z$에 대하여 다음이 성립함을 증명하시오.
+	\begin{equation*}
+		\sqrt{x^{2}+y^{2} - xy} +\sqrt{y^{2}+z^{2}-yz} \geq \sqrt{z^{2} + x^{2} +zx}
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	이 문제는 주어진 부등식을 기하적인 해석을 하므로써 쉽게 증명할 수 있다. 다음 그림을 보자.
+	\begin{figure}[H]
+		\begin{center}
+			\begin{tikzpicture}[scale=0.8]
+				\pgfmathsetmacro{\angle}{30} % math mode에서 작동함.
+				
+				
+				\draw[line width=2pt] (0,0) --(90:2) ;
+				\draw[line width=1.5pt] (\angle:7) -- (180-\angle:5);
+				
+				
+				\coordinate (A) at (0,0);
+				\coordinate (B) at (180-\angle:5);
+				\coordinate (C) at (\angle:7);
+				\coordinate (D) at (90:2);
+				
+				\coordinate[label=below:\large $z$](z) at ($ (A)!.5!(C) $);
+				\coordinate[label=below:\large $x$] (x) at ($ (A)!.5!(B) $);
+				\coordinate[label=right:\large $y$](y) at ($ (A)!.7!(D) $);
+				
+				% angle 60
+				\draw[fill=green!30] (0,0) -- (\angle:0.75) arc (\angle:90:0.75);
+				\draw (55:0.9) node {\scriptsize $60^{\circ}$};
+				\draw[fill=red!20] (0,0) -- (180-\angle:0.75) arc (180-\angle:90:0.75);
+				\draw (115:0.8) node {\scriptsize $60^{\circ}$};
+				
+				\draw[line join=round] [line width=2pt] (0,0) node[below] {\Large\textrm{A}} -- (\angle:7) node[right]{\large\textrm{C}}--(90:2) node[anchor=south]{\large\textrm{D}} -- (180-\angle:5) node[left]{\large\textrm{B}}-- cycle;
+				
+			\end{tikzpicture}
+		\end{center}
+	\end{figure}
+코사인 정리에 의해 다음이 성립한다.
+\begin{align*}
+	\ovr{BD} &= \sqrt{x^{2} +y^{2}-xy} \\
+	\ovr{CD} &= \sqrt{y^{2} +z^{2}-yz} \\
+	\ovr{BC} &= \sqrt{z^{2} +x^{2}+zx} 
+\end{align*}
+그런데 삼각형 \textrm{BCD}에서 $\ovr{BD} +\ovr{CD} \geq \ovr{BC}$이 성립하므로 문제가 증명되었다. 
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	다음 방정식의 해를 구하시오.
+   	\begin{equation*}
+   		6x + 8 \sqrt{1-x^{2}} = 5 \left(\sqrt{1+x} +\sqrt{1-x}\right) (\text{ 단, }0.6<x<1)
+   	\end{equation*}
+\processifversion{psol}{%
+\begin{psolution}
+	$\phi_{0} = \cos^{-1}(0.6)$이라 하고 $x=\cos(\phi)$라 하면 $\phi \in \left(0,\; \phi_{0}\right)$이고 다음이 성립한다.
+	\begin{equation*}
+	\cos(\phi_{0}) =0.6 < x = \cos(\phi) < 1.
+	\end{equation*}
+이제 주어진 방정식은 다음과 같이 삼각치환 된다.
+\begin{equation*}
+	6 \cos(\phi) + 8 \sin(\phi) = 5\left(\sqrt{1+\cos(\phi)}+\sqrt{1-\cos(\phi)}\right)
+\end{equation*}
+그런데 $\left(0, \;\phi_{0}\right) \subset \left(0, \; \frac{\pi}{2}\right)$이므로 $\sin(\phi_{0})=0.8$이고 다음이 성립한다.
+\begin{align*}
+	\Leftrightarrow 10\left(0.6 \cos(\phi)+0.8 \sin(\phi)\right) & = 5\sqrt{2}\left(\cos\left(\frac{\phi}{2}\right) +\sin\left(\frac{\phi}{2}\right)\right) \\
+	\Leftrightarrow 10\left(0.6 \cos(\phi)+0.8 \sin(\phi)\right) & =10\left(\frac{\sqrt{2}}{2}\cos\left(\frac{\phi}{2}\right) +\frac{\sqrt{2}}{2}\sin\left(\frac{\phi}{2}\right)\right) \\
+	\Leftrightarrow 10\left(\cos(\phi_{0}) \cos(\phi)+\sin(\phi_{0}) \sin(\phi)\right) & =10\left(\cos\left(\frac{\pi}{4}\right)\cos\left(\frac{\phi}{2}\right) +\sin\left(\frac{\pi}{4}\right)\sin\left(\frac{\phi}{2}\right)\right) \\
+	\Leftrightarrow \cos\left(\phi_{0}-\phi\right) & = \cos\left(\frac{\pi}{4}-\frac{\phi}{2}\right)
+\end{align*}
+이다. 한편
+\begin{equation*}
+	\cos\left(\frac{\phi_{0}}{2}\right) =\sqrt{\frac{1+\cos\left(\phi_{0}\right)}{2}} =\sqrt{0.8} > \cos\left(\frac{\pi}{4}\right)
+\end{equation*}
+이다. 또 $\phi_{0} - \phi<\frac{\pi}{2}$이고 $0<\frac{\pi}{4}-\frac{\phi}{2}<\frac{\pi}{2}$이므로
+\begin{align*}
+	\cos\left(\phi_{0}-\phi \right) &=\cos\left(\frac{\pi}{2}-\frac{\phi}{2}\right) \\
+	\Leftrightarrow \phi_{0} -\phi & = \frac{\pi}{4} -\frac{\phi}{2}
+\end{align*}
+이다. 따라서 $\phi = 2\phi_{0} - \frac{\pi}{2}$이므로 구하는 $x$는
+\begin{align*}
+	x = \cos\left(2\phi_{0} -\frac{\pi}{2}\right) & = \sin\left(2\phi_{0}\right)\\
+	&= 2 \sin\left(\phi_{0}\right)\cos\left(\phi_{0}\right)\\
+	&= 2 \times 0.8 \times 0.6 = 0.96
+\end{align*}
+이다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{example}
+	다음 연립방정식의 해를구하시오.
+	\begin{equation*}
+		\frac{3x-y}{x-3y} =x^{2}, \quad \frac{3y-z}{y-3z} =y^{2}, \quad \frac{3z-x}{z-3x} =z^{2}
+	\end{equation*}
+	\begin{solution}
+$x=0$이면 나머지 미지수도 모두 $0$이 되므로 모순이다. 따라서 $x,\;y,\;z \neq 0$이다. $u \in \left(-\frac{\pi}{2}, \: \frac{\pi}{2}\right)$라 하고 $x=\tan(u)$라 하면 탄젠트 함수의 $3$배각 공식에 의해
+\begin{equation*}
+y = \frac{3 \tan(u)-\tan^{3}(u)}{1-3\tan^{2}(u)} = \tan(3u)
+\end{equation*}	
+을 얻고 비슷한 방법으로 다음을 얻을 수 있다.
+\begin{equation*}
+	z= \tan(9u), \quad x = \tan(27u)
+\end{equation*}
+따라서 $\tan(u) =\tan(27u)$이고 이로부터 $27u-u=k \pi$(단, $k=\pm 1, \;\pm2,\; \cdots, \;\pm12$)이고 $u=\frac{k \pi}{26}$이다. 그러므로 구하는 해는 $x=\tan\left(\frac{k\pi}{26}\right)$, $y=\tan\left(\frac{3k\pi}{26}\right)$, $z=\tan\left(\frac{9k\pi}{26}\right)$이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	다음 연립방정식의 해를 구하시오.
+\begin{equation}\label{eqn:syseq}
+	\begin{cases}
+		3\left(x+\frac{1}{x} \right) = 4\left(y+\frac{1}{y} \right)=5\left(z+\frac{1}{z} \right)\\
+		xy+yz+zx =1
+	\end{cases}
+\end{equation}
+\processifversion{psol}{%
+\begin{psolution}
+	\begin{align}\label{eqn:syseq1}
+		\phantom{\Leftrightarrow}& 	3\left(x+\frac{1}{x} \right) = 4\left(y+\frac{1}{y} \right)=5\left(z+\frac{1}{z} \right) \nonumber\\
+		\Leftrightarrow & \frac{x}{3(1+x^{2})} = \frac{y}{4(1+y^{2})} = \frac{z}{5(1+z^{2})} 
+	\end{align}
+이고 주어진 연립방정식의 해는 $x,\;y,\;z$의 부호는 항상 일치하므로 $(x,\;y,\;z)$가 연립방정식 (\ref{eqn:syseq})의 해이면 $(-x,\;-y,\;-z)$도 해가 된다. 따라서 편의상  $x,\;y,\;z$가 모두 양수라고 가정하고 문제를 풀자. 그런데
+$\sin\left(\theta\right)=\frac{2\tan\left(\frac{\theta}{2}\right)}{1+\tan^{2}\left(\frac{\theta}{2}\right)}$이므로
+\begin{equation*}
+	x=\tan\left(\frac{\alpha}{2}\right), \quad y=\tan\left(\frac{\beta}{2}\right), \quad z=\tan\left(\frac{\gamma}{2}\right)
+\end{equation*}
+라 할 수 있고 $x, \;y,\;z>0$이므로 $\frac{\alpha}{2}, \;\frac{\beta}{2}, \;\frac{\gamma}{2} \in \left(0, \; \frac{\pi}{2}\right)$이고 따라서 $0< \alpha, \;\beta, \; \gamma<\pi$이다. 
+
+즉
+\begin{equation*}
+	\sin(\alpha) =\frac{2x}{1+x^{2}}, \quad \sin(\beta) =\frac{2y}{1+y^{2}}, \quad \sin(\gamma) =\frac{2z}{1+z^{2}}
+\end{equation*}
+이므로 식 (\ref{eqn:syseq1})는 다음과 같이 삼각치환된다.
+\begin{equation*}
+	\frac{\sin(\alpha)}{3} =\frac{\sin(\beta)}{4} =\frac{\sin(\gamma)}{5}
+\end{equation*}
+한편, 두 번째 식을 변형하면
+\begin{equation*}
+	\frac{1}{z} =\frac{x+y}{1-xy} \Leftrightarrow \cot\left(\frac{\gamma}{2}\right) =\tan\left(\frac{\alpha+\beta}{2}\right)
+\end{equation*}
+이고 $z\neq0$, $xy\neq 1$이다. 이제 $\alpha,\;\beta,\;\gamma \in (0, \;\pi)$이고 $\frac{\alpha+\beta}{2} =\frac{\pi}{2}-\frac{\gamma}{2}$이므로 $\alpha+\beta+\gamma=\pi$이다. 즉 $\alpha,\;\beta,\;\gamma$는 삼각형의 세 내각이다. 따라서
+\begin{equation*}
+	\sin(\alpha) : \sin(\beta) : \sin(\gamma) = 3 : 4: 5
+\end{equation*}
+이므로 $\gamma=\frac{\pi}{2}$이고 $\sin(\alpha)=\frac{3}{5}$, $\sin(\beta)=\frac{4}{5}$이다. 따라서
+\begin{align*}
+	x&=\tan\left(\frac{\alpha}{2}\right) =\frac{1}{3}\\	y&=\tan\left(\frac{\beta}{2}\right)  =\frac{1}{2}\\	z&=\tan\left(\frac{\gamma}{2}\right) = 1
+\end{align*}
+이고 구하는 해는 $\left(\frac{1}{3}, \; \frac{1}{2}, \; 1\right)$와 $\left(-\frac{1}{3}, \; -\frac{1}{2}, \; -1\right)$이다.
+\end{psolution}}
+\end{problem}
+\vspace{1em}
+\begin{example}
+	다음 부등식의 해를 구하시오,
+	\begin{equation*}
+		\frac{x}{\sqrt{x^{2}+1}} + \frac{1-x^{2}}{1+x^{2}} >0
+	\end{equation*}
+\begin{solution}
+		$x=\tan(\theta)\left(-\frac{\pi}{2},\: \frac{\pi}{2}\right)$라 치환하면
+\begin{align*}
+	  & &	\frac{x}{\sqrt{x^{2}+1}} + \frac{1-x^{2}}{1+x^{2}} &>0\\
+		&\Leftrightarrow & \frac{\tan(\theta)}{\sqrt{\tan^{2}(\theta)+1}} + \frac{1-\tan^{2}(\theta)}{1+\tan^{2}(\theta)} &>0\\
+		&\Leftrightarrow &\sin(\theta) +\left(\cos^{2}(\theta)-\sin^{2}(\theta)\right) &>0 \\
+		&\Leftrightarrow &\sin(\theta) + \left(1-2 \sin^{2}(\theta)\right) &>0 \\
+		&\Leftrightarrow & \left(2\sin(\theta)+1\right)\left(\sin(\theta)-1\right) &<0
+	\end{align*}
+따라서 $2\sin(\theta)+1>0$이고 $\sin(\theta)<1$이다. 따라서 $1>\sin(\theta)>-\frac{1}{2}$이므로 $\frac{\pi}{2}>\theta > -\frac{\pi}{6}$이고 $\boxed{x> -\frac{\sqrt{3}}{3}}$이다.
+\end{solution}
+\end{example}
+\vspace{1em}
+\begin{problem}
+	임의의 $5$개의 실수가 주어지면 이들 중 어느 두 수 $x, \;y$는 다음을 만족시킨다.
+	\begin{equation*}
+		\vert xy+1 \vert > \vert x- y \vert
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	$5$개의 실수는 모두 $\tan(\theta_{k})$$(0\leq \theta_{k} \leq \pi)$의 꼴로 치환할 수 있다.(단, $k=1,\;2,\;3,\;4,\;5$) 따라서
+ 구간 $\left[0,\; \pi\right]$를 $4$등분 하면 비둘기집의 원리에 의해 $5$개의 실수 중 탄젠트 함수로 치환된 어느 두 수의 각의 값이 같은 구간에 속할 수밖에 없다. 이 두 각을 $\theta_{i}$와 $\theta_{j}$라 하자. 그러면 다음이 성립한다.
+ \begin{equation*}
+ 	\left|\frac{x-y}{1+xy}\right| =\left|\frac{\tan(\theta_{i})-\tan(\theta_{j})}{1+\tan(\theta_{i}) \tan(\theta_{j})}\right| =\left|\tan(\theta_{i}-\theta_{j})\right| \leq \left|\tan\left(45^{\circ}\right) \right| =1
+ \end{equation*}
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	두 실수열 $\{x_{n}\}$, $\{y_{n}\}$은 $n\geq 1$인 모든 자연수에 대하여
+	\begin{equation*}
+		x_{1}=y_{1} =\sqrt{3}, \quad x_{n+1} =x_{n}+\sqrt{1+x_{n}^{2}}, \quad y_{n+1} =\frac{y_{n}}{1+\sqrt{1+y_{n}^{2}}}
+	\end{equation*}
+로 정의 된다. 이 때, 모든 자연수 $n>1$에 대하여 $2<x_{n}y_{n}<3$이 성립함을 보이시오.
+\processifversion{pslo}{
+\begin{psolution}
+ 모든 자연수 $n$에 대하여 $x_{n}=\tan(\alpha_{n})$, 	$y_{n}=\tan(\beta_{n})$라 하자. 그러면 $\alpha_{1} =\beta_{1}=60^{\circ}$이고  $\{x_{n}\}$, $\{y_{n}\}$은 모두 양의 실수이므로 $0<\alpha_{n}, \beta_{n} < 90^{\circ}$이다. 이제
+ \begin{align*}
+ 	\tan(\alpha_{n+1}) &= \tan(\alpha_{n}) + \sqrt{1+\tan^{2}(\alpha_{n})} \\
+ 	&= \tan(\alpha_{n}) + \sec(\alpha_{n}) \\
+ 	&=\frac{\sin(\alpha_{n})+1}{\cos(\alpha_{n})} \\
+ 	&= \frac{1-\cos\left(90^{\circ}+\alpha_{n}\right)}{\sin\left(90^{\circ}+\alpha_{n}\right)} \\
+ 	&= \tan\left(\frac{90^{\circ}+\alpha_{n}}{2}\right) \\
+ 	&= \tan\left(90^{\circ} -\frac{90^{\circ}-\alpha_{n}}{2}\right)
+ \end{align*}
+이므로
+\begin{equation*}
+	\alpha_{n} =90^{\circ}-\frac{90^{\circ}-\alpha_{n-1}}{2}= \cdots = 90^{\circ}-\frac{90^{\circ}-\alpha_{1}}{2^{n-1}} = 90^{\circ} -\frac{30^{\circ}}{2^{n-1}} (n>1)
+\end{equation*}
+이다. 이제 $\theta_{n} =\frac{30^{\circ}}{2^{n-1}}$이라 하면,
+\begin{equation*}
+	x_n = \tan(\alpha_{n}) = \tan(90^{\circ}-\theta_{n}) =\cot(\theta_{n}) \quad (n>1)
+\end{equation*}
+비슷한 방법으로 
+\begin{equation*}
+	y_{n} =\tan(2\theta_{n}) \quad (n>1)
+\end{equation*}
+임을 보일 수 있다. 따라서 $n>1$일 때,
+\begin{equation*}
+	x_{n} y_{n} =\cot(\theta_{n})\cdot \tan(2\theta_{n)} =\frac{1}{\tan(\theta_{n})} \cdot \frac{2\tan(\theta_{n})}{1-\tan^{2}(\theta_{n})} =\frac{2}{1-\tan^{2}(\theta_{n})}
+\end{equation*}
+ 그런데 $0<\theta_{n} < 30^{\circ}$이므로 $0<\tan^{2}(\theta_{n}) <\frac{1}{3}$이다. 따라서 $2<x_{n}y_{n}<3$이다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+
+\begin{problem}\label{p:prob1}
+	$x, \; y,\;z$가 양의 실수이고 $xyz+x+z=y$를 만족시킬 때
+	\begin{equation*}
+		P =\frac{2}{x^{2}+1}-\frac{2}{y^{2}+1}+\frac{2}{z^{2}+1}
+	\end{equation*}
+\processifversion{psol}{
+	\begin{psolution}
+		먼저 $zx\neq 1$임을 보이자. $zx=1$이면 주어진 조건으로부터 $x+z=0$이고 이것은 $x,\;z$가 모두 양수라는 사실에 모순이다. 따라서 주어진 조건은
+		\begin{equation*}
+			xyz +x+z = y \; \Leftrightarrow \; y = \frac{x+z}{1-xz}
+		\end{equation*}
+		으로 변형되므로 $x=\tan(\alpha)$, $y=\tan(\beta)$, $z=\tan(\gamma)$라 치환하면 $\alpha, \; \beta,\; \gamma \in \left(0,\:90^{\circ}\right)$이다. 따라서
+		\begin{equation*}
+			\tan(\beta) =\frac{\tan(\alpha)+\tan(\gamma)}{1-\tan(\alpha) \tan(\gamma)} =\tan(\alpha+\gamma) \Rightarrow \beta =\alpha+ \gamma
+		\end{equation*}
+		이고 
+		\begin{align*}
+			P &= \frac{2}{\tan^{2}(\alpha)+1} -\frac{2}{\tan^{2}(\alpha+\gamma)+1} + \frac{2}{\tan^{2}(\gamma)+1} \\
+			&= 2\cos^{2}(\alpha) - 2 \cos^{2}(\alpha+\gamma) + 3 \cos^{2}(\gamma) \\
+			&= \left(1+\cos(2\alpha)\right) - \left(1+\cos\left(2(\alpha+\beta)\right)\right) + 3 \cos^{2}(\gamma)\\
+			&= \left(\cos(2\alpha)-\cos\left(2\alpha+2\gamma\right)\right) + 3\cos^{2}(\gamma)\\
+			&= 2 \sin(\gamma) \sin(2\alpha+\gamma) + 3\left(1-\sin^{2}(\gamma)\right)\\
+			&\leq 2 \sin(\gamma) + 3 - 3\sin^{2}(\gamma)\\
+			&= -3 \left(\sin(\gamma)-\frac{1}{3}\right)^{2} +\frac{10}{3}\\
+			&\leq \boxed{\frac{10}{3}}
+		\end{align*}
+		
+	\end{psolution}
+}
+\end{problem}
+문제 \ref{p:prob1}에서 등호가 성립할 때의 $x,\;y,\;z$의 값을 구해 보시오.
+\vspace{1em}
+\begin{problem}
+다음 방정식의 해를 구하시오.
+	\begin{equation*}
+	2\sqrt{2} x^{2} + x - \sqrt{1-x^{2}} -\sqrt{2}=0
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	분명히 $\left|x\right| \leq 1$이다. 따라서 $x=\sin(\theta)$라 치환할 수 있고 이 때, $\theta \in \left[-\frac{\pi}{2}, \: \frac{\pi}{2}\right]$이다. 이제
+	\begin{align*}
+		2\sqrt{2} \sin^{2}(\theta) +\sin(\theta) -\cos(\theta)-\sqrt{2} &=0 \\
+		\sqrt{2}(2\sin^{2}(\theta)-1) +(\sin(\theta)-\cos(\theta)) &=0\\
+		\sqrt{2}(\sin^{2}(\theta)-\cos^{2}(\theta)) 			+(\sin(\theta)-\cos(\theta))&=0\\
+		\sqrt2 (\sin(\theta)+\cos(\theta)) (\sin(\theta)-\cos(\theta)) + (\sin(\theta)-\cos(\theta))&=0 \\
+		(\sin(\theta)-\cos(\theta))\left(\sqrt{2}(\sin(\theta)+\cos(\theta))+1\right) &=0 \\
+		\left(\sqrt{2}\sin(\theta -45^{\circ})\right) \left(2\sin(\theta+45^{\circ})+1\right) &=0
+	\end{align*}
+이므로 다음의 두 해를 얻을 수 있다.
+\begin{equation*}
+	\sin\left(\theta-45^{\circ}\right) =0 \; \Rightarrow \; \theta =45^{\circ} \; \Rightarrow \; x=\boxed{\frac{\sqrt{2}}{2}}
+\end{equation*}
+\begin{equation*}
+	\sin\left(\theta+45^{\circ}\right) =-\frac{1}{2} \; \Rightarrow \; \theta =-75^{\circ} \; \Rightarrow \; x=\boxed{-\frac{\sqrt{6}+\sqrt{2}}{4}}
+\end{equation*}
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	$a,\;b$는 $1$보다 작거나 같은 양의 실수이다. 이 때, 다음 부등식을 증명하시오.
+	\begin{equation*}
+		\frac{1}{\sqrt{a^{2}+1}} +\frac{1}{\sqrt{b^{2}+1}} \leq \frac{2}{\sqrt{1+ab}}
+	\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	$a=\tan(\alpha)$, $b=\tan(\beta)$로 치환하면 $\alpha, \; \beta \in \left(0, \frac{\pi}{4} \right]$이다. 그러면
+	\begin{align}
+	&&	\frac{1}{\sqrt{a^{2}+1}} +\frac{1}{\sqrt{b^{2}+1}} &\leq \frac{2}{\sqrt{1+ab}}\nonumber\\
+	&\Leftrightarrow & \frac{1}{\tan^{2}(\alpha)+1} +\frac{1}{\tan^{2}(\beta)+1} & \leq \frac{2}{1+\tan(\alpha) \tan(\beta)}\nonumber \\
+    &\Leftrightarrow & \cos(\alpha) +\cos(\beta) &\leq 2\sqrt{\frac{\cos(\alpha)\cos(\beta)}{\cos(\alpha)\cos(\beta)+\sin(\alpha)\sin(\beta)}}\nonumber\\
+    &\Leftrightarrow & \cos(\alpha) +\cos(\beta) &\leq 2\sqrt{\frac{\cos(\alpha)\cos(\beta)}{\cos(\alpha-\beta)}}\label{eqn:ineq}
+	\end{align}
+이고,
+$\alpha, \; \beta \in \left(0, \frac{\pi}{4} \right]$이므로 
+\begin{equation*}
+	0< \cos(\alpha),\; \cos(\beta), \;\cos(\alpha-\beta)<1
+\end{equation*}
+이다. 따라서 부등식 \ref{eqn:ineq}는 식의 양변을 제곱한 것과 동치이다. 따라서
+\begin{align*}
+&&\left(\cos(\alpha) +\cos(\beta)\right)^{2} &\leq 4\left(\frac{\cos(\alpha)\cos(\beta)}{\cos(\alpha-\beta)}\right) \\
+&\Leftrightarrow & \cos^{2}(\alpha)+\cos^{2}(\beta) + 2 \cos(\alpha)\cos(\beta) &\leq 4\left(\frac{\cos(\alpha)\cos(\beta)}{\cos(\alpha-\beta)}\right) \\
+&\Leftrightarrow & \cos(\alpha-\beta) \left(\cos^{2}(\alpha)+\cos^{2}(\beta)\right) &\leq \left(4-2\cos(\alpha-\beta)\right) \cos(\alpha)\cos(\beta) 
+\end{align*}
+그런데 $0<\cos(\alpha-\beta)<1$이므로 다음을 증명하면 충분하다.
+\begin{align}
+	&& \cos(\alpha-\beta) (\cos^{2}(\alpha)+\cos^{2}(\beta)) &\leq (4-2)\cos(\alpha)\cos(\beta) \nonumber \\
+	&\Leftrightarrow &\cos(\alpha-\beta) (\cos^{2}(\alpha)+\cos^{2}(\beta)) &\leq 2\cos(\alpha)\cos(\beta) \nonumber \\
+	&\Leftrightarrow & \cos(\alpha-\beta) \left(\frac{1+\cos(2\alpha)}{2} +\frac{1+\cos(2\beta)}{2}\right) &\leq 2\cos(\alpha)\cos(\beta) \nonumber\\
+	&\Leftrightarrow & \cos(\alpha-\beta) \left(\cos(2\alpha)+\cos(2\beta)+2\right) &\leq 4\cos(\alpha)\cos(\beta) \label{{eqn:ineq2}}
+	\end{align}
+이다. 부등식 (\ref{{eqn:ineq2}})의 좌변에 합을 곱으로 고치는 공식을 적용하면
+\begin{equation*}
+	\cos(\alpha-\beta) \left(2\cos(\alpha+\beta) \cos(\alpha-\beta)+2\right)
+\end{equation*}
+이고 부등식 (\ref{{eqn:ineq2}})의 우변에 곱을 합으로 고치는 공식을 적용하면
+\begin{equation*}
+	2\left(\cos(\alpha+\beta)+\cos(\alpha-\beta)\right)
+\end{equation*}
+가 된다. 이 두 식을 정리하면
+\begin{equation*}
+\Leftrightarrow	\cos^{2}(\alpha-\beta)\cos(\alpha+\beta) \leq \cos(\alpha+\beta)
+\end{equation*}
+이고 이 부등식은 $\cos^{2}(\alpha-\beta)\leq 1$와 동치이고 
+\begin{equation*}
+	0< \alpha, \beta \leq \frac{\pi}{4} \;\Rightarrow \; 0<\alpha +\beta \leq \frac{\pi}{2} \; \Rightarrow \; 0 \leq \cos(\alpha+\beta)<1
+\end{equation*}
+이므로 마지막 부등식이 성립하고 따라서 부등식이 증명되었다.
+\end{psolution}
+}
+\end{problem}
+\vspace{1em}
+\begin{problem}
+	$a_{i} \in \left[-2, \:2\right]$$(i=1,\;2,\; \cdots, \; n)$이고 
+	\begin{equation*}
+		a_{1}+a_{2} + \; \cdots \; +a_{n} =0
+	\end{equation*}
+이다. 이 때, 다음을 증명하시오.
+\begin{equation*}
+	\left|a_{1}^{3} + a_{2}^{3} + \; \cdots \; + a_{n}^{3}\right| \leq 2n
+\end{equation*}
+\processifversion{psol}{
+\begin{psolution}
+	$a_{i}$가 모두 구간 $\left[-2, \; 2\right]$에 속하므로 $a_{k} =2 \cos(b_{k})$$(k=1, \;2,\; \cdots,\; n)$으로 치환할 수 있다. 그런데 $3$배각 공식에 의해 
+	\begin{equation*}
+		\cos(3b) = 4\cos^{3}(b) - 3 \cos(b)
+	\end{equation*}
+이므로 $2\cos(3b_{k}) = a_{k}^{3}-3a_{k}$$(k=1, \;2,\;\cdots, \; n)$이다. 가정에 의해 $a_{1}+a_{2} + \; \cdots \; +a_{n} =0$이므로
+\begin{equation*}
+	2 \sum_{k=1}^{n} \cos(3b_{k}) = \sum_{k=1}^{n} a_{k}^{3}
+\end{equation*}
+이고 모든 실수 $x$에 대하여 $\vert \sin(x) \vert \leq 1$이고 삼각부등식에 의해
+\begin{align*}
+	\left| \sum_{k=1}^{n} a_{k}^{3}\right| =2\left| \sum_{k=1}^{n} \cos(3b_{k}) \right| \leq 2 \sum_{k=1}^{n} \vert \cos(3b_{k}) \vert  \leq 2n
+\end{align*} 
+이 성립하므로 부등식이 증명되었다.  
+\end{psolution}
+}
+\end{problem}
+\end{document}
